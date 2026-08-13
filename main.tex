@@ -1,0 +1,177 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs,amsmath,amsfonts,amssymb,bm,eufrak,pifont,amscd,euscript,amsthm,color,epsfig,xr,tikz,verbatim,enumitem}
+ 
+%%%%%%%%%%%%%%%%
+
+%\usepackage{jmlr2e}
+\usepackage{authblk}
+\setlength{\hoffset}{-1in}
+   \setlength{\voffset}{-1in}
+   \setlength{\oddsidemargin}{1.1in}
+   \setlength{\textwidth}{6.42in}
+   \setlength{\topmargin}{0.5in}
+   \setlength{\headheight}{0.25in}
+   \setlength{\headsep}{0.25in}
+   \setlength{\textheight}{9.0in}
+\setlength{\arraycolsep}{0.0em}
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts   % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}  
+\usepackage{amsmath} 
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}
+\usepackage{hyperref}  
+% \usepackage{amssymb}
+\usepackage{cleveref}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{subcaption,mathrsfs}
+\usepackage{natbib}
+\usepackage{wrapfig}
+\usepackage{tikz}
+% \usepackage{include/titletoc}
+\usepackage[makeroom]{cancel}
+% \usepackage{caption}
+\usepackage{subcaption}
+\newcommand{\tarc}{\mbox{$\frown$}}
+\newcommand{\arc}[1]{\stackrel{\raisebox{-0.5ex}{\tarc}}{#1}}
+
+\allowdisplaybreaks
+\usetikzlibrary{decorations.markings}
+
+\definecolor{mydarkblue}{rgb}{0,0.08,0.45}
+
+\hypersetup{ %
+    pdftitle={},
+    pdfauthor={},
+    pdfsubject={},
+    pdfkeywords={},
+    pdfborder=0 0 0,
+    pdfpagemode=UseNone,
+    colorlinks=true,
+    linkcolor=mydarkblue,
+    citecolor=mydarkblue,
+    filecolor=mydarkblue,
+    urlcolor=mydarkblue,
+    pdfview=FitH
+}
+
+\newtheorem{assumption}{Assumption}
+\Crefname{assumption}{Assumption}{Assumption} 
+\crefname{assumption}{Assumption}{Assumption} 
+
+\usepackage{aliascnt}
+
+\newenvironment{talign*}
+ {\let\displaystyle\textstyle\csname align*\endcsname}
+ {\endalign}
+\newenvironment{talign}
+ {\let\displaystyle\textstyle\csname align\endcsname}
+ {\endalign}
+
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage[title]{appendix}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\crefname{theorem}{Theorem}{Theorems}
+\Crefname{theorem}{Theorem}{Theorems}
+\newaliascnt{lem}{theorem}
+\newtheorem{lem}[lem]{Lemma}
+\aliascntresetthe{lem}
+\crefname{lem}{Lemma}{Lemmas}
+\Crefname{lem}{Lemma}{Lemmas}
+
+\newaliascnt{prop}{theorem}
+\newtheorem{prop}[prop]{Proposition} 
+\aliascntresetthe{prop}
+\crefname{prop}{Proposition}{Propositions}
+\Crefname{prop}{Proposition}{Propositions}
+
+\newtheorem{ass}{Assumption}
+\crefname{ass}{Assumption}{Assumptions}
+\Crefname{ass}{Assumption}{Assumptions}
+
+\newaliascnt{rem}{theorem}
+\newtheorem{rem}[rem]{Remark} 
+\aliascntresetthe{rem}
+\crefname{rem}{Remark}{Remarks}
+\Crefname{rem}{Remark}{Remarks}
+
+\newaliascnt{example}{theorem}
+\newtheorem{example}[example]{Example} 
+\aliascntresetthe{example}
+\crefname{example}{Example}{Examples}
+\Crefname{example}{Example}{Examples}
+
+\newaliascnt{defi}{theorem}
+\newtheorem{defi}[defi]{Definition} 
+\aliascntresetthe{defi}
+\crefname{defi}{Definition}{Definitions}
+\Crefname{defi}{Definition}{Definitions}
+
+\newaliascnt{cor}{theorem}
+\newtheorem{cor}[cor]{Corollary} 
+\aliascntresetthe{cor}
+\crefname{cor}{Corollary}{Corollaries}
+\Crefname{cor}{Corollary}{Corollaries}
+ 
+\input{include/macros}
+
+\definecolor{mydarkblue}{rgb}{0,0.08,0.45}
+
+\hypersetup{ %
+    pdftitle={},
+    pdfauthor={},
+    pdfsubject={},
+    pdfkeywords={},
+    pdfborder=0 0 0,
+    pdfpagemode=UseNone,
+    colorlinks=true,
+    linkcolor=mydarkblue,
+    citecolor=mydarkblue,
+    filecolor=mydarkblue,
+    urlcolor=mydarkblue,
+    pdfview=FitH
+}
+
+\newcommand{\hudson}[1]{\textcolor{red}{[#1]}}
+\newcommand{\remarkcy}[1]{\textcolor{red}{[Chenyang: #1]}}
+\newcommand{\sophia}[1]{\textcolor{blue}{[Sophia: #1]}}
+\newcommand{\fxb}[1]{\textcolor{orange}{[FXB: #1]}}
+\newcommand{\ls}[1]{\textcolor{purple}{[LS: #1]}}
+\newcommand{\codex}[1]{\textcolor{blue}{[Codex: #1]}}
+
+\makeatletter
+\newcommand{\customlabel}[2]{%
+   \protected@write \@auxout {}{\string \newlabel {#1}{{#2}{\thepage}{#2}{#1}{}} }%
+   \hypertarget{#1}{}
+}
+\makeatother
+
+\title{What is the right geometry for minimization of MMD?}
+
+\author{Hudson Chen}
+% \author{}
+
+%\nipsfinalcopy % Uncomment for camera-ready version
+
+
+\begin{document}
+\maketitle
+\input{arxiv/introduction}
+
+\bibliographystyle{plainnat}
+\bibliography{main}  
+
+\newpage
+
+% \newpage
+% \input{include/checklist}
+
+\end{document}

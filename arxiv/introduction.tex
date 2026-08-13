@@ -1,0 +1,214 @@
+
+\section{Introduction}
+Given a functional $\calF:\calP(\R^d)\to\R$, its gradient-flow dynamics depend on the choice of geometry on the underlying space of measures. One of the most commonly used geometries is the Wasserstein-2 geometry, induced by the Wasserstein-2 distance. Its associated Onsager operator, which is the inverse of the Riemannian metric tensor, is given by
+$\mathbb{K}_W(\rho): T_\rho^* \mathcal{M}^{+} \rightarrow T_\rho \mathcal{M}^{+}, \xi \mapsto-\operatorname{div}(\rho \nabla \xi)$.
+Hence, the Wasserstein gradient flow of $\calF$ is
+\begin{align}
+\partial_t \mu_t = \nabla\cdot \left(\mu_t \nabla \calF'[\mu_t]\right). \tag{W-GF}
+\end{align}
+Similarly, the Fisher--Rao geometry is induced by the Hellinger distance, with associated Onsager operator
+$\mathbb{K}_{\mathrm{FR}}(\rho): T_\rho^*\mathcal M^+\rightarrow T_\rho\mathcal M^+, \xi\mapsto \rho , \xi$.
+Consequently, the Fisher--Rao gradient flow of $\calF$ is
+\begin{align}
+\partial_t\mu_t = -\mu_t \left( \calF'[\mu_t] - \int \calF'[\mu_t]  \dd \mu_t \right). \tag{FR-GF}
+\end{align}
+An interpolation between these two dynamics is given by the well-known Wasserstein--Fisher--Rao gradient flow:
+\begin{align}
+\partial_t\mu_t = \alpha \nabla\cdot \left(\mu_t \nabla \calF'[\mu_t]\right) - \beta \mu_t \left( \calF'[\mu_t] - \int \calF'[\mu_t]  \dd \mu_t \right). \tag{WFR-GF}
+\end{align} 
+Recently, a different geometry is considered in \cite{zhu2024inclusive,zhu2024kernel,gladin2024interaction}, which uses the MMD as the geometry. The associated Onsager operator is $\mathbb{K}_{\mathrm{MMD}}(\rho) = \mathbb{K}_{\mathrm{FR}}(\rho) \circ \mathcal{K}_\rho^{-1}$. The Interaction-Force Transport (IFT) gradient flow is described as the following:
+\begin{align}
+\partial_t\mu_t = -\mathbb{K}_{\mathrm{MMD}}(\mu_t) \calF'[\mu_t] = -\mu_t \mathcal{K}_{\mu_t}^{-1} \calF'[\mu_t] = - \mathcal{K}^{-1} \calF'[\mu_t]. \tag{IFT-GF}
+\end{align}
+Similarly as WFR-GF, an interpolation of WGF and IFT-GF can also be constructed
+\begin{align*}
+    \partial_t\mu_t = \alpha \nabla\cdot \left(\mu_t \nabla \calF'[\mu_t]\right) - \beta \mathcal{K}^{-1} \calF'[\mu_t] \tag{WIFT-GF}.
+\end{align*}
+
+
+\section{$\calF=\mmd$ and geometry=$\mmd$}
+We focus on MMD due to its interpretation as the worse-case integration error in the unit ball of a RKHS. 
+If $\calF$ is the MMD distance $\calF(\cdot)=\mmd^2(\cdot, \pi)$, then $\calF'[\mu](\cdot)=\int k(x, \cdot) \dd(\mu-\pi) = \mathcal{K}(\mu-\pi)$. 
+MSIP uses the WFG-GF, but here we focus on the WIFT-GF. 
+The main reason is that, \cite{gladin2024interaction} has proved that $\operatorname{MMD}^2\left(\mu_t, \pi\right) \leq e^{-2 \beta t} \cdot \operatorname{MMD}^2 \left(\mu_0, \pi\right)$. 
+
+Following \cite{gladin2024interaction}, a way to simulate the WIFT-GF.  is via an weighted interacting particle system.  
+Let $\mu_N^{(t)}=\sum_{i=1}^N w_i^{(t)} \delta_{x_i^{(t)}}$ be a weighted empirical measure at iteration $t$, where the weights do not necessarily sum up to $1$. 
+Denote $m_\pi=\int k(x,\cdot)\dd \pi$. 
+First evolve the Wasserstein gradient term, 
+\begin{align*}
+    x_i^{(t+1)}=x_i^{(t)}-\tau \alpha\left[\sum_{j=1}^N w_j^{(t)} \nabla_2 k\left(x_j^{(t)}, x_i^{(t)}\right)-\nabla m_\pi\left(x_i^{(t)}\right)\right].
+\end{align*}
+Then, evolve the IFT gradient term, by solving the following optimal weights: let $\eta=\beta\tau \alpha^{-1}$, 
+\begin{align*}
+    w^{(t+1)} = \arg \min _{w \in \R^N}\left\{\frac{1}{2} \mmd^2\left(\sum_{i=1}^N w_i \delta_{x_i^{(t+1)}}, \pi\right)+\frac{1}{2 \eta} \mmd^2\left(\sum_{i=1}^N w_i \delta_{x_i^{(t+1)}}, \mu_N^{(t)}\right)\right\}.
+\end{align*}
+Interestingly, let $K^{(t+1)}=k(x_{1:N}^{(t+1)},x_{1:N}^{(t+1)})\in\R^{N\times N}$, the weight problem is
+\begin{align*}
+    \min_w \left\{\frac{1}{2} w^{\top} K^{(t+1)} w - m_\pi(x_{1:N}^{(t+1)})^{\top} w + \frac{1}{2 \eta} \left(w-w^{(t)} \right)^{\top} K^{(t+1)} \left(w-w^{(t)}\right)\right\} ,
+\end{align*}
+By definition of kernel quadrature, there is $m_\pi(x_{1:N}^{(t+1)}) = K^{(t+1)} w_{\mathrm{KQ}}(x_{1:N}^{(t+1)})$. 
+And the solution is
+\begin{align*}
+    w^{(t+1)} = \frac{1}{1+\eta} w^{(t)} + \frac{\eta}{1+\eta} w_{\mathrm{KQ}}(x_{1:N}^{(t+1)}).
+\end{align*}
+
+
+\begin{theorem}[Monotone improvement over the initial kernel quadrature rule]
+\label{thm:wift-kq-descent}
+Let $\mu_N^{(t)}=\sum_{i=1}^N w_i^{(t)}\delta_{x_i^{(t)}}$ and $X_t=(x_1^{(t)},\ldots,x_N^{(t)})$. Define the MMD energy
+$\mathcal{E}(X,w)=\frac12\operatorname{MMD}^2\left(\sum_{i=1}^N w_i\delta_{x_i},\pi\right)$,
+and let $w_{\mathrm{KQ}}(X)=K(X)^{-1}m_\pi(X)$ denote the unconstrained kernel quadrature weights associated with the locations $X$.
+
+Assume that $k$ is twice continuously differentiable, that $K(X_t)$ is positive definite for every $t$, and that the weights remain uniformly positive, namely $w_i^{(t)}\geq \underline w>0$ for every $i,t$. Assume moreover that, for every admissible $w$, the map $X\mapsto\mathcal{E}(X,w)$ has an $L_X$-Lipschitz gradient on a set containing all iterates. If $\tau\alpha\leq 2\underline w/L_X$, then
+\begin{align}
+\operatorname{MMD}
+\left(
+\mu_N^{(t+1)},\pi
+\right)
+\leq
+\operatorname{MMD}
+\left(
+\mu_N^{(t)},\pi
+\right)
+\label{eq:wift-mmd-monotonicity}
+\end{align}
+for every $t\geq0$. 
+\end{theorem}
+
+\begin{proof}
+For fixed $X$ and $w$, let
+$g_i(X,w)=\sum_{j=1}^N w_j\nabla_2 k(x_j,x_i)-\nabla m_\pi(x_i)$.
+Differentiating the MMD energy with respect to $x_i$ and using symmetry of the kernel gives
+$\nabla_{x_i}\mathcal{E}(X,w)=w_i g_i(X,w)$.
+Hence, the position update can be written as
+$x_i^{(t+1)}=x_i^{(t)}-\frac{\tau\alpha}{w_i^{(t)}}\nabla_{x_i}\mathcal{E}(X_t,w^{(t)})$.
+Thus, the Wasserstein substep is a diagonally preconditioned gradient step for $X\mapsto\mathcal{E}(X,w^{(t)})$.
+
+By the $L_X$-smoothness of $\mathcal{E}(\cdot,w^{(t)})$, the descent lemma gives
+\begin{align}
+\mathcal{E}(X_{t+1},w^{(t)})
+&\leq
+\mathcal{E}(X_t,w^{(t)})
++
+\sum_{i=1}^N
+\left\langle
+\nabla_{x_i}\mathcal{E}(X_t,w^{(t)}),
+x_i^{(t+1)}-x_i^{(t)}
+\right\rangle
+\nonumber\\
+&\qquad
++
+\frac{L_X}{2}
+\sum_{i=1}^N
+\left\|
+x_i^{(t+1)}-x_i^{(t)}
+\right\|^2
+\nonumber\\
+&=
+\mathcal{E}(X_t,w^{(t)})
+-
+\tau\alpha
+\sum_{i=1}^N
+\left(
+w_i^{(t)}
+-
+\frac{L_X\tau\alpha}{2}
+\right)
+\left\|
+g_i(X_t,w^{(t)})
+\right\|^2.
+\label{eq:wasserstein-descent}
+\end{align}
+Since $w_i^{(t)}\geq\underline w$ and $\tau\alpha\leq2\underline w/L_X$, we have
+$w_i^{(t)}-L_X\tau\alpha/2\geq0$. Therefore,
+$\mathcal{E}(X_{t+1},w^{(t)})\leq\mathcal{E}(X_t,w^{(t)})$.
+
+We next consider the weight update. For fixed $X$, the dependence of the MMD energy on $w$ is quadratic:
+$\mathcal{E}(X,w)=\frac12 w^\top K(X)w-m_\pi(X)^\top w+C_\pi$,
+where $C_\pi$ is independent of $w$. Since $K(X)$ is positive definite, the unique minimizer is
+$w_{\mathrm{KQ}}(X)=K(X)^{-1}m_\pi(X)$.
+Completing the square gives
+\begin{align}
+\mathcal{E}(X,w)
+=
+\mathcal{E}\left(X,w_{\mathrm{KQ}}(X)\right)
++
+\frac12
+\left\|
+w-w_{\mathrm{KQ}}(X)
+\right\|_{K(X)}^2,
+\label{eq:mmd-kq-decomposition}
+\end{align}
+where $\|v\|_{K(X)}^2=v^\top K(X)v$.
+
+By the weight update,
+$w^{(t+1)}-w_{\mathrm{KQ}}(X_{t+1})
+=
+(1+\eta)^{-1}
+\left(
+w^{(t)}-w_{\mathrm{KQ}}(X_{t+1})
+\right)$.
+Consequently,
+\begin{align}
+&
+\mathcal{E}(X_{t+1},w^{(t+1)})
+-
+\mathcal{E}\left(X_{t+1},w_{\mathrm{KQ}}(X_{t+1})\right)
+\nonumber\\
+&\qquad=
+\frac{1}{(1+\eta)^2}
+\left[
+\mathcal{E}(X_{t+1},w^{(t)})
+-
+\mathcal{E}\left(X_{t+1},w_{\mathrm{KQ}}(X_{t+1})\right)
+\right].
+\label{eq:kq-weight-contraction}
+\end{align}
+Since $(1+\eta)^{-2}\leq1$ and $w_{\mathrm{KQ}}(X_{t+1})$ minimizes
+$w\mapsto\mathcal{E}(X_{t+1},w)$, it follows that
+$\mathcal{E}(X_{t+1},w^{(t+1)})
+\leq
+\mathcal{E}(X_{t+1},w^{(t)})$.
+
+Combining the two substeps yields
+\begin{align}
+\mathcal{E}(X_{t+1},w^{(t+1)})
+\leq
+\mathcal{E}(X_{t+1},w^{(t)})
+\leq
+\mathcal{E}(X_t,w^{(t)}).
+\label{eq:full-wift-descent}
+\end{align}
+Hence, $\mathcal{E}(X_t,w^{(t)})$ is nonincreasing. Since
+$\mathcal{E}(X,w)=\frac12\operatorname{MMD}^2(\sum_i w_i\delta_{x_i},\pi)$,
+we obtain
+$\operatorname{MMD}(\mu_N^{(t+1)},\pi)
+\leq
+\operatorname{MMD}(\mu_N^{(t)},\pi)$.
+
+Finally, if $w^{(0)}=w_{\mathrm{KQ}}(X_0)$, monotonicity implies
+$\mathcal{E}(X_t,w^{(t)})
+\leq
+\mathcal{E}(X_0,w^{(0)})
+=
+\mathcal{E}(X_0,w_{\mathrm{KQ}}(X_0))$.
+Equivalently,
+\begin{align}
+\operatorname{MMD}^2
+\left(
+\mu_N^{(t)},\pi
+\right)
+\leq
+\operatorname{MMD}^2
+\left(
+\sum_{i=1}^N
+w_{\mathrm{KQ},i}(X_0)
+\delta_{x_i^{(0)}},
+\pi
+\right).
+\end{align}
+Taking square roots proves \eqref{eq:wift-improves-initial-kq}.
+\end{proof}
+
+
