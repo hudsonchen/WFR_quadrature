@@ -185,30 +185,7 @@ $\mathcal{E}(X,w)=\frac12\operatorname{MMD}^2(\sum_i w_i\delta_{x_i},\pi)$,
 we obtain
 $\operatorname{MMD}(\mu_N^{(t+1)},\pi)
 \leq
-\operatorname{MMD}(\mu_N^{(t)},\pi)$.
-
-Finally, if $w^{(0)}=w_{\mathrm{KQ}}(X_0)$, monotonicity implies
-$\mathcal{E}(X_t,w^{(t)})
-\leq
-\mathcal{E}(X_0,w^{(0)})
-=
-\mathcal{E}(X_0,w_{\mathrm{KQ}}(X_0))$.
-Equivalently,
-\begin{align}
-\operatorname{MMD}^2
-\left(
-\mu_N^{(t)},\pi
-\right)
-\leq
-\operatorname{MMD}^2
-\left(
-\sum_{i=1}^N
-w_{\mathrm{KQ},i}(X_0)
-\delta_{x_i^{(0)}},
-\pi
-\right).
-\end{align}
-Taking square roots proves \eqref{eq:wift-improves-initial-kq}.
+\operatorname{MMD}(\mu_N^{(t)},\pi)$. The proof is thus concluded. 
 \end{proof}
 
 
