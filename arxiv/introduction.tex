@@ -345,12 +345,24 @@ The proof is concluded.
 
 
 \begin{rem}
-If the initial kernel quadrature error satisfies
-$\operatorname{MMD}(\sum_iw_{\mathrm{KQ},i}(\bm{X}_0)\delta_{x_i^{(0)}},\pi)
-=O_{\mathbb{P}}(N^{-s/d})$,
-then its squared MMD is $O_{\mathbb{P}}(N^{-2s/d})$. Substitution into
-\eqref{eq:wift-convergence-kq-mmd} yields
-\eqref{eq:wift-statistical-rate-squared}. Taking square roots and using
-$\sqrt{a+b}\leq\sqrt{a}+\sqrt{b}$ gives
-\eqref{eq:wift-statistical-rate}.
+Theorem~\ref{thm:wift-convergence} separates the optimization error from the
+statistical error of the initial kernel quadrature rule. In particular, if
+$\operatorname{MMD}(\sum_{i=1}^N
+w_{\mathrm{KQ},i}(\bm{X}_0)\delta_{x_i^{(0)}},\pi)
+=O_{\mathbb{P}}(N^{-s/d})$, then
+\begin{align*}
+\operatorname{MMD}^2(\mu_N^{(t)},\pi)
+&\leq \frac{1}{(1+\eta)^{2t}}
+\operatorname{MMD}^2(\mu_N^{(0)},\pi)
++O_{\mathbb{P}}(N^{-2s/d}), \\
+\operatorname{MMD}(\mu_N^{(t)},\pi)
+&\leq \frac{1}{(1+\eta)^t}
+\operatorname{MMD}(\mu_N^{(0)},\pi)
++O_{\mathbb{P}}(N^{-s/d}).
+\end{align*}
+Thus, the optimization error decays geometrically until it reaches the
+kernel quadrature error floor. If, in addition,
+$\operatorname{MMD}(\mu_N^{(0)},\pi)=O_{\mathbb{P}}(1)$, then choosing
+$t\geq \frac{s}{d\log(1+\eta)}\log N$ is sufficient to obtain
+$\operatorname{MMD}(\mu_N^{(t)},\pi)=O_{\mathbb{P}}(N^{-s/d})$.
 \end{rem}
