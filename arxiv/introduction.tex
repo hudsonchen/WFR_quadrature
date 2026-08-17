@@ -32,7 +32,7 @@ If $\calF$ is the MMD distance $\calF(\cdot)=\mmd^2(\cdot, \pi)$, then $\calF'[\
 MSIP uses the WFG-GF, but here we focus on the WIFT-GF. 
 The main reason is that, \cite{gladin2024interaction} has proved that $\operatorname{MMD}^2\left(\mu_t, \pi\right) \leq e^{-2 \beta t} \cdot \operatorname{MMD}^2 \left(\mu_0, \pi\right)$. 
 
-Following \cite{gladin2024interaction}, a way to simulate the WIFT-GF.  is via an weighted interacting particle system.  
+Following \cite{gladin2024interaction}, a way to simulate the WIFT-GF is via an weighted interacting particle system.  
 Let $\mu_N^{(t)}=\sum_{i=1}^N w_i^{(t)} \delta_{x_i^{(t)}}$ be a weighted empirical measure at iteration $t$. Write $\bm{X}_t=(x_1^{(t)},\ldots,x_N^{(t)})$ and $\bm{w}^{(t)}=(w_1^{(t)},\ldots,w_N^{(t)})$.
 Denote $m_\pi=\int k(x,\cdot)\dd \pi$ as the kernel mean embedding. 
 First evolve the Wasserstein gradient term, 
@@ -60,27 +60,22 @@ In contrast, the update scheme for the standard Euclidean gradient is:
 Comparing the two update schemes, we note that the two only differs by a weight factor $w_i$. 
 
 \begin{defi}[Weighted Euclidean Geometry]\label{defi:weighted_euc}
-For a positive weight vector $\bm{w}=(w_1,\ldots,w_N) \in\R_{>0}^N$, we equip the particle space $(\R^d)^N$ with the $\bm{w}$-weighted Euclidean inner product $\langle \bm{u},\bm{v}\rangle_{\bm{w}}
-:= \sum_{i=1}^N w_i \langle u_i,v_i\rangle$, 
-with the induced norm $\|\bm{u}\|_{\bm{w}}^2 := \sum_{i=1}^N w_i \|u_i\|_2^2$. 
-For a differentiable function $f:(\R^d)^N\to\R$, its gradient with respect to the
-$\bm{w}$-weighted Euclidean geometry, denoted by $\grad_{\bm{w}} f$, is defined through
+Let $m\in\R$ and let $G \in \mathbb{R}^{m\times m}$ be a symmetric positive definite matrix. 
+We equip the space $\R^m$ with the $G$-weighted Euclidean inner product $\langle u,v\rangle_G := u^\top G v$ and with the induced norm $\|u\|_G^2 := u^\top G u$. 
+For a differentiable function $f:\R^m\to\R$, its gradient with respect to the $G$-weighted Euclidean geometry, denoted by $\grad_G f$, is defined as: for any $u\in\R^m$, 
 \begin{align*}
-    Df(\bm{X})[\bm{u}]
-    =
-    \left\langle \grad_{\bm{w}} f(\bm{X}),\bm{u}\right\rangle_{\bm{w}},
-    \qquad
-    \forall\,\bm{u}\in(\R^d)^N.
+    \left.\frac{\dd}{\dd t} f(x+t u)\right|_{t=0} = \left\langle \grad_G f(x)\, , u \right\rangle_G. 
 \end{align*}
-Equivalently, its $i$-th component is $\left[\grad_{\bm{w}} f(\bm{X})\right]_i =
-\frac{1}{w_i} \nabla_{x_i} f(\bm{X})$. 
+Equivalently, $\grad_G f(x) = G^{-1}\nabla f(x)$ where $\nabla f$ denotes the standard Euclidean gradient. 
 \end{defi}
+
+
 
 
 \begin{prop}[Smoothness under Euclidean and weighted Euclidean geometries]
 \label{prop:mmd-energy-smoothness}
 Let $\bm{w}\in\Delta^N$ with $w_i>0$ for every $i$ and $\sum_{i=1}^N w_i=1$. 
-Suppose that $k$ is symmetric and twice continuously differentiable, with $\sup_{x,y\in\R^d}\|\nabla_{11}^2 k(x,y)\|_{\mathrm{op}} = C_1<\infty$ and $\sup_{x,y\in\R^d}\|\nabla_{12}^2 k(x,y)\|_{\mathrm{op}}=C_2 <\infty$. For fixed $\bm{w}$, define
+Suppose that $k$ is symmetric and twice continuously differentiable, with $\sup_{x,y\in\R^d}\|\nabla_{11}^2 k(x,y)\|_{\mathrm{op}} = C_1<\infty$ and $\sup_{x,y\in\R^d}\|\nabla_{12}^2 k(x,y)\|_{\mathrm{op}}=C_2 <\infty$. Define
 \begin{align*}
 E(\bm{X},\bm{w})
 =
@@ -88,9 +83,18 @@ E(\bm{X},\bm{w})
 \end{align*}
 Then $E(\cdot,\bm{w})$ is $\max_{1\leq i\leq N}w_i (2 C_1 + C_2)$-smooth under the standard Euclidean geometry; 
 and is $(2 C_1 + C_2)$-smooth under the $\bm{w}$-weighted Euclidean geometry. 
+Moreover, $E(\bm{X}, \cdot)$ is $\lambda_{\max}(K(\bm{X}, \bm{X}))$-smooth under the standard Euclidean geometry; and is $1$-smooth under the $K(\bm{X}, \bm{X})$-weighted Euclidean geometry. 
 \end{prop}
 
-\subsection{Convergence}
+From the above proposition, we see that the right smoothness notion to consider is the weighted Euclidean geometry instead of the standard Euclidean geometry. 
+
+
+The direct KQ update instantaneously minimizes the MMD over the weights at each particle configuration, whereas the IFT update is a proximal tracking scheme that interpolates between the previous weights and the instantaneous KQ solution. The latter sacrifices instantaneous optimality in exchange for a controlled and stable evolution of the weights, consistent with the underlying continuous-time IFT dynamics.
+
+
+
+
+\section{Convergence}
 \begin{theorem}[Monotone improvement]
 \label{thm:wift-kq-descent}
 At iteration $t\in\N$, let $\mu_N^{(t)}=\sum_{i=1}^N w_i^{(t)}\delta_{x_i^{(t)}}$ with $\bm{X}_t=(x_1^{(t)},\ldots,x_N^{(t)})$, and $\bm{w}^{(t)}=(w_1^{(t)},\ldots,w_N^{(t)})$.
