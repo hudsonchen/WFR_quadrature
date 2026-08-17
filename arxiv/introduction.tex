@@ -59,18 +59,18 @@ h_{\bm{X},\bm{w}}(x)
 :=
 \sum_{j=1}^N w_j k(x_j,x)-m_\pi(x).
 \end{align*}
-Table~\ref{tab:mmd-particle-geometries} gives the location and weight updates explicitly for the three geometries and for MSIP \citep{belhadji2026weighted}. In the WFR scheme, the transport step precedes the weight step, which is evaluated at the updated particle locations. The WFR weight update is obtained by applying forward Euler discretization to the Fisher--Rao reaction term in Eq.~\textup{(WFR-GF)}.
+Table~\ref{tab:mmd-particle-geometries} gives the location and weight updates explicitly for the three geometries, direct Euclidean gradient descent, and MSIP \citep{belhadji2026weighted}. In the WFR scheme, the transport step precedes the weight step, which is evaluated at the updated particle locations. The WFR weight update is obtained by applying forward Euler discretization to the Fisher--Rao reaction term in Eq.~\textup{(WFR-GF)}.
 
 \begin{table}[t]
 \centering
-\caption{Location and weight updates for MMD minimization under Wasserstein, WFR, and MMD geometries, together with MSIP.}
+\caption{Location and weight updates for MMD minimization under Wasserstein, WFR, and MMD geometries, together with direct Euclidean gradient descent and MSIP.}
 \label{tab:mmd-particle-geometries}
 \small
 \renewcommand{\arraystretch}{1.5}
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.16\textwidth}>{\raggedright\arraybackslash}p{0.79\textwidth}@{}}
-\toprule
+\begin{tabular}{@{}|>{\raggedright\arraybackslash}p{0.16\textwidth}|>{\raggedright\arraybackslash}p{0.78\textwidth}|@{}}
+\hline
 Geometry or method & Location and weight updates \\
-\midrule
+\hline
 Wasserstein
 & \(\displaystyle
 \begin{aligned}
@@ -80,6 +80,7 @@ w_i^{(t+1)}
 &=w_i^{(t)}=\frac{1}{N}.
 \end{aligned}
 \) \\
+\hline
 WFR
 & \(\displaystyle
 \begin{aligned}
@@ -94,17 +95,30 @@ h_{\bm{X}_{t+1},\bm{w}^{(t)}}\left(x_j^{(t+1)}\right)
 \right].
 \end{aligned}
 \) \\
-MMD
+\hline
+MMD (IFT)
 & \(\displaystyle
 \begin{aligned}
 x_i^{(t+1)}
-&=x_i^{(t)}, \\
+&=x_i^{(t)}-\tau\alpha\nabla h_{\bm{X}_t,\bm{w}^{(t)}}\left(x_i^{(t)}\right), \\
 \bm{w}^{(t+1)}
 &=\frac{1}{1+\eta}\bm{w}^{(t)}
-+\frac{\eta}{1+\eta}\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}),
-\qquad \bm{X}_{t+1}=\bm{X}_t.
++\frac{\eta}{1+\eta}\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}).
 \end{aligned}
 \) \\
+\hline
+Direct GD
+& \(\displaystyle
+\begin{aligned}
+x_i^{(t+1)}
+&=x_i^{(t)}-\tau\alpha w_i^{(t)}
+\nabla h_{\bm{X}_t,\bm{w}^{(t)}}\left(x_i^{(t)}\right), \\
+w_i^{(t+1)}
+&=w_i^{(t)}-\tau\beta
+h_{\bm{X}_t,\bm{w}^{(t)}}\left(x_i^{(t)}\right).
+\end{aligned}
+\) \\
+\hline
 MSIP
 & For a squared-exponential kernel,
 \(\displaystyle
@@ -117,17 +131,11 @@ x_i^{(t+1)}={}&(1-\tau)x_i^{(t)}
 &\bm{w}^{(t+1)}=\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}).
 \end{aligned}
 \) \\
-\bottomrule
+\hline
 \end{tabular}
 \end{table}
 
-The Wasserstein row uses uniform initial weights, which remain equal to $1/N$ under transport; arbitrary initial weights would likewise remain fixed. The centering term in the WFR update preserves $\sum_{i=1}^N w_i^{(t)}=1$, while nonnegativity additionally requires $\tau\beta$ to be sufficiently small. The MMD row gives the closed-form weight update obtained when the simplex constraint in Eq.~\eqref{eq:ift_update} is ignored. The WIFT discretization in Eqs.~\eqref{eq:wass_update}--\eqref{eq:ift_update} combines the Wasserstein location update with the MMD weight update in Table~\ref{tab:mmd-particle-geometries}. In contrast, MSIP is a damped fixed-point method for the stationary conditions of the unbalanced WFR flow, rather than a time discretization of the normalized WFR flow in Eq.~\textup{(WFR-GF)}. Its update requires $K(\bm{X}_t)$ to be invertible and the kernel quadrature weights to be positive.
-
-In contrast, the update scheme for the standard Euclidean gradient is:
-\begin{align}\label{eq:euc_update_1}
-    x_i^{(t+1)}=x_i^{(t)}-\tau \alpha w_i \left[\sum_{j=1}^N w_j^{(t)} \nabla_2 k\left(x_j^{(t)}, x_i^{(t)}\right)-\nabla m_\pi\left(x_i^{(t)}\right)\right], \quad \bm{w}^{(t+1)} = \bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}). 
-\end{align}
-Comparing the two update schemes, we note that the two only differs by a weight factor $w_i$. 
+The Wasserstein row uses uniform initial weights, which remain equal to $1/N$ under transport; arbitrary initial weights would likewise remain fixed. The centering term in the WFR update preserves $\sum_{i=1}^N w_i^{(t)}=1$, while nonnegativity additionally requires $\tau\beta$ to be sufficiently small. The MMD row is the WIFT particle implementation used here: it combines the Wasserstein location update with the IFT weight update in Eqs.~\eqref{eq:wass_update}--\eqref{eq:ift_update}. Its displayed closed form is obtained when the simplex constraint in Eq.~\eqref{eq:ift_update} is ignored. The direct-gradient row performs simultaneous Euclidean descent in both $\bm{X}$ and $\bm{w}$; its location update differs from the Wasserstein update by the factor $w_i^{(t)}$. This weight update is unconstrained and must be projected if the iterates are required to remain in $\Delta^N$. In contrast, MSIP is a damped fixed-point method for the stationary conditions of the unbalanced WFR flow, rather than a time discretization of the normalized WFR flow in Eq.~\textup{(WFR-GF)}. Its update requires $K(\bm{X}_t)$ to be invertible and the kernel quadrature weights to be positive.
 
 \begin{defi}[Weighted Euclidean Geometry]\label{defi:weighted_euc}
 Let $m\in\R$ and let $G \in \mathbb{R}^{m\times m}$ be a symmetric positive definite matrix. 
