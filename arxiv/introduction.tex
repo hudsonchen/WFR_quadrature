@@ -78,20 +78,96 @@ Equivalently, its $i$-th component is $\left[\grad_{\bm{w}} f(\bm{X})\right]_i =
 
 
 \begin{prop}[Smoothness under Euclidean and weighted Euclidean geometries]
+\label{prop:mmd-energy-smoothness}
 Let $\bm{w}\in\Delta^N$ with $w_i>0$ for every $i$ and $\sum_{i=1}^N w_i=1$. 
 Suppose that $k$ is symmetric and twice continuously differentiable, with $\sup_{x,y\in\R^d}\|\nabla_{11}^2 k(x,y)\|_{\mathrm{op}} = C_1<\infty$ and $\sup_{x,y\in\R^d}\|\nabla_{12}^2 k(x,y)\|_{\mathrm{op}}=C_2 <\infty$. For fixed $\bm{w}$, define
-\[
+\begin{align*}
 E(\bm{X},\bm{w})
 =
 \frac{1}{2}\mmd^2\left(\sum_{i=1}^N w_i\delta_{x_i},\pi\right).
-\]
+\end{align*}
 Then $E(\cdot,\bm{w})$ is $\max_{1\leq i\leq N}w_i (2 C_1 + C_2)$-smooth under the standard Euclidean geometry; 
 and is $(2 C_1 + C_2)$-smooth under the $\bm{w}$-weighted Euclidean geometry. 
 \end{prop}
 
-\begin{proof}
+\subsection{Convergence}
+\begin{theorem}[Monotone improvement]
+\label{thm:wift-kq-descent}
+At iteration $t\in\N$, let $\mu_N^{(t)}=\sum_{i=1}^N w_i^{(t)}\delta_{x_i^{(t)}}$ with $\bm{X}_t=(x_1^{(t)},\ldots,x_N^{(t)})$, and $\bm{w}^{(t)}=(w_1^{(t)},\ldots,w_N^{(t)})$.
+
+Assume that $k$ is twice continuously differentiable, that $K(\bm{X}_t)$ is positive definite for every $t$, and that the weights remain uniformly positive, namely $w_i^{(t)}\geq \underline w>0$ for every $i,t$. Assume moreover that, for every admissible $\bm{w}$, the map $\bm{X}\mapsto\mathcal{E}(\bm{X},\bm{w})$ has an $L_X$-Lipschitz gradient on a set containing all iterates. If $\tau\alpha\leq 2\underline w/L_X$, then for every $t\geq0$,
+\begin{align}
+\operatorname{MMD} \left( \mu_N^{(t+1)},\pi
+\right) \leq \operatorname{MMD}
+\left( \mu_N^{(t)},\pi \right).
+\label{eq:wift-mmd-monotonicity}
+\end{align}
+\end{theorem}
+
+\begin{lem}[Uniform control of the kernel quadrature residual]
+\label{lem:kq-residual-control}
+Suppose that the assumptions of Theorem~\ref{thm:wift-kq-descent} hold and that the initial weights are chosen as $\bm{w}^{(0)}=\bm{w}_{\mathrm{KQ}}(\bm{X}_0) $.
+Then, for every $t\geq 0$, $\operatorname{MMD}
+\left(
+\sum_{i=1}^N
+w_{\mathrm{KQ},i} (\bm{X}_t)
+\delta_{x_i^{(t)}},
+\pi
+\right)
+\leq
+\operatorname{MMD}
+\left(
+\sum_{i=1}^N
+w_{\mathrm{KQ},i}(\bm{X}_0)
+\delta_{x_i^{(0)}},
+\pi
+\right)$.
+\end{lem}
+
+\begin{theorem}[Convergence to the kernel quadrature error]
+\label{thm:wift-convergence}
+Suppose that the assumptions of Theorem~\ref{thm:wift-kq-descent} hold, and that the initial weights are chosen as $\bm{w}^{(0)}=\bm{w}_{\mathrm{KQ}}(\bm{X}_0)$. Then, the WIFT iterates satisfy
+\begin{align*}
+\operatorname{MMD}^2(\mu_N^{(t)},\pi) \leq
+\frac{1}{(1+\eta)^{2t}}
+\operatorname{MMD}^2(\mu_N^{(0)},\pi) +
+\left(
+1-\frac{1}{(1+\eta)^{2t}}
+\right)
+\operatorname{MMD}^2
+\left(
+\sum_{i=1}^N
+w_{\mathrm{KQ},i}(\bm{X}_0)
+\delta_{x_i^{(0)}},
+\pi
+\right).
+\end{align*}
+\end{theorem}
+
+\begin{rem}
+Theorem~\ref{thm:wift-convergence} separates the optimization error from the
+statistical error of the initial kernel quadrature rule. In particular, if
+$\operatorname{MMD}(\sum_{i=1}^N
+w_{\mathrm{KQ},i}(\bm{X}_0)\delta_{x_i^{(0)}},\pi)
+=O_{\mathbb{P}}(N^{-s/d})$, then
+\begin{align*}
+\operatorname{MMD}(\mu_N^{(t)},\pi)
+&\leq \frac{1}{(1+\eta)^t}
+\operatorname{MMD}(\mu_N^{(0)},\pi)
++O_{\mathbb{P}}(N^{-s/d}).
+\end{align*}
+Thus, the optimization error decays geometrically until it reaches the
+kernel quadrature error floor. If, in addition,
+$\operatorname{MMD}(\mu_N^{(0)},\pi)=O_{\mathbb{P}}(1)$, then choosing
+$t\geq \frac{s}{d\log(1+\eta)}\log N$ is sufficient to obtain
+$\operatorname{MMD}(\mu_N^{(t)},\pi)=O_{\mathbb{P}}(N^{-s/d})$.
+\end{rem}
+
+\section{Proofs}
+
+\begin{proof}[Proof of \Cref{prop:mmd-energy-smoothness}]
 Recall that
-\[
+\begin{align*}
 E(\bm{X},\bm{w})
 =
 \frac{1}{2}\sum_{i,j=1}^N w_iw_j k(x_i,x_j)
@@ -99,7 +175,7 @@ E(\bm{X},\bm{w})
 \sum_{i=1}^N w_i m_\pi(x_i)
 +
 \mathrm{const}.
-\]
+\end{align*}
 For any $\bm{u}=(u_1,\ldots,u_N)\in(\R^d)^N$, direct differentiation gives
 \begin{align*}
 \nabla_{\bm{X}}^2E(\bm{X},\bm{w})[\bm{u},\bm{u}]
@@ -118,7 +194,7 @@ w_i
 u_i^\top\nabla^2m_\pi(x_i)u_i.
 \end{align*}
 Since $m_\pi(x)=\int k(x,y)\,\mathrm{d}\pi(y)$ and $\pi$ is a probability measure, we have
-\[
+\begin{align*}
 \|\nabla^2m_\pi(x)\|_{\mathrm{op}}
 =
 \left\|
@@ -127,16 +203,16 @@ Since $m_\pi(x)=\int k(x,y)\,\mathrm{d}\pi(y)$ and $\pi$ is a probability measur
 \leq
 \sup_{x,y\in\R^d}
 \|\nabla_{11}^2 k(x,y)\|_{\mathrm{op}} = C_1.
-\]
+\end{align*}
 Using $\sum_{j=1}^Nw_j=1$, it follows that
-\[
+\begin{align*}
 \left|
 \sum_{i,j=1}^N w_i w_j u_i^\top\nabla_{11}^2 k(x_i,x_j)u_i - \sum_{i=1}^N w_i u_i^\top\nabla^2m_\pi(x_i)u_i
 \right| \leq 2 C_1
 \sum_{i=1}^Nw_i\|u_i\|^2.
-\]
+\end{align*}
 For the mixed term,
-\[
+\begin{align*}
 \left|
 \sum_{i,j=1}^N
 w_iw_j
@@ -146,15 +222,15 @@ u_i^\top\nabla_{12}^2 k(x_i,x_j)u_j
 \sup_{x,y\in\R^d}
 \|\nabla_{12}^2 k(x,y)\|_{\mathrm{op}}
 \left(\sum_{i=1}^Nw_i\|u_i\|\right)^2 = C_2 \left(\sum_{i=1}^Nw_i\|u_i\|\right)^2 .
-\]
+\end{align*}
 By Cauchy--Schwarz and $\sum_{i=1}^Nw_i=1$, we have
 $\left(\sum_{i=1}^N w_i\|u_i\|\right)^2
 \leq \sum_{i=1}^Nw_i\|u_i\|^2$. Therefore,
-\[
+\begin{align*}
 \left|
 \nabla_{\bm{X}}^2 E(\bm{X},\bm{w})[\bm{u},\bm{u}]
 \right| \leq \left( 2C_1 + C_2\right) \sum_{i=1}^N w_i\|u_i\|^2 = \left( 2C_1 + C_2\right) \|\bm{u}\|_{\bm{w}}^2.
-\]
+\end{align*}
 The last step holds by the definition of $\bm{w}$-weighted Euclidean geometry in \Cref{defi:weighted_euc}. 
 This proves smoothness under the weighted Euclidean geometry.
 
@@ -168,22 +244,7 @@ For the standard Euclidean geometry, since $\sum_{i=1}^Nw_i\|u_i\|^2
 The proof is concluded.
 \end{proof}
 
-
-\subsection{Convergence}
-\begin{theorem}[Monotone improvement]
-\label{thm:wift-kq-descent}
-At iteration $t\in\N$, let $\mu_N^{(t)}=\sum_{i=1}^N w_i^{(t)}\delta_{x_i^{(t)}}$ with $\bm{X}_t=(x_1^{(t)},\ldots,x_N^{(t)})$, and $\bm{w}^{(t)}=(w_1^{(t)},\ldots,w_N^{(t)})$. 
-
-Assume that $k$ is twice continuously differentiable, that $K(\bm{X}_t)$ is positive definite for every $t$, and that the weights remain uniformly positive, namely $w_i^{(t)}\geq \underline w>0$ for every $i,t$. Assume moreover that, for every admissible $\bm{w}$, the map $\bm{X}\mapsto\mathcal{E}(\bm{X},\bm{w})$ has an $L_X$-Lipschitz gradient on a set containing all iterates. If $\tau\alpha\leq 2\underline w/L_X$, then for every $t\geq0$, 
-\begin{align}
-\operatorname{MMD} \left( \mu_N^{(t+1)},\pi
-\right) \leq \operatorname{MMD}
-\left( \mu_N^{(t)},\pi \right). 
-\label{eq:wift-mmd-monotonicity}
-\end{align} 
-\end{theorem}
-
-\begin{proof}
+\begin{proof}[Proof of \Cref{thm:wift-kq-descent}]
 For fixed $\bm{X}$ and $\bm{w}$, let
 $g_i(\bm{X},\bm{w})=\sum_{j=1}^N w_j\nabla_2 k(x_j,x_i)-\nabla m_\pi(x_i)$. 
 Define the MMD energy by
@@ -338,28 +399,7 @@ Combining the two substeps yields
 Hence, $\mathcal{E}(\bm{X}_t,\bm{w}^{(t)})$ is nonincreasing, and the proof is concluded. 
 \end{proof}
 
-
-\begin{lem}[Uniform control of the kernel quadrature residual]
-\label{lem:kq-residual-control}
-Suppose that the assumptions of Theorem~\ref{thm:wift-kq-descent} hold and that the initial weights are chosen as $\bm{w}^{(0)}=\bm{w}_{\mathrm{KQ}}(\bm{X}_0) $.
-Then, for every $t\geq 0$, $\operatorname{MMD}
-\left(
-\sum_{i=1}^N
-w_{\mathrm{KQ},i} (\bm{X}_t)
-\delta_{x_i^{(t)}},
-\pi
-\right)
-\leq
-\operatorname{MMD}
-\left(
-\sum_{i=1}^N
-w_{\mathrm{KQ},i}(\bm{X}_0)
-\delta_{x_i^{(0)}},
-\pi
-\right)$. 
-\end{lem}
-
-\begin{proof}
+\begin{proof}[Proof of \Cref{lem:kq-residual-control}]
 Recall the definition that $\mathcal{E}(\bm{X},\bm{w})
 =\frac12\operatorname{MMD}^2\left(\sum_{i=1}^N w_i\delta_{x_i},\pi\right)$. For any fixed particle locations $\bm{X}_t$, the kernel quadrature weights
 $\bm{w}_{\mathrm{KQ}}(\bm{X}_t)$ minimize the MMD energy over the weights. Hence, $\mathcal{E}\left(
@@ -404,27 +444,7 @@ Combining the previous inequalities gives
 The proof is thus concluded. 
 \end{proof}
 
-\begin{theorem}[Convergence to the kernel quadrature error]
-\label{thm:wift-convergence}
-Suppose that the assumptions of Theorem~\ref{thm:wift-kq-descent} hold, and that the initial weights are chosen as $\bm{w}^{(0)}=\bm{w}_{\mathrm{KQ}}(\bm{X}_0)$. Then, the WIFT iterates satisfy
-\begin{align*}
-\operatorname{MMD}^2(\mu_N^{(t)},\pi) \leq
-\frac{1}{(1+\eta)^{2t}}
-\operatorname{MMD}^2(\mu_N^{(0)},\pi) +
-\left(
-1-\frac{1}{(1+\eta)^{2t}}
-\right)
-\operatorname{MMD}^2
-\left(
-\sum_{i=1}^N
-w_{\mathrm{KQ},i}(\bm{X}_0)
-\delta_{x_i^{(0)}},
-\pi
-\right). 
-\end{align*}
-\end{theorem}
-
-\begin{proof}
+\begin{proof}[Proof of \Cref{thm:wift-convergence}]
 From the exact contraction of the weight update in
 Eq.~\eqref{eq:kq-weight-contraction}, together with descent of the Wasserstein position update, we have
 \begin{align}
@@ -457,23 +477,3 @@ and therefore
 \end{align}
 The proof is concluded. 
 \end{proof}
-
-
-\begin{rem}
-Theorem~\ref{thm:wift-convergence} separates the optimization error from the
-statistical error of the initial kernel quadrature rule. In particular, if
-$\operatorname{MMD}(\sum_{i=1}^N
-w_{\mathrm{KQ},i}(\bm{X}_0)\delta_{x_i^{(0)}},\pi)
-=O_{\mathbb{P}}(N^{-s/d})$, then
-\begin{align*}
-\operatorname{MMD}(\mu_N^{(t)},\pi)
-&\leq \frac{1}{(1+\eta)^t}
-\operatorname{MMD}(\mu_N^{(0)},\pi)
-+O_{\mathbb{P}}(N^{-s/d}).
-\end{align*}
-Thus, the optimization error decays geometrically until it reaches the
-kernel quadrature error floor. If, in addition,
-$\operatorname{MMD}(\mu_N^{(0)},\pi)=O_{\mathbb{P}}(1)$, then choosing
-$t\geq \frac{s}{d\log(1+\eta)}\log N$ is sufficient to obtain
-$\operatorname{MMD}(\mu_N^{(t)},\pi)=O_{\mathbb{P}}(N^{-s/d})$.
-\end{rem}
