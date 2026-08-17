@@ -29,7 +29,7 @@ Similarly as WFR-GF, an interpolation of WGF and IFT-GF can also be constructed
 \section{$\calF=\mmd$ and geometry=$\mmd$}
 We focus on MMD due to its interpretation as the worse-case integration error in the unit ball of a RKHS. 
 If $\calF$ is the MMD distance $\calF(\cdot)=\mmd^2(\cdot, \pi)$, then $\calF'[\mu](\cdot)=\int k(x, \cdot) \dd(\mu-\pi) = \mathcal{K}(\mu-\pi)$. 
-MSIP uses the WFG-GF, but here we focus on the WIFT-GF. 
+MSIP is derived from the stationary conditions of an unbalanced WFR gradient flow \citep{belhadji2026weighted}, whereas here we focus on the WIFT-GF.
 The main reason is that, \cite{gladin2024interaction} has proved that $\operatorname{MMD}^2\left(\mu_t, \pi\right) \leq e^{-2 \beta t} \cdot \operatorname{MMD}^2 \left(\mu_0, \pi\right)$. 
 
 Following \cite{gladin2024interaction}, a way to simulate the WIFT-GF is via an weighted interacting particle system.  
@@ -52,6 +52,59 @@ And the solution is, when ignoring the simplex constraint,
 \begin{align*}
     \bm{w}^{(t+1)} = \frac{1}{1+\eta} \bm{w}^{(t)} + \frac{\eta}{1+\eta} \bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}).
 \end{align*}
+
+Table~\ref{tab:mmd-particle-geometries} collects the particle discretizations of the MMD gradient flow under the three geometries and the MSIP update of \citet{belhadji2026weighted}. In the WFR scheme, the transport step precedes the weight step, which is evaluated at the updated particle locations. The WFR weight update is obtained by applying forward Euler discretization to the Fisher--Rao reaction term in Eq.~\textup{(WFR-GF)}.
+
+\begin{center}
+\begin{minipage}{\textwidth}
+\captionsetup{hypcap=false}
+\captionof{table}{Particle updates for MMD minimization under Wasserstein, WFR, and MMD geometries, together with MSIP.}
+\label{tab:mmd-particle-geometries}
+\small
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.16\textwidth}>{\raggedright\arraybackslash}p{0.79\textwidth}@{}}
+\toprule
+Geometry or method & Particle update \\
+\midrule
+Wasserstein
+& Particle locations follow Eq.~\eqref{eq:wass_update}, while $\bm{w}^{(t+1)}=\bm{w}^{(t)}$. \\
+WFR
+& Particle locations follow Eq.~\eqref{eq:wass_update}, followed by
+\(\displaystyle
+\begin{aligned}
+w_i^{(t+1)}={}&w_i^{(t)}-\tau\beta w_i^{(t)}
+\Bigg\{
+\sum_{j=1}^N w_j^{(t)}k\left(x_j^{(t+1)},x_i^{(t+1)}\right)
+-m_\pi\left(x_i^{(t+1)}\right) \\
+&\quad-
+\sum_{\ell=1}^N w_\ell^{(t)}
+\left[
+\sum_{j=1}^N w_j^{(t)}k\left(x_j^{(t+1)},x_\ell^{(t+1)}\right)
+-m_\pi\left(x_\ell^{(t+1)}\right)
+\right]
+\Bigg\} .
+\end{aligned}
+\) \\
+MMD
+& Particle locations remain fixed, $x_i^{(t+1)}=x_i^{(t)}$, while the weights follow Eq.~\eqref{eq:ift_update} with $\bm{X}_{t+1}=\bm{X}_t$. \\
+MSIP
+& For a squared-exponential kernel, the damped fixed-point update is
+\(\displaystyle
+\begin{aligned}
+x_i^{(t+1)}={}&(1-\tau)x_i^{(t)}
++\frac{\tau}{w_{\mathrm{KQ},i}(\bm{X}_t)}
+\sum_{j=1}^N
+\left[K(\bm{X}_t)^{-1}\right]_{ij}
+\int x k\left(x,x_j^{(t)}\right)\dd\pi(x), \\
+&\bm{w}^{(t+1)}=\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}).
+\end{aligned}
+\) \\
+\bottomrule
+\end{tabular}
+\end{minipage}
+\end{center}
+
+The centering term in the WFR update preserves $\sum_{i=1}^N w_i^{(t)}=1$. Nonnegativity additionally requires $\tau\beta$ to be sufficiently small. The WIFT discretization in Eqs.~\eqref{eq:wass_update}--\eqref{eq:ift_update} combines the Wasserstein location update with the MMD weight update in Table~\ref{tab:mmd-particle-geometries}. In contrast, MSIP is a damped fixed-point method for the stationary conditions of the unbalanced WFR flow, rather than a time discretization of the normalized WFR flow in Eq.~\textup{(WFR-GF)}. Its update requires $K(\bm{X}_t)$ to be invertible and the kernel quadrature weights to be positive.
 
 In contrast, the update scheme for the standard Euclidean gradient is:
 \begin{align}\label{eq:euc_update_1}

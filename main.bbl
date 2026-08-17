@@ -1,9 +1,17 @@
-\begin{thebibliography}{3}
+\begin{thebibliography}{4}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Belhadji et~al.(2026)Belhadji, Sharp, and
+  Marzouk]{belhadji2026weighted}
+Ayoub Belhadji, Daniel Sharp, and Youssef Marzouk.
+\newblock Weighted quantization using {MMD}: From mean field to mean shift
+  using gradient flows.
+\newblock In \emph{Proceedings of the 29th International Conference on
+  Artificial Intelligence and Statistics}, 2026.
 
 \bibitem[Gladin et~al.(2024)Gladin, Dvurechensky, Mielke, and
   Zhu]{gladin2024interaction}
