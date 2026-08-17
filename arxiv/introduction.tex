@@ -78,31 +78,15 @@ Equivalently, its $i$-th component is $\left[\grad_{\bm{w}} f(\bm{X})\right]_i =
 
 
 \begin{prop}[Smoothness under Euclidean and weighted Euclidean geometries]
-Let $\bm{w}\in\Delta^N$ with $w_i>0$ for every $i$, and suppose that $k$ is symmetric and twice continuously differentiable, with $\sup_{x,y\in\R^d}\|\nabla_{11}^2 k(x,y)\|_{\mathrm{op}}<\infty$ and $\sup_{x,y\in\R^d}\|\nabla_{12}^2 k(x,y)\|_{\mathrm{op}}<\infty$. For fixed $\bm{w}$, consider
+Let $\bm{w}\in\Delta^N$ with $w_i>0$ for every $i$ and $\sum_{i=1}^N w_i=1$. 
+Suppose that $k$ is symmetric and twice continuously differentiable, with $\sup_{x,y\in\R^d}\|\nabla_{11}^2 k(x,y)\|_{\mathrm{op}} = C_1<\infty$ and $\sup_{x,y\in\R^d}\|\nabla_{12}^2 k(x,y)\|_{\mathrm{op}}=C_2 <\infty$. For fixed $\bm{w}$, define
 \[
 E(\bm{X},\bm{w})
 =
 \frac{1}{2}\mmd^2\left(\sum_{i=1}^N w_i\delta_{x_i},\pi\right).
 \]
-Then $E(\cdot,\bm{w})$ is $L_{\mathrm{Euc}}$-smooth under the standard Euclidean geometry, with
-\[
-L_{\mathrm{Euc}}
-\leq
-\max_{1\leq i\leq N}w_i
-\left(
-2\sup_{x,y\in\R^d}\|\nabla_{11}^2 k(x,y)\|_{\mathrm{op}}
-+
-\sup_{x,y\in\R^d}\|\nabla_{12}^2 k(x,y)\|_{\mathrm{op}}
-\right).
-\]
-Moreover, $E(\cdot,\bm{w})$ is $L_{\bm{w}}$-smooth under the $\bm{w}$-weighted Euclidean geometry, with
-\[
-L_{\bm{w}}
-\leq
-2\sup_{x,y\in\R^d}\|\nabla_{11}^2 k(x,y)\|_{\mathrm{op}}
-+
-\sup_{x,y\in\R^d}\|\nabla_{12}^2 k(x,y)\|_{\mathrm{op}}.
-\]
+Then $E(\cdot,\bm{w})$ is $\max_{1\leq i\leq N}w_i (2 C_1 + C_2)$-smooth under the standard Euclidean geometry; 
+and is $(2 C_1 + C_2)$-smooth under the $\bm{w}$-weighted Euclidean geometry. 
 \end{prop}
 
 \begin{proof}
