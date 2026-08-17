@@ -59,7 +59,7 @@ In contrast, the update scheme for the standard Euclidean gradient is:
 \end{align}
 Comparing the two update schemes, we note that the two only differs by a weight factor $w_i$. 
 
-\begin{defi}[Weighted Euclidean Geometry]
+\begin{defi}[Weighted Euclidean Geometry]\label{defi:weighted_euc}
 For a positive weight vector $\bm{w}=(w_1,\ldots,w_N) \in\R_{>0}^N$, we equip the particle space $(\R^d)^N$ with the $\bm{w}$-weighted Euclidean inner product $\langle \bm{u},\bm{v}\rangle_{\bm{w}}
 := \sum_{i=1}^N w_i \langle u_i,v_i\rangle$, 
 with the induced norm $\|\bm{u}\|_{\bm{w}}^2 := \sum_{i=1}^N w_i \|u_i\|_2^2$. 
@@ -126,23 +126,13 @@ Since $m_\pi(x)=\int k(x,y)\,\mathrm{d}\pi(y)$ and $\pi$ is a probability measur
 \right\|_{\mathrm{op}}
 \leq
 \sup_{x,y\in\R^d}
-\|\nabla_{11}^2 k(x,y)\|_{\mathrm{op}}.
+\|\nabla_{11}^2 k(x,y)\|_{\mathrm{op}} = C_1.
 \]
 Using $\sum_{j=1}^Nw_j=1$, it follows that
 \[
 \left|
-\sum_{i,j=1}^N
-w_iw_j
-u_i^\top\nabla_{11}^2 k(x_i,x_j)u_i
--
-\sum_{i=1}^N
-w_i
-u_i^\top\nabla^2m_\pi(x_i)u_i
-\right|
-\leq
-2
-\sup_{x,y\in\R^d}
-\|\nabla_{11}^2 k(x,y)\|_{\mathrm{op}}
+\sum_{i,j=1}^N w_i w_j u_i^\top\nabla_{11}^2 k(x_i,x_j)u_i - \sum_{i=1}^N w_i u_i^\top\nabla^2m_\pi(x_i)u_i
+\right| \leq 2 C_1
 \sum_{i=1}^Nw_i\|u_i\|^2.
 \]
 For the mixed term,
@@ -155,74 +145,26 @@ u_i^\top\nabla_{12}^2 k(x_i,x_j)u_j
 \leq
 \sup_{x,y\in\R^d}
 \|\nabla_{12}^2 k(x,y)\|_{\mathrm{op}}
-\left(\sum_{i=1}^Nw_i\|u_i\|\right)^2.
+\left(\sum_{i=1}^Nw_i\|u_i\|\right)^2 = C_2 \left(\sum_{i=1}^Nw_i\|u_i\|\right)^2 .
 \]
 By Cauchy--Schwarz and $\sum_{i=1}^Nw_i=1$, we have
-\[
-\left(\sum_{i=1}^Nw_i\|u_i\|\right)^2
-\leq
-\sum_{i=1}^Nw_i\|u_i\|^2.
-\]
-Therefore,
+$\left(\sum_{i=1}^N w_i\|u_i\|\right)^2
+\leq \sum_{i=1}^Nw_i\|u_i\|^2$. Therefore,
 \[
 \left|
 \nabla_{\bm{X}}^2 E(\bm{X},\bm{w})[\bm{u},\bm{u}]
-\right|
-\leq
-\left(
-2\sup_{x,y\in\R^d}\|\nabla_{11}^2 k(x,y)\|_{\mathrm{op}}
-+
-\sup_{x,y\in\R^d}\|\nabla_{12}^2 k(x,y)\|_{\mathrm{op}}
-\right)
-\sum_{i=1}^Nw_i\|u_i\|^2.
+\right| \leq \left( 2C_1 + C_2\right) \sum_{i=1}^N w_i\|u_i\|^2 = \left( 2C_1 + C_2\right) \|\bm{u}\|_{\bm{w}}^2.
 \]
-Under the $\bm{w}$-weighted Euclidean geometry, $\|\bm{u}\|_{\bm{w}}^2=\sum_{i=1}^Nw_i\|u_i\|^2$. Hence
-\[
-\left|
-\nabla_{\bm{X}}^2E(\bm{X},\bm{w})[\bm{u},\bm{u}]
-\right|
-\leq
-L_{\bm{w}}\|\bm{u}\|_{\bm{w}}^2,
-\]
-where
-\[
-L_{\bm{w}}
-=
-2\sup_{x,y\in\R^d}\|\nabla_{11}^2 k(x,y)\|_{\mathrm{op}}
-+
-\sup_{x,y\in\R^d}\|\nabla_{12}^2 k(x,y)\|_{\mathrm{op}}.
-\]
+The last step holds by the definition of $\bm{w}$-weighted Euclidean geometry in \Cref{defi:weighted_euc}. 
 This proves smoothness under the weighted Euclidean geometry.
 
-For the standard Euclidean geometry, since
-\[
-\sum_{i=1}^Nw_i\|u_i\|^2
+For the standard Euclidean geometry, since $\sum_{i=1}^Nw_i\|u_i\|^2
 \leq
 \left(\max_{1\leq i\leq N}w_i\right)
 \sum_{i=1}^N\|u_i\|^2
 =
 \left(\max_{1\leq i\leq N}w_i\right)
-\|\bm{u}\|_2^2,
-\]
-we obtain
-\[
-\left|
-\nabla_{\bm{X}}^2E(\bm{X},\bm{w})[\bm{u},\bm{u}]
-\right|
-\leq
-L_{\mathrm{Euc}}\|\bm{u}\|_2^2,
-\]
-with
-\[
-L_{\mathrm{Euc}}
-\leq
-\max_{1\leq i\leq N}w_i
-\left(
-2\sup_{x,y\in\R^d}\|\nabla_{11}^2 k(x,y)\|_{\mathrm{op}}
-+
-\sup_{x,y\in\R^d}\|\nabla_{12}^2 k(x,y)\|_{\mathrm{op}}
-\right).
-\]
+\|\bm{u}\|_2^2$. 
 The proof is concluded.
 \end{proof}
 
