@@ -53,42 +53,60 @@ And the solution is, when ignoring the simplex constraint,
     \bm{w}^{(t+1)} = \frac{1}{1+\eta} \bm{w}^{(t)} + \frac{\eta}{1+\eta} \bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}).
 \end{align*}
 
-Table~\ref{tab:mmd-particle-geometries} collects the particle discretizations of the MMD gradient flow under the three geometries and the MSIP update of \citet{belhadji2026weighted}. In the WFR scheme, the transport step precedes the weight step, which is evaluated at the updated particle locations. The WFR weight update is obtained by applying forward Euler discretization to the Fisher--Rao reaction term in Eq.~\textup{(WFR-GF)}.
+To state the particle updates compactly, define the kernel-mean residual
+\begin{align*}
+h_{\bm{X},\bm{w}}(x)
+:=
+\sum_{j=1}^N w_j k(x_j,x)-m_\pi(x).
+\end{align*}
+Table~\ref{tab:mmd-particle-geometries} gives the location and weight updates explicitly for the three geometries and for MSIP \citep{belhadji2026weighted}. In the WFR scheme, the transport step precedes the weight step, which is evaluated at the updated particle locations. The WFR weight update is obtained by applying forward Euler discretization to the Fisher--Rao reaction term in Eq.~\textup{(WFR-GF)}.
 
-\begin{center}
-\begin{minipage}{\textwidth}
-\captionsetup{hypcap=false}
-\captionof{table}{Particle updates for MMD minimization under Wasserstein, WFR, and MMD geometries, together with MSIP.}
+\begin{table}[t]
+\centering
+\caption{Location and weight updates for MMD minimization under Wasserstein, WFR, and MMD geometries, together with MSIP.}
 \label{tab:mmd-particle-geometries}
 \small
 \renewcommand{\arraystretch}{1.5}
 \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.16\textwidth}>{\raggedright\arraybackslash}p{0.79\textwidth}@{}}
 \toprule
-Geometry or method & Particle update \\
+Geometry or method & Location and weight updates \\
 \midrule
 Wasserstein
-& Particle locations follow Eq.~\eqref{eq:wass_update}, while $\bm{w}^{(t+1)}=\bm{w}^{(t)}$. \\
-WFR
-& Particle locations follow Eq.~\eqref{eq:wass_update}, followed by
-\(\displaystyle
+& \(\displaystyle
 \begin{aligned}
-w_i^{(t+1)}={}&w_i^{(t)}-\tau\beta w_i^{(t)}
-\Bigg\{
-\sum_{j=1}^N w_j^{(t)}k\left(x_j^{(t+1)},x_i^{(t+1)}\right)
--m_\pi\left(x_i^{(t+1)}\right) \\
-&\quad-
-\sum_{\ell=1}^N w_\ell^{(t)}
+x_i^{(t+1)}
+&=x_i^{(t)}-\tau\alpha\nabla h_{\bm{X}_t,\bm{w}^{(t)}}\left(x_i^{(t)}\right), \\
+w_i^{(t+1)}
+&=w_i^{(t)}=\frac{1}{N}.
+\end{aligned}
+\) \\
+WFR
+& \(\displaystyle
+\begin{aligned}
+x_i^{(t+1)}
+&=x_i^{(t)}-\tau\alpha\nabla h_{\bm{X}_t,\bm{w}^{(t)}}\left(x_i^{(t)}\right), \\
+w_i^{(t+1)}
+&=w_i^{(t)}-\tau\beta w_i^{(t)}
 \left[
-\sum_{j=1}^N w_j^{(t)}k\left(x_j^{(t+1)},x_\ell^{(t+1)}\right)
--m_\pi\left(x_\ell^{(t+1)}\right)
-\right]
-\Bigg\} .
+h_{\bm{X}_{t+1},\bm{w}^{(t)}}\left(x_i^{(t+1)}\right)
+-\sum_{j=1}^N w_j^{(t)}
+h_{\bm{X}_{t+1},\bm{w}^{(t)}}\left(x_j^{(t+1)}\right)
+\right].
 \end{aligned}
 \) \\
 MMD
-& Particle locations remain fixed, $x_i^{(t+1)}=x_i^{(t)}$, while the weights follow Eq.~\eqref{eq:ift_update} with $\bm{X}_{t+1}=\bm{X}_t$. \\
+& \(\displaystyle
+\begin{aligned}
+x_i^{(t+1)}
+&=x_i^{(t)}, \\
+\bm{w}^{(t+1)}
+&=\frac{1}{1+\eta}\bm{w}^{(t)}
++\frac{\eta}{1+\eta}\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}),
+\qquad \bm{X}_{t+1}=\bm{X}_t.
+\end{aligned}
+\) \\
 MSIP
-& For a squared-exponential kernel, the damped fixed-point update is
+& For a squared-exponential kernel,
 \(\displaystyle
 \begin{aligned}
 x_i^{(t+1)}={}&(1-\tau)x_i^{(t)}
@@ -101,10 +119,9 @@ x_i^{(t+1)}={}&(1-\tau)x_i^{(t)}
 \) \\
 \bottomrule
 \end{tabular}
-\end{minipage}
-\end{center}
+\end{table}
 
-The centering term in the WFR update preserves $\sum_{i=1}^N w_i^{(t)}=1$. Nonnegativity additionally requires $\tau\beta$ to be sufficiently small. The WIFT discretization in Eqs.~\eqref{eq:wass_update}--\eqref{eq:ift_update} combines the Wasserstein location update with the MMD weight update in Table~\ref{tab:mmd-particle-geometries}. In contrast, MSIP is a damped fixed-point method for the stationary conditions of the unbalanced WFR flow, rather than a time discretization of the normalized WFR flow in Eq.~\textup{(WFR-GF)}. Its update requires $K(\bm{X}_t)$ to be invertible and the kernel quadrature weights to be positive.
+The Wasserstein row uses uniform initial weights, which remain equal to $1/N$ under transport; arbitrary initial weights would likewise remain fixed. The centering term in the WFR update preserves $\sum_{i=1}^N w_i^{(t)}=1$, while nonnegativity additionally requires $\tau\beta$ to be sufficiently small. The MMD row gives the closed-form weight update obtained when the simplex constraint in Eq.~\eqref{eq:ift_update} is ignored. The WIFT discretization in Eqs.~\eqref{eq:wass_update}--\eqref{eq:ift_update} combines the Wasserstein location update with the MMD weight update in Table~\ref{tab:mmd-particle-geometries}. In contrast, MSIP is a damped fixed-point method for the stationary conditions of the unbalanced WFR flow, rather than a time discretization of the normalized WFR flow in Eq.~\textup{(WFR-GF)}. Its update requires $K(\bm{X}_t)$ to be invertible and the kernel quadrature weights to be positive.
 
 In contrast, the update scheme for the standard Euclidean gradient is:
 \begin{align}\label{eq:euc_update_1}
