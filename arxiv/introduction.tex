@@ -36,11 +36,10 @@ If $\calF$ is the MMD distance $\calF(\cdot)=\mmd^2(\cdot, \pi)$, then the first
 Then, we can derive the particle descent scheme of the corresponding gradient flows. 
 
 Let $\mu_N^{(t)}=\sum_{i=1}^N w_i^{(t)} \delta_{x_i^{(t)}}$ be a weighted empirical measure at iteration $t$. Write $\bm{X}^{(t)}=(x_1^{(t)},\ldots,x_N^{(t)})$ and $\bm{w}^{(t)}=(w_1^{(t)},\ldots,w_N^{(t)})$.
-Denote $m_\pi=\int k(x,\cdot)\dd \pi$ as the kernel mean embedding, and denote the kernel-mean residual as 
+Denote $m_\pi=\int k(x,\cdot)\dd \pi$ as the kernel mean embedding. 
+Denote the kernel-mean residual and its vectorized counterpart as,  
 \begin{align*}
-h_{\bm{X},\bm{w}}(x)
-:=
-\sum_{j=1}^N w_j k(x_j,x)-m_\pi(x).
+h_{\bm{X},\bm{w}}(x) := \sum_{j=1}^N w_j k(x_j,x)-m_\pi(x) \in \R, \quad h_{\bm{X},\bm{w}}(\bm{v}) = [h_{\bm{X},\bm{w}}(v_1), \ldots, h_{\bm{X},\bm{w}}(v_N)]^\top \in \R^N .
 \end{align*}
 Define
 \begin{align*}
@@ -50,10 +49,12 @@ E(\bm{X},\bm{w})
 \end{align*}
 
 \paragraph{Euclidean geometry}
-One most straight-forward way of finding the weights and locations are running gradient descent: $\bm{X}^{(t+1)}=\bm{X}^{(t)} - \tau \nabla_{\bm{X}} E(\bm{X}^{(t)},\bm{w}^{(t)})$ and $\bm{w}^{(t+1)}=\bm{w}^{(t)} - \tau \nabla_{\bm{w}} E(\bm{X}^{(t)},\bm{w}^{(t)})$. Expanding the derivative gives the following explicit update scheme, 
+The most straightforward approach to optimizing the particle locations and weights is to apply gradient descent jointly to $\bm{X}$ and $\bm{w}$.  Let $\tau>0$ be the step size. Then, $\bm{X}^{(t+1)}=\bm{X}^{(t)} - \tau \nabla_{\bm{X}} E(\bm{X}^{(t)},\bm{w}^{(t)})$ and $\bm{w}^{(t+1)}=\bm{w}^{(t)} - \tau \nabla_{\bm{w}} E(\bm{X}^{(t)},\bm{w}^{(t)})$. 
+xpanding the gradients yields the following explicit update scheme: for each $i\in[N]$, 
 \begin{align}
-    x_i^{(t+1)}=x_i^{(t)}-\tau w_i^{(t)} \nabla h_{\bm{X}^{(t)}, \bm{w}^{(t)}}\left( x_i^{(t)} \right), \quad w_i^{(t+1)} =w_i^{(t)}-\tau\beta w_i^{(t)} h_{\bm{X}^{(t)},\bm{w}^{(t)}} \left(x_i^{(t)}\right)
+    x_i^{(t+1)}=x_i^{(t)}-\tau w_i^{(t)} \nabla h_{\bm{X}^{(t)}, \bm{w}^{(t)}}\left( x_i^{(t)} \right), \quad w_i^{(t+1)} =w_i^{(t)}-\tau h_{\bm{X}^{(t+1)},\bm{w}^{(t)}} \left(x_i^{(t+1)}\right)
 \end{align}
+In particular, we use Gauss--Seidel-type block gradient descent where the weight update scheme use $\bm{X}^{(t+1)}$ instead of $\bm{X}^{(t)}$, for later consistency with the other update schemes. 
 
 
 
@@ -73,14 +74,14 @@ The locations are first updated as the same as above, however, the weight update
     x_i^{(t+1)} &= x_i^{(t)}-\tau\alpha \nabla h_{\bm{X}^{(t)},\bm{w}^{(t)}}\left(x_i^{(t)}\right), \\
     \bm{w}^{(t+1)} &= \arg \min _{\bm{w} \in \Delta^N} \left\{\frac{1}{2} \mmd^2\left(\sum_{i=1}^N w_i \delta_{x_i^{(t+1)}}, \pi\right) + \frac{1}{2 (\beta \tau)} \mmd^2 \left(\sum_{i=1}^N w_i \delta_{x_i^{(t+1)}}, \mu_N^{(t)}\right) \right\}.
 \end{align}
-Interestingly, letting $K^{(t+1)}=K(\bm{X}^{(t+1)})\in\R^{N\times N}$, the weight problem is
+Interestingly, letting $K^{(t+1)}=K(\bm{X}^{(t+1)}, \bm{X}^{(t+1)}) \in\R^{N\times N}$ be the Gram matrix, the weight problem is
 \begin{align*}
     \min_{\bm{w}\in \Delta^N} \left\{\frac{1}{2} \bm{w}^{\top} K^{(t+1)} \bm{w} - m_\pi(\bm{X}^{(t+1)})^{\top} \bm{w} + \frac{1}{2 \eta} \left(\bm{w}-\bm{w}^{(t)} \right)^{\top} K^{(t+1)} \left(\bm{w}-\bm{w}^{(t)}\right)\right\} ,
 \end{align*}
 By definition of kernel quadrature, there is $m_\pi(\bm{X}^{(t+1)}) = K^{(t+1)} \bm{w}_{\mathrm{KQ}}(\bm{X}^{(t+1)})$.
-And the solution is, when ignoring the simplex constraint, 
+And the solution is, when ignoring the simplex constraint, $\bm{w}^{(t+1)} = \frac{1}{1+\eta} \bm{w}^{(t)} + \frac{\eta}{1+\eta} \bm{w}_{\mathrm{KQ}}(\bm{X}^{(t+1)})$ which can be equivalently written as, 
 \begin{align*}
-    \bm{w}^{(t+1)} = \frac{1}{1+\eta} \bm{w}^{(t)} + \frac{\eta}{1+\eta} \bm{w}_{\mathrm{KQ}}(\bm{X}^{(t+1)}).
+    \bm{w}^{(t+1)} = \bm{w}^{(t)} - \frac{1}{1+(\tau\beta)} {K^{(t+1)}}^{-1} \left( h_{\bm{X}^{(t+1)},\bm{w}^{(t)}} \left(\bm{X}^{(t+1)}\right) \right).
 \end{align*}
 
 To state the particle updates compactly, 
