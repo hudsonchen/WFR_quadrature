@@ -1,8 +1,8 @@
 
 \section{Introduction}
+We focus on MMD due to its interpretation as the worse-case integration error in the unit ball of a RKHS. 
 
-
-\section{Population level: gradient flows}
+\section{Gradient Flows}
 Given a functional $\calF:\calP(\R^d)\to\R$, its gradient-flow dynamics depend on the choice of geometry on the underlying space of measures. One of the most commonly used geometries is the Wasserstein-2 geometry, induced by the Wasserstein-2 distance. Its associated Onsager operator, which is the inverse of the Riemannian metric tensor, is given by
 $\mathbb{K}_W(\rho): T_\rho^* \mathcal{M}^{+} \rightarrow T_\rho \mathcal{M}^{+}, \xi \mapsto-\operatorname{div}(\rho \nabla \xi)$.
 Hence, the Wasserstein gradient flow of $\calF$ is
@@ -30,8 +30,8 @@ Similarly as WFR-GF, an interpolation of WGF and IFT-GF can also be constructed
 It has been proved that~\citep{gladin2024interaction}, for both IFT-GF and WIFT-GF, $\operatorname{MMD}^2\left(\mu_t, \pi\right) \leq e^{-2 \beta t} \cdot \operatorname{MMD}^2 \left(\mu_0, \pi\right)$. 
 
 
-\section{Particle level: particle descent} 
-We focus on MMD due to its interpretation as the worse-case integration error in the unit ball of a RKHS. 
+\section{Particle Descent} 
+
 If $\calF$ is the MMD distance $\calF(\cdot)=\mmd^2(\cdot, \pi)$, then the first variation $\calF'[\mu](\cdot)=\int k(x, \cdot) \dd(\mu-\pi) = \mathcal{K}(\mu-\pi)$. 
 Then, we can derive the particle descent scheme of the corresponding gradient flows. 
 
