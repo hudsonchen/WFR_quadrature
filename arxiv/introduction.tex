@@ -49,12 +49,13 @@ E(\bm{X},\bm{w})
 \end{align*}
 
 \paragraph{Euclidean geometry}
-The most straightforward approach to optimizing the particle locations and weights is to apply gradient descent jointly to $\bm{X}$ and $\bm{w}$.  Let $\tau>0$ be the step size. Then, $\bm{X}^{(t+1)}=\bm{X}^{(t)} - \tau \nabla_{\bm{X}} E(\bm{X}^{(t)},\bm{w}^{(t)})$ and $\bm{w}^{(t+1)}=\bm{w}^{(t)} - \tau \nabla_{\bm{w}} E(\bm{X}^{(t)},\bm{w}^{(t)})$. 
-xpanding the gradients yields the following explicit update scheme: for each $i\in[N]$, 
+The most straightforward approach to optimizing the particle locations and weights is to apply gradient descent jointly to $\bm{X}$ and $\bm{w}$. 
+For consistency with the update schemes introduced later, we adopt a Gauss--Seidel-type block gradient descent scheme, in which the particle locations are updated first and the weights are subsequently updated using the new locations $\bm{X}^{(t+1)}$. 
+In particular, let $\tau>0$ be the step size. We consider $\bm{X}^{(t+1)}=\bm{X}^{(t)} - \tau \nabla_{\bm{X}} E(\bm{X}^{(t)},\bm{w}^{(t)})$ and $\bm{w}^{(t+1)}=\bm{w}^{(t)} - \tau \nabla_{\bm{w}} E(\bm{X}^{(t)},\bm{w}^{(t)})$. 
+Expanding the gradients yields the following explicit update scheme: for each $i\in[N]$, 
 \begin{align}
     x_i^{(t+1)}=x_i^{(t)}-\tau w_i^{(t)} \nabla h_{\bm{X}^{(t)}, \bm{w}^{(t)}}\left( x_i^{(t)} \right), \quad w_i^{(t+1)} =w_i^{(t)}-\tau h_{\bm{X}^{(t+1)},\bm{w}^{(t)}} \left(x_i^{(t+1)}\right)
 \end{align}
-In particular, we use Gauss--Seidel-type block gradient descent where the weight update scheme use $\bm{X}^{(t+1)}$ instead of $\bm{X}^{(t)}$, for later consistency with the other update schemes. 
 
 
 
