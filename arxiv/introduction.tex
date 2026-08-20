@@ -35,54 +35,54 @@ It has been proved that~\citep{gladin2024interaction}, for both IFT-GF and WIFT-
 If $\calF$ is the MMD distance $\calF(\cdot)=\mmd^2(\cdot, \pi)$, then the first variation $\calF'[\mu](\cdot)=\int k(x, \cdot) \dd(\mu-\pi) = \mathcal{K}(\mu-\pi)$. 
 Then, we can derive the particle descent scheme of the corresponding gradient flows. 
 
-Let $\mu_N^{(t)}=\sum_{i=1}^N w_i^{(t)} \delta_{x_i^{(t)}}$ be a weighted empirical measure at iteration $t$. Write $\bm{X}^{(t)}=(x_1^{(t)},\ldots,x_N^{(t)})$ and $\bm{w}^{(t)}=(w_1^{(t)},\ldots,w_N^{(t)})$.
+Let $\mu_{N,t}=\sum_{i=1}^N w_t^{(i)} \delta_{x_t^{(i)}}$ be a weighted empirical measure at iteration $t$. Write $\bm{X}_t=(x_t^{(1)},\ldots,x_t^{(N)})$ and $\bm{w}_t=(w_t^{(1)},\ldots,w_t^{(N)})$.
 Denote $m_\pi=\int k(x,\cdot)\dd \pi$ as the kernel mean embedding. 
 Denote the kernel-mean residual and its vectorized counterpart as,  
 \begin{align*}
-h_{\bm{X},\bm{w}}(x) := \sum_{j=1}^N w_j k(x_j,x)-m_\pi(x) \in \R, \quad h_{\bm{X},\bm{w}}(\bm{v}) = [h_{\bm{X},\bm{w}}(v_1), \ldots, h_{\bm{X},\bm{w}}(v_N)]^\top \in \R^N .
+h_{\bm{X},\bm{w}}(x) := \sum_{j=1}^N w^{(j)} k(x^{(j)},x)-m_\pi(x) \in \R, \quad h_{\bm{X},\bm{w}}(\bm{v}) = [h_{\bm{X},\bm{w}}(v^{(1)}), \ldots, h_{\bm{X},\bm{w}}(v^{(N)})]^\top \in \R^N .
 \end{align*}
 Define
 \begin{align*}
 E(\bm{X},\bm{w})
 =
-\frac{1}{2}\mmd^2\left(\sum_{i=1}^N w_i\delta_{x_i},\pi\right).
+\frac{1}{2}\mmd^2\left(\sum_{i=1}^N w^{(i)}\delta_{x^{(i)}},\pi\right).
 \end{align*}
 
 \paragraph{Euclidean geometry}
 The most straightforward approach to optimizing the particle locations and weights is to apply gradient descent jointly to $\bm{X}$ and $\bm{w}$. 
-For consistency with the update schemes introduced later, we adopt a Gauss--Seidel-type block gradient descent scheme, in which the particle locations are updated first and the weights are subsequently updated using the new locations $\bm{X}^{(t+1)}$. 
-In particular, let $\tau>0$ be the step size. We consider $\bm{X}^{(t+1)}=\bm{X}^{(t)} - \tau \nabla_{\bm{X}} E(\bm{X}^{(t)},\bm{w}^{(t)})$ and $\bm{w}^{(t+1)}=\bm{w}^{(t)} - \tau \nabla_{\bm{w}} E(\bm{X}^{(t)},\bm{w}^{(t)})$. 
+For consistency with the update schemes introduced later, we adopt a Gauss--Seidel-type block gradient descent scheme, in which the particle locations are updated first and the weights are subsequently updated using the new locations $\bm{X}_{t+1}$.
+In particular, let $\tau>0$ be the step size. We consider $\bm{X}_{t+1}=\bm{X}_t - \tau \nabla_{\bm{X}} E(\bm{X}_t,\bm{w}_t)$ and $\bm{w}_{t+1}=\bm{w}_t - \tau \nabla_{\bm{w}} E(\bm{X}_t,\bm{w}_t)$.
 Expanding the gradients yields the following explicit update scheme: for each $i\in[N]$, 
 \begin{align}
-    x_i^{(t+1)}=x_i^{(t)}-\tau w_i^{(t)} \nabla h_{\bm{X}^{(t)}, \bm{w}^{(t)}}\left( x_i^{(t)} \right), \quad w_i^{(t+1)} =w_i^{(t)}-\tau h_{\bm{X}^{(t+1)},\bm{w}^{(t)}} \left(x_i^{(t+1)}\right)
+    x_{t+1}^{(i)}=x_t^{(i)}-\tau w_t^{(i)} \nabla h_{\bm{X}_t, \bm{w}_t}\left( x_t^{(i)} \right), \quad w_{t+1}^{(i)} =w_t^{(i)}-\tau h_{\bm{X}_{t+1},\bm{w}_t} \left(x_{t+1}^{(i)}\right)
 \end{align}
 
 
 
 \paragraph{Wasserstein Fisher-Rao geometry}
 \begin{align}
-x_i^{(t+1)}
-= x_i^{(t)}-\tau\alpha\nabla h_{\bm{X}^{(t)},\bm{w}^{(t)}}\left(x_i^{(t)}\right), \quad
-w_i^{(t+1)}
-=w_i^{(t)}-\tau\beta w_i^{(t)}
-h_{\bm{X}^{(t+1)},\bm{w}^{(t)}} \left(x_i^{(t+1)}\right) . 
+x_{t+1}^{(i)}
+= x_t^{(i)}-\tau\alpha\nabla h_{\bm{X}_t,\bm{w}_t}\left(x_t^{(i)}\right), \quad
+w_{t+1}^{(i)}
+=w_t^{(i)}-\tau\beta w_t^{(i)}
+h_{\bm{X}_{t+1},\bm{w}_t} \left(x_{t+1}^{(i)}\right) .
 \end{align}
 
 
 \paragraph{Wasserstein IFT geometry} 
 The locations are first updated as the same as above, however, the weight update scheme require knowledge of the true density $\pi$. In reality, the weights are updated instead via an implicit minimizing scheme. 
 \begin{align}
-    x_i^{(t+1)} &= x_i^{(t)}-\tau\alpha \nabla h_{\bm{X}^{(t)},\bm{w}^{(t)}}\left(x_i^{(t)}\right), \\
-    \bm{w}^{(t+1)} &= \arg \min _{\bm{w} \in \Delta^N} \left\{\frac{1}{2} \mmd^2\left(\sum_{i=1}^N w_i \delta_{x_i^{(t+1)}}, \pi\right) + \frac{1}{2 (\beta \tau)} \mmd^2 \left(\sum_{i=1}^N w_i \delta_{x_i^{(t+1)}}, \mu_N^{(t)}\right) \right\}.
+    x_{t+1}^{(i)} &= x_t^{(i)}-\tau\alpha \nabla h_{\bm{X}_t,\bm{w}_t}\left(x_t^{(i)}\right), \\
+    \bm{w}_{t+1} &= \arg \min _{\bm{w} \in \Delta^N} \left\{\frac{1}{2} \mmd^2\left(\sum_{i=1}^N w^{(i)} \delta_{x_{t+1}^{(i)}}, \pi\right) + \frac{1}{2 (\beta \tau)} \mmd^2 \left(\sum_{i=1}^N w^{(i)} \delta_{x_{t+1}^{(i)}}, \mu_{N,t}\right) \right\}.
 \end{align}
-Interestingly, letting $K^{(t+1)}=K(\bm{X}^{(t+1)}, \bm{X}^{(t+1)}) \in\R^{N\times N}$ be the Gram matrix, the weight problem is
+Interestingly, letting $K_{t+1}=K(\bm{X}_{t+1}, \bm{X}_{t+1}) \in\R^{N\times N}$ be the Gram matrix, the weight problem is
 \begin{align*}
-    \min_{\bm{w}\in \Delta^N} \left\{\frac{1}{2} \bm{w}^{\top} K^{(t+1)} \bm{w} - m_\pi(\bm{X}^{(t+1)})^{\top} \bm{w} + \frac{1}{2 \eta} \left(\bm{w}-\bm{w}^{(t)} \right)^{\top} K^{(t+1)} \left(\bm{w}-\bm{w}^{(t)}\right)\right\} ,
+    \min_{\bm{w}\in \Delta^N} \left\{\frac{1}{2} \bm{w}^{\top} K_{t+1} \bm{w} - m_\pi(\bm{X}_{t+1})^{\top} \bm{w} + \frac{1}{2 \eta} \left(\bm{w}-\bm{w}_t \right)^{\top} K_{t+1} \left(\bm{w}-\bm{w}_t\right)\right\} ,
 \end{align*}
-By definition of kernel quadrature, there is $m_\pi(\bm{X}^{(t+1)}) = K^{(t+1)} \bm{w}_{\mathrm{KQ}}(\bm{X}^{(t+1)})$.
-And the solution is, when ignoring the simplex constraint, $\bm{w}^{(t+1)} = \frac{1}{1+\eta} \bm{w}^{(t)} + \frac{\eta}{1+\eta} \bm{w}_{\mathrm{KQ}}(\bm{X}^{(t+1)})$ which can be equivalently written as, 
+By definition of kernel quadrature, there is $m_\pi(\bm{X}_{t+1}) = K_{t+1} \bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1})$.
+And the solution is, when ignoring the simplex constraint, $\bm{w}_{t+1} = \frac{1}{1+\eta} \bm{w}_t + \frac{\eta}{1+\eta} \bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1})$ which can be equivalently written as,
 \begin{align*}
-    \bm{w}^{(t+1)} = \bm{w}^{(t)} - \frac{1}{1+(\tau\beta)} {K^{(t+1)}}^{-1} \left( h_{\bm{X}^{(t+1)},\bm{w}^{(t)}} \left(\bm{X}^{(t+1)}\right) \right).
+    \bm{w}_{t+1} = \bm{w}_t - \frac{1}{1+(\tau\beta)} {K_{t+1}}^{-1} \left( h_{\bm{X}_{t+1},\bm{w}_t} \left(\bm{X}_{t+1}\right) \right).
 \end{align*}
 
 To state the particle updates compactly, 
@@ -101,24 +101,24 @@ Geometry or method & Location and weight updates \\
 Wasserstein
 & \(\displaystyle
 \begin{aligned}
-x_i^{(t+1)}
-&=x_i^{(t)}-\tau\alpha\nabla h_{\bm{X}^{(t)},\bm{w}^{(t)}}\left(x_i^{(t)}\right), \\
-w_i^{(t+1)}
-&=w_i^{(t)}=\frac{1}{N}.
+x_{t+1}^{(i)}
+&=x_t^{(i)}-\tau\alpha\nabla h_{\bm{X}_t,\bm{w}_t}\left(x_t^{(i)}\right), \\
+w_{t+1}^{(i)}
+&=w_t^{(i)}=\frac{1}{N}.
 \end{aligned}
 \) \\
 \hline
 WFR
 & \(\displaystyle
 \begin{aligned}
-x_i^{(t+1)}
-&=x_i^{(t)}-\tau\alpha\nabla h_{\bm{X}^{(t)},\bm{w}^{(t)}}\left(x_i^{(t)}\right), \\
-w_i^{(t+1)}
-&=w_i^{(t)}-\tau\beta w_i^{(t)}
+x_{t+1}^{(i)}
+&=x_t^{(i)}-\tau\alpha\nabla h_{\bm{X}_t,\bm{w}_t}\left(x_t^{(i)}\right), \\
+w_{t+1}^{(i)}
+&=w_t^{(i)}-\tau\beta w_t^{(i)}
 \left[
-h_{\bm{X}^{(t+1)},\bm{w}^{(t)}}\left(x_i^{(t+1)}\right)
--\sum_{j=1}^N w_j^{(t)}
-h_{\bm{X}^{(t+1)},\bm{w}^{(t)}}\left(x_j^{(t+1)}\right)
+h_{\bm{X}_{t+1},\bm{w}_t}\left(x_{t+1}^{(i)}\right)
+-\sum_{j=1}^N w_t^{(j)}
+h_{\bm{X}_{t+1},\bm{w}_t}\left(x_{t+1}^{(j)}\right)
 \right].
 \end{aligned}
 \) \\
@@ -126,23 +126,23 @@ h_{\bm{X}^{(t+1)},\bm{w}^{(t)}}\left(x_j^{(t+1)}\right)
 MMD (IFT)
 & \(\displaystyle
 \begin{aligned}
-x_i^{(t+1)}
-&=x_i^{(t)}-\tau\alpha\nabla h_{\bm{X}^{(t)},\bm{w}^{(t)}}\left(x_i^{(t)}\right), \\
-\bm{w}^{(t+1)}
-&=\frac{1}{1+\eta}\bm{w}^{(t)}
-+\frac{\eta}{1+\eta}\bm{w}_{\mathrm{KQ}}(\bm{X}^{(t+1)}).
+x_{t+1}^{(i)}
+&=x_t^{(i)}-\tau\alpha\nabla h_{\bm{X}_t,\bm{w}_t}\left(x_t^{(i)}\right), \\
+\bm{w}_{t+1}
+&=\frac{1}{1+\eta}\bm{w}_t
++\frac{\eta}{1+\eta}\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}).
 \end{aligned}
 \) \\
 \hline
 Direct GD
 & \(\displaystyle
 \begin{aligned}
-x_i^{(t+1)}
-&=x_i^{(t)}-\tau\alpha w_i^{(t)}
-\nabla h_{\bm{X}^{(t)},\bm{w}^{(t)}}\left(x_i^{(t)}\right), \\
-w_i^{(t+1)}
-&=w_i^{(t)}-\tau\beta
-h_{\bm{X}^{(t)},\bm{w}^{(t)}}\left(x_i^{(t)}\right).
+x_{t+1}^{(i)}
+&=x_t^{(i)}-\tau\alpha w_t^{(i)}
+\nabla h_{\bm{X}_t,\bm{w}_t}\left(x_t^{(i)}\right), \\
+w_{t+1}^{(i)}
+&=w_t^{(i)}-\tau\beta
+h_{\bm{X}_t,\bm{w}_t}\left(x_t^{(i)}\right).
 \end{aligned}
 \) \\
 \hline
@@ -150,19 +150,19 @@ MSIP
 & For a squared-exponential kernel,
 \(\displaystyle
 \begin{aligned}
-x_i^{(t+1)}={}&(1-\tau)x_i^{(t)}
-+\frac{\tau}{w_{\mathrm{KQ},i}(\bm{X}^{(t)})}
+x_{t+1}^{(i)}={}&(1-\tau)x_t^{(i)}
++\frac{\tau}{w_{\mathrm{KQ}}^{(i)}(\bm{X}_t)}
 \sum_{j=1}^N
-\left[K(\bm{X}^{(t)})^{-1}\right]_{ij}
-\int x k\left(x,x_j^{(t)}\right)\dd\pi(x), \\
-&\bm{w}^{(t+1)}=\bm{w}_{\mathrm{KQ}}(\bm{X}^{(t+1)}).
+\left[K(\bm{X}_t)^{-1}\right]_{ij}
+\int x k\left(x,x_t^{(j)}\right)\dd\pi(x), \\
+&\bm{w}_{t+1}=\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}).
 \end{aligned}
 \) \\
 \hline
 \end{tabular}
 \end{table}
 
-The Wasserstein row uses uniform initial weights, which remain equal to $1/N$ under transport; arbitrary initial weights would likewise remain fixed. The centering term in the WFR update preserves $\sum_{i=1}^N w_i^{(t)}=1$, while nonnegativity additionally requires $\tau\beta$ to be sufficiently small. The MMD row is the WIFT particle implementation used here: it combines the Wasserstein location update with the IFT weight update in Eqs.~\eqref{eq:wass_update}--\eqref{eq:ift_update}. Its displayed closed form is obtained when the simplex constraint in Eq.~\eqref{eq:ift_update} is ignored. The direct-gradient row performs simultaneous Euclidean descent in both $\bm{X}$ and $\bm{w}$; its location update differs from the Wasserstein update by the factor $w_i^{(t)}$. This weight update is unconstrained and must be projected if the iterates are required to remain in $\Delta^N$. In contrast, MSIP is a damped fixed-point method for the stationary conditions of the unbalanced WFR flow, rather than a time discretization of the normalized WFR flow in Eq.~\textup{(WFR-GF)}. Its update requires $K(\bm{X}^{(t)})$ to be invertible and the kernel quadrature weights to be positive.
+The Wasserstein row uses uniform initial weights, which remain equal to $1/N$ under transport; arbitrary initial weights would likewise remain fixed. The centering term in the WFR update preserves $\sum_{i=1}^N w_t^{(i)}=1$, while nonnegativity additionally requires $\tau\beta$ to be sufficiently small. The MMD row is the WIFT particle implementation used here: it combines the Wasserstein location update with the IFT weight update in Eqs.~\eqref{eq:wass_update}--\eqref{eq:ift_update}. Its displayed closed form is obtained when the simplex constraint in Eq.~\eqref{eq:ift_update} is ignored. The direct-gradient row performs simultaneous Euclidean descent in both $\bm{X}$ and $\bm{w}$; its location update differs from the Wasserstein update by the factor $w_t^{(i)}$. This weight update is unconstrained and must be projected if the iterates are required to remain in $\Delta^N$. In contrast, MSIP is a damped fixed-point method for the stationary conditions of the unbalanced WFR flow, rather than a time discretization of the normalized WFR flow in Eq.~\textup{(WFR-GF)}. Its update requires $K(\bm{X}_t)$ to be invertible and the kernel quadrature weights to be positive.
 
 \begin{defi}[Weighted Euclidean Geometry]\label{defi:weighted_euc}
 Let $m\in\R$ and let $G \in \mathbb{R}^{m\times m}$ be a symmetric positive definite matrix. 
@@ -179,14 +179,14 @@ Equivalently, $\grad_G f(x) = G^{-1}\nabla f(x)$ where $\nabla f$ denotes the st
 
 \begin{prop}[Smoothness under Euclidean and weighted Euclidean geometries]
 \label{prop:mmd-energy-smoothness}
-Let $\bm{w}\in\Delta^N$ with $w_i>0$ for every $i$ and $\sum_{i=1}^N w_i=1$. 
+Let $\bm{w}\in\Delta^N$ with $w^{(i)}>0$ for every $i$ and $\sum_{i=1}^N w^{(i)}=1$.
 Suppose that $k$ is symmetric and twice continuously differentiable, with $\sup_{x,y\in\R^d}\|\nabla_{11}^2 k(x,y)\|_{\mathrm{op}} = C_1<\infty$ and $\sup_{x,y\in\R^d}\|\nabla_{12}^2 k(x,y)\|_{\mathrm{op}}=C_2 <\infty$. Define
 \begin{align*}
 E(\bm{X},\bm{w})
 =
-\frac{1}{2}\mmd^2\left(\sum_{i=1}^N w_i\delta_{x_i},\pi\right).
+\frac{1}{2}\mmd^2\left(\sum_{i=1}^N w^{(i)}\delta_{x^{(i)}},\pi\right).
 \end{align*}
-Then $E(\cdot,\bm{w})$ is $\max_{1\leq i\leq N}w_i (2 C_1 + C_2)$-smooth under the standard Euclidean geometry; 
+Then $E(\cdot,\bm{w})$ is $\max_{1\leq i\leq N}w^{(i)} (2 C_1 + C_2)$-smooth under the standard Euclidean geometry;
 and is $(2 C_1 + C_2)$-smooth under the $\bm{w}$-weighted Euclidean geometry. 
 Moreover, $E(\bm{X}, \cdot)$ is $\lambda_{\max}(K(\bm{X}, \bm{X}))$-smooth under the standard Euclidean geometry; and is $1$-smooth under the $K(\bm{X}, \bm{X})$-weighted Euclidean geometry. 
 \end{prop}
@@ -202,52 +202,52 @@ The direct KQ update instantaneously minimizes the MMD over the weights at each 
 \section{Convergence}
 \begin{theorem}[Monotone improvement]
 \label{thm:wift-kq-descent}
-At iteration $t\in\N$, let $\mu_N^{(t)}=\sum_{i=1}^N w_i^{(t)}\delta_{x_i^{(t)}}$ with $\bm{X}^{(t)}=(x_1^{(t)},\ldots,x_N^{(t)})$, and $\bm{w}^{(t)}=(w_1^{(t)},\ldots,w_N^{(t)})$.
+At iteration $t\in\N$, let $\mu_{N,t}=\sum_{i=1}^N w_t^{(i)}\delta_{x_t^{(i)}}$ with $\bm{X}_t=(x_t^{(1)},\ldots,x_t^{(N)})$, and $\bm{w}_t=(w_t^{(1)},\ldots,w_t^{(N)})$.
 
-Assume that $k$ is twice continuously differentiable, that $K(\bm{X}^{(t)})$ is positive definite for every $t$, and that the weights remain uniformly positive, namely $w_i^{(t)}\geq \underline w>0$ for every $i,t$. Assume moreover that, for every admissible $\bm{w}$, the map $\bm{X}\mapsto\mathcal{E}(\bm{X},\bm{w})$ has an $L_X$-Lipschitz gradient on a set containing all iterates. If $\tau\alpha\leq 2\underline w/L_X$, then for every $t\geq0$,
+Assume that $k$ is twice continuously differentiable, that $K(\bm{X}_t)$ is positive definite for every $t$, and that the weights remain uniformly positive, namely $w_t^{(i)}\geq \underline w>0$ for every $i,t$. Assume moreover that, for every admissible $\bm{w}$, the map $\bm{X}\mapsto\mathcal{E}(\bm{X},\bm{w})$ has an $L_X$-Lipschitz gradient on a set containing all iterates. If $\tau\alpha\leq 2\underline w/L_X$, then for every $t\geq0$,
 \begin{align}
-\operatorname{MMD} \left( \mu_N^{(t+1)},\pi
+\operatorname{MMD} \left( \mu_{N,t+1},\pi
 \right) \leq \operatorname{MMD}
-\left( \mu_N^{(t)},\pi \right).
+\left( \mu_{N,t},\pi \right).
 \label{eq:wift-mmd-monotonicity}
 \end{align}
 \end{theorem}
 
 \begin{lem}[Uniform control of the kernel quadrature residual]
 \label{lem:kq-residual-control}
-Suppose that the assumptions of Theorem~\ref{thm:wift-kq-descent} hold and that the initial weights are chosen as $\bm{w}^{(0)}=\bm{w}_{\mathrm{KQ}}(\bm{X}_0) $.
+Suppose that the assumptions of Theorem~\ref{thm:wift-kq-descent} hold and that the initial weights are chosen as $\bm{w}_0=\bm{w}_{\mathrm{KQ}}(\bm{X}_0) $.
 Then, for every $t\geq 0$, $\operatorname{MMD}
 \left(
 \sum_{i=1}^N
-w_{\mathrm{KQ},i} (\bm{X}^{(t)})
-\delta_{x_i^{(t)}},
+w_{\mathrm{KQ}}^{(i)} (\bm{X}_t)
+\delta_{x_t^{(i)}},
 \pi
 \right)
 \leq
 \operatorname{MMD}
 \left(
 \sum_{i=1}^N
-w_{\mathrm{KQ},i}(\bm{X}_0)
-\delta_{x_i^{(0)}},
+w_{\mathrm{KQ}}^{(i)}(\bm{X}_0)
+\delta_{x_0^{(i)}},
 \pi
 \right)$.
 \end{lem}
 
 \begin{theorem}[Convergence to the kernel quadrature error]
 \label{thm:wift-convergence}
-Suppose that the assumptions of Theorem~\ref{thm:wift-kq-descent} hold, and that the initial weights are chosen as $\bm{w}^{(0)}=\bm{w}_{\mathrm{KQ}}(\bm{X}_0)$. Then, the WIFT iterates satisfy
+Suppose that the assumptions of Theorem~\ref{thm:wift-kq-descent} hold, and that the initial weights are chosen as $\bm{w}_0=\bm{w}_{\mathrm{KQ}}(\bm{X}_0)$. Then, the WIFT iterates satisfy
 \begin{align*}
-\operatorname{MMD}^2(\mu_N^{(t)},\pi) \leq
+\operatorname{MMD}^2(\mu_{N,t},\pi) \leq
 \frac{1}{(1+\eta)^{2t}}
-\operatorname{MMD}^2(\mu_N^{(0)},\pi) +
+\operatorname{MMD}^2(\mu_{N,0},\pi) +
 \left(
 1-\frac{1}{(1+\eta)^{2t}}
 \right)
 \operatorname{MMD}^2
 \left(
 \sum_{i=1}^N
-w_{\mathrm{KQ},i}(\bm{X}_0)
-\delta_{x_i^{(0)}},
+w_{\mathrm{KQ}}^{(i)}(\bm{X}_0)
+\delta_{x_0^{(i)}},
 \pi
 \right).
 \end{align*}
@@ -257,19 +257,19 @@ w_{\mathrm{KQ},i}(\bm{X}_0)
 Theorem~\ref{thm:wift-convergence} separates the optimization error from the
 statistical error of the initial kernel quadrature rule. In particular, if
 $\operatorname{MMD}(\sum_{i=1}^N
-w_{\mathrm{KQ},i}(\bm{X}_0)\delta_{x_i^{(0)}},\pi)
+w_{\mathrm{KQ}}^{(i)}(\bm{X}_0)\delta_{x_0^{(i)}},\pi)
 =O_{\mathbb{P}}(N^{-s/d})$, then
 \begin{align*}
-\operatorname{MMD}(\mu_N^{(t)},\pi)
+\operatorname{MMD}(\mu_{N,t},\pi)
 &\leq \frac{1}{(1+\eta)^t}
-\operatorname{MMD}(\mu_N^{(0)},\pi)
+\operatorname{MMD}(\mu_{N,0},\pi)
 +O_{\mathbb{P}}(N^{-s/d}).
 \end{align*}
 Thus, the optimization error decays geometrically until it reaches the
 kernel quadrature error floor. If, in addition,
-$\operatorname{MMD}(\mu_N^{(0)},\pi)=O_{\mathbb{P}}(1)$, then choosing
+$\operatorname{MMD}(\mu_{N,0},\pi)=O_{\mathbb{P}}(1)$, then choosing
 $t\geq \frac{s}{d\log(1+\eta)}\log N$ is sufficient to obtain
-$\operatorname{MMD}(\mu_N^{(t)},\pi)=O_{\mathbb{P}}(N^{-s/d})$.
+$\operatorname{MMD}(\mu_{N,t},\pi)=O_{\mathbb{P}}(N^{-s/d})$.
 \end{rem}
 
 \section{Proofs}
@@ -279,28 +279,28 @@ Recall that
 \begin{align*}
 E(\bm{X},\bm{w})
 =
-\frac{1}{2}\sum_{i,j=1}^N w_iw_j k(x_i,x_j)
+\frac{1}{2}\sum_{i,j=1}^N w^{(i)}w^{(j)} k(x^{(i)},x^{(j)})
 -
-\sum_{i=1}^N w_i m_\pi(x_i)
+\sum_{i=1}^N w^{(i)} m_\pi(x^{(i)})
 +
 \mathrm{const}.
 \end{align*}
-For any $\bm{u}=(u_1,\ldots,u_N)\in(\R^d)^N$, direct differentiation gives
+For any $\bm{u}=(u^{(1)},\ldots,u^{(N)})\in(\R^d)^N$, direct differentiation gives
 \begin{align*}
 \nabla_{\bm{X}}^2E(\bm{X},\bm{w})[\bm{u},\bm{u}]
 ={}&
 \sum_{i,j=1}^N
-w_iw_j
-u_i^\top\nabla_{11}^2 k(x_i,x_j)u_i
+w^{(i)}w^{(j)}
+(u^{(i)})^\top\nabla_{11}^2 k(x^{(i)},x^{(j)})u^{(i)}
 \\
 &+
 \sum_{i,j=1}^N
-w_iw_j
-u_i^\top\nabla_{12}^2 k(x_i,x_j)u_j
+w^{(i)}w^{(j)}
+(u^{(i)})^\top\nabla_{12}^2 k(x^{(i)},x^{(j)})u^{(j)}
 -
 \sum_{i=1}^N
-w_i
-u_i^\top\nabla^2m_\pi(x_i)u_i.
+w^{(i)}
+(u^{(i)})^\top\nabla^2m_\pi(x^{(i)})u^{(i)}.
 \end{align*}
 Since $m_\pi(x)=\int k(x,y)\,\mathrm{d}\pi(y)$ and $\pi$ is a probability measure, we have
 \begin{align*}
@@ -313,95 +313,96 @@ Since $m_\pi(x)=\int k(x,y)\,\mathrm{d}\pi(y)$ and $\pi$ is a probability measur
 \sup_{x,y\in\R^d}
 \|\nabla_{11}^2 k(x,y)\|_{\mathrm{op}} = C_1.
 \end{align*}
-Using $\sum_{j=1}^Nw_j=1$, it follows that
+Using $\sum_{j=1}^Nw^{(j)}=1$, it follows that
 \begin{align*}
 \left|
-\sum_{i,j=1}^N w_i w_j u_i^\top\nabla_{11}^2 k(x_i,x_j)u_i - \sum_{i=1}^N w_i u_i^\top\nabla^2m_\pi(x_i)u_i
+\sum_{i,j=1}^N w^{(i)} w^{(j)} (u^{(i)})^\top\nabla_{11}^2 k(x^{(i)},x^{(j)})u^{(i)} - \sum_{i=1}^N w^{(i)} (u^{(i)})^\top\nabla^2m_\pi(x^{(i)})u^{(i)}
 \right| \leq 2 C_1
-\sum_{i=1}^Nw_i\|u_i\|^2.
+\sum_{i=1}^Nw^{(i)}\|u^{(i)}\|^2.
 \end{align*}
 For the mixed term,
 \begin{align*}
 \left|
 \sum_{i,j=1}^N
-w_iw_j
-u_i^\top\nabla_{12}^2 k(x_i,x_j)u_j
+w^{(i)}w^{(j)}
+(u^{(i)})^\top\nabla_{12}^2 k(x^{(i)},x^{(j)})u^{(j)}
 \right|
-\leq
+&\leq
 \sup_{x,y\in\R^d}
 \|\nabla_{12}^2 k(x,y)\|_{\mathrm{op}}
-\left(\sum_{i=1}^Nw_i\|u_i\|\right)^2 = C_2 \left(\sum_{i=1}^Nw_i\|u_i\|\right)^2 .
+\left(\sum_{i=1}^Nw^{(i)}\|u^{(i)}\|\right)^2 \\
+&= C_2 \left(\sum_{i=1}^Nw^{(i)}\|u^{(i)}\|\right)^2 .
 \end{align*}
-By Cauchy--Schwarz and $\sum_{i=1}^Nw_i=1$, we have
-$\left(\sum_{i=1}^N w_i\|u_i\|\right)^2
-\leq \sum_{i=1}^Nw_i\|u_i\|^2$. Therefore,
+By Cauchy--Schwarz and $\sum_{i=1}^Nw^{(i)}=1$, we have
+$\left(\sum_{i=1}^N w^{(i)}\|u^{(i)}\|\right)^2
+\leq \sum_{i=1}^Nw^{(i)}\|u^{(i)}\|^2$. Therefore,
 \begin{align*}
 \left|
 \nabla_{\bm{X}}^2 E(\bm{X},\bm{w})[\bm{u},\bm{u}]
-\right| \leq \left( 2C_1 + C_2\right) \sum_{i=1}^N w_i\|u_i\|^2 = \left( 2C_1 + C_2\right) \|\bm{u}\|_{\bm{w}}^2.
+\right| \leq \left( 2C_1 + C_2\right) \sum_{i=1}^N w^{(i)}\|u^{(i)}\|^2 = \left( 2C_1 + C_2\right) \|\bm{u}\|_{\bm{w}}^2.
 \end{align*}
 The last step holds by the definition of $\bm{w}$-weighted Euclidean geometry in \Cref{defi:weighted_euc}. 
 This proves smoothness under the weighted Euclidean geometry.
 
-For the standard Euclidean geometry, since $\sum_{i=1}^Nw_i\|u_i\|^2
+For the standard Euclidean geometry, since $\sum_{i=1}^Nw^{(i)}\|u^{(i)}\|^2
 \leq
-\left(\max_{1\leq i\leq N}w_i\right)
-\sum_{i=1}^N\|u_i\|^2
+\left(\max_{1\leq i\leq N}w^{(i)}\right)
+\sum_{i=1}^N\|u^{(i)}\|^2
 =
-\left(\max_{1\leq i\leq N}w_i\right)
+\left(\max_{1\leq i\leq N}w^{(i)}\right)
 \|\bm{u}\|_2^2$. 
 The proof is concluded.
 \end{proof}
 
 \begin{proof}[Proof of \Cref{thm:wift-kq-descent}]
 For fixed $\bm{X}$ and $\bm{w}$, let
-$g_i(\bm{X},\bm{w})=\sum_{j=1}^N w_j\nabla_2 k(x_j,x_i)-\nabla m_\pi(x_i)$. 
+$g^{(i)}(\bm{X},\bm{w})=\sum_{j=1}^N w^{(j)}\nabla_2 k(x^{(j)},x^{(i)})-\nabla m_\pi(x^{(i)})$.
 Define the MMD energy by
 \begin{align}\label{eq:defi_mmd}
 \mathcal{E}(\bm{X},\bm{w})
-=\frac12\operatorname{MMD}^2\left(\sum_{i=1}^N w_i\delta_{x_i},\pi\right),
+=\frac12\operatorname{MMD}^2\left(\sum_{i=1}^N w^{(i)}\delta_{x^{(i)}},\pi\right),
 \end{align}
-Differentiating the MMD energy with respect to $x_i$ and using symmetry of the kernel gives
-$\nabla_{x_i}\mathcal{E}(\bm{X},\bm{w})=w_i g_i(\bm{X},\bm{w})$.
+Differentiating the MMD energy with respect to $x^{(i)}$ and using symmetry of the kernel gives
+$\nabla_{x^{(i)}}\mathcal{E}(\bm{X},\bm{w})=w^{(i)} g^{(i)}(\bm{X},\bm{w})$.
 Hence, the position update can be written as
-$x_i^{(t+1)}=x_i^{(t)}-\frac{\tau\alpha}{w_i^{(t)}}\nabla_{x_i}\mathcal{E}(\bm{X}^{(t)},\bm{w}^{(t)})$.
-Thus, the Wasserstein substep is a diagonally preconditioned gradient step for $\bm{X}\mapsto\mathcal{E}(\bm{X},\bm{w}^{(t)})$. 
-By the $L_X$-smoothness of $\mathcal{E}(\cdot,\bm{w}^{(t)})$, the descent lemma gives
+$x_{t+1}^{(i)}=x_t^{(i)}-\frac{\tau\alpha}{w_t^{(i)}}\nabla_{x^{(i)}}\mathcal{E}(\bm{X}_t,\bm{w}_t)$.
+Thus, the Wasserstein substep is a diagonally preconditioned gradient step for $\bm{X}\mapsto\mathcal{E}(\bm{X},\bm{w}_t)$.
+By the $L_X$-smoothness of $\mathcal{E}(\cdot,\bm{w}_t)$, the descent lemma gives
 \begin{align}
-\mathcal{E}(\bm{X}^{(t+1)},\bm{w}^{(t)})
+\mathcal{E}(\bm{X}_{t+1},\bm{w}_t)
 &\leq
-\mathcal{E}(\bm{X}^{(t)},\bm{w}^{(t)})
+\mathcal{E}(\bm{X}_t,\bm{w}_t)
 +
 \sum_{i=1}^N
 \left\langle
-\nabla_{x_i}\mathcal{E}(\bm{X}^{(t)},\bm{w}^{(t)}),
-x_i^{(t+1)}-x_i^{(t)}
+\nabla_{x^{(i)}}\mathcal{E}(\bm{X}_t,\bm{w}_t),
+x_{t+1}^{(i)}-x_t^{(i)}
 \right\rangle
 +
 \frac{L_X}{2}
 \sum_{i=1}^N
 \left\|
-x_i^{(t+1)}-x_i^{(t)}
+x_{t+1}^{(i)}-x_t^{(i)}
 \right\|^2
 \nonumber\\
 &=
-\mathcal{E}(\bm{X}^{(t)},\bm{w}^{(t)})
+\mathcal{E}(\bm{X}_t,\bm{w}_t)
 -
 \tau\alpha
 \sum_{i=1}^N
 \left(
-w_i^{(t)}
+w_t^{(i)}
 -
 \frac{L_X\tau\alpha}{2}
 \right)
 \left\|
-g_i(\bm{X}^{(t)},\bm{w}^{(t)})
+g^{(i)}(\bm{X}_t,\bm{w}_t)
 \right\|^2.
 \label{eq:wasserstein-descent}
 \end{align}
-Since $w_i^{(t)}\geq\underline w$ and $\tau\alpha\leq2\underline w/L_X$, we have
-$w_i^{(t)}-L_X\tau\alpha/2\geq0$. Therefore,
-$\mathcal{E}(\bm{X}^{(t+1)},\bm{w}^{(t)})\leq\mathcal{E}(\bm{X}^{(t)},\bm{w}^{(t)})$. This proves that the particle update in Eq.~\eqref{eq:wass_update} is decreasing the MMD value. 
+Since $w_t^{(i)}\geq\underline w$ and $\tau\alpha\leq2\underline w/L_X$, we have
+$w_t^{(i)}-L_X\tau\alpha/2\geq0$. Therefore,
+$\mathcal{E}(\bm{X}_{t+1},\bm{w}_t)\leq\mathcal{E}(\bm{X}_t,\bm{w}_t)$. This proves that the particle update in Eq.~\eqref{eq:wass_update} is decreasing the MMD value.
 
 We next consider the weight update. For fixed $\bm{X}$, the dependence of the MMD energy on $\bm{w}$ is quadratic:
 $\mathcal{E}(\bm{X},\bm{w})=\frac12 \bm{w}^\top K(\bm{X})\bm{w}-m_\pi(\bm{X})^\top \bm{w}+$const. Since $K(\bm{X})$ is positive definite, the unique minimizer is
@@ -417,40 +418,40 @@ Completing the square gives
 \end{align}
 By the weight update,
 \begin{align}
-\bm{w}^{(t+1)}
+\bm{w}_{t+1}
 -
-\bm{w}_{\mathrm{KQ}}(\bm{X}^{(t+1)})
+\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1})
 =
 \frac{1}{1+\eta}
 \left(
-\bm{w}^{(t)}
+\bm{w}_t
 -
-\bm{w}_{\mathrm{KQ}}(\bm{X}^{(t+1)})
+\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1})
 \right).
 \label{eq:weight-difference-contraction}
 \end{align}
-On the other hand, for fixed particle locations $\bm{X}^{(t+1)}$, the KQ decomposition gives
+On the other hand, for fixed particle locations $\bm{X}_{t+1}$, the KQ decomposition gives
 \begin{align}
 &
-\mathcal{E}(\bm{X}^{(t+1)},\bm{w}^{(t+1)})
+\mathcal{E}(\bm{X}_{t+1},\bm{w}_{t+1})
 -
 \mathcal{E}\left(
-\bm{X}^{(t+1)},
-\bm{w}_{\mathrm{KQ}}(\bm{X}^{(t+1)})
+\bm{X}_{t+1},
+\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1})
 \right)
 \nonumber\\
 &\qquad=
 \frac{1}{2}
 \left(
-\bm{w}^{(t+1)}
+\bm{w}_{t+1}
 -
-\bm{w}_{\mathrm{KQ}}(\bm{X}^{(t+1)})
+\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1})
 \right)^\top
-K^{(t+1)}
+K_{t+1}
 \left(
-\bm{w}^{(t+1)}
+\bm{w}_{t+1}
 -
-\bm{w}_{\mathrm{KQ}}(\bm{X}^{(t+1)})
+\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1})
 \right).
 \label{eq:kq-energy-gap}
 \end{align}
@@ -458,93 +459,93 @@ Substituting \eqref{eq:weight-difference-contraction} into
 \eqref{eq:kq-energy-gap} yields
 \begin{align}
 &
-\mathcal{E}(\bm{X}^{(t+1)},\bm{w}^{(t+1)})
+\mathcal{E}(\bm{X}_{t+1},\bm{w}_{t+1})
 -
 \mathcal{E}\left(
-\bm{X}^{(t+1)},
-\bm{w}_{\mathrm{KQ}}(\bm{X}^{(t+1)})
+\bm{X}_{t+1},
+\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1})
 \right)
 \nonumber\\
 &\qquad=
 \frac{1}{2(1+\eta)^2}
 \left(
-\bm{w}^{(t)}
+\bm{w}_t
 -
-\bm{w}_{\mathrm{KQ}}(\bm{X}^{(t+1)})
+\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1})
 \right)^\top
-K^{(t+1)}
+K_{t+1}
 \left(
-\bm{w}^{(t)}
+\bm{w}_t
 -
-\bm{w}_{\mathrm{KQ}}(\bm{X}^{(t+1)})
+\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1})
 \right)
 \nonumber\\
 &\qquad=
 \frac{1}{(1+\eta)^2}
 \left[
-\mathcal{E}(\bm{X}^{(t+1)},\bm{w}^{(t)})
+\mathcal{E}(\bm{X}_{t+1},\bm{w}_t)
 -
 \mathcal{E}\left(
-\bm{X}^{(t+1)},
-\bm{w}_{\mathrm{KQ}}(\bm{X}^{(t+1)})
+\bm{X}_{t+1},
+\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1})
 \right)
 \right].
 \label{eq:kq-weight-contraction}
 \end{align}
-Since $(1+\eta)^{-2}\leq1$ and $\bm{w}_{\mathrm{KQ}}(\bm{X}^{(t+1)})$ minimizes
-$\bm{w}\mapsto\mathcal{E}(\bm{X}^{(t+1)},\bm{w})$, it follows that
-$\mathcal{E}(\bm{X}^{(t+1)},\bm{w}^{(t+1)})
+Since $(1+\eta)^{-2}\leq1$ and $\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1})$ minimizes
+$\bm{w}\mapsto\mathcal{E}(\bm{X}_{t+1},\bm{w})$, it follows that
+$\mathcal{E}(\bm{X}_{t+1},\bm{w}_{t+1})
 \leq
-\mathcal{E}(\bm{X}^{(t+1)},\bm{w}^{(t)})$.
+\mathcal{E}(\bm{X}_{t+1},\bm{w}_t)$.
 Combining the two substeps yields
 \begin{align}
-\mathcal{E}(\bm{X}^{(t+1)},\bm{w}^{(t+1)})
+\mathcal{E}(\bm{X}_{t+1},\bm{w}_{t+1})
 \leq
-\mathcal{E}(\bm{X}^{(t+1)},\bm{w}^{(t)})
+\mathcal{E}(\bm{X}_{t+1},\bm{w}_t)
 \leq
-\mathcal{E}(\bm{X}^{(t)},\bm{w}^{(t)}).
+\mathcal{E}(\bm{X}_t,\bm{w}_t).
 \label{eq:full-wift-descent}
 \end{align}
-Hence, $\mathcal{E}(\bm{X}^{(t)},\bm{w}^{(t)})$ is nonincreasing, and the proof is concluded. 
+Hence, $\mathcal{E}(\bm{X}_t,\bm{w}_t)$ is nonincreasing, and the proof is concluded.
 \end{proof}
 
 \begin{proof}[Proof of \Cref{lem:kq-residual-control}]
 Recall the definition that $\mathcal{E}(\bm{X},\bm{w})
-=\frac12\operatorname{MMD}^2\left(\sum_{i=1}^N w_i\delta_{x_i},\pi\right)$. For any fixed particle locations $\bm{X}^{(t)}$, the kernel quadrature weights
-$\bm{w}_{\mathrm{KQ}}(\bm{X}^{(t)})$ minimize the MMD energy over the weights. Hence, $\mathcal{E}\left(
-\bm{X}^{(t)},
-\bm{w}_{\mathrm{KQ}}(\bm{X}^{(t)})
+=\frac12\operatorname{MMD}^2\left(\sum_{i=1}^N w^{(i)}\delta_{x^{(i)}},\pi\right)$. For any fixed particle locations $\bm{X}_t$, the kernel quadrature weights
+$\bm{w}_{\mathrm{KQ}}(\bm{X}_t)$ minimize the MMD energy over the weights. Hence, $\mathcal{E}\left(
+\bm{X}_t,
+\bm{w}_{\mathrm{KQ}}(\bm{X}_t)
 \right)
 \leq
 \mathcal{E}\left(
-\bm{X}^{(t)},
-\bm{w}^{(t)}
+\bm{X}_t,
+\bm{w}_t
 \right)$. On the other hand, by the monotonicity of the WIFT iteration established in
 Theorem~\ref{thm:wift-kq-descent}, we have $\mathcal{E}\left(
-\bm{X}^{(t)},
-\bm{w}^{(t)}
+\bm{X}_t,
+\bm{w}_t
 \right)
 \leq
 \mathcal{E}\left(
 \bm{X}_0,
-\bm{w}^{(0)}
-\right)$. Since $\bm{w}^{(0)}=\bm{w}_{\mathrm{KQ}}(\bm{X}_0)$, we have
-$ \mathcal{E}(\bm{X}_0,\bm{w}^{(0)})
+\bm{w}_0
+\right)$. Since $\bm{w}_0=\bm{w}_{\mathrm{KQ}}(\bm{X}_0)$, we have
+$ \mathcal{E}(\bm{X}_0,\bm{w}_0)
 =
 \mathcal{E}(\bm{X}_0,\bm{w}_{\mathrm{KQ}}(\bm{X}_0)) $.
 Combining the previous inequalities gives
 \begin{align}
 \mathcal{E}\left(
-\bm{X}^{(t)},
-\bm{w}_{\mathrm{KQ}}(\bm{X}^{(t)})
+\bm{X}_t,
+\bm{w}_{\mathrm{KQ}}(\bm{X}_t)
 \right) \leq
 \mathcal{E}\left(
-\bm{X}^{(t)},
-\bm{w}^{(t)}
+\bm{X}_t,
+\bm{w}_t
 \right) \leq
 \mathcal{E}\left(
 \bm{X}_0,
-\bm{w}^{(0)}
+\bm{w}_0
 \right) = \mathcal{E}\left(
 \bm{X}_0,
 \bm{w}_{\mathrm{KQ}}(\bm{X}_0)
@@ -557,24 +558,24 @@ The proof is thus concluded.
 From the exact contraction of the weight update in
 Eq.~\eqref{eq:kq-weight-contraction}, together with descent of the Wasserstein position update, we have
 \begin{align}
-\mathcal{E}(\bm{X}^{(t+1)},\bm{w}^{(t+1)}) \leq \frac{1}{(1+\eta)^2}
-\mathcal{E}(\bm{X}^{(t)},\bm{w}^{(t)}) + \left(
+\mathcal{E}(\bm{X}_{t+1},\bm{w}_{t+1}) \leq \frac{1}{(1+\eta)^2}
+\mathcal{E}(\bm{X}_t,\bm{w}_t) + \left(
 1 - \frac{1}{(1+\eta)^2}
 \right)
 \mathcal{E} \left(
-\bm{X}^{(t+1)},
-\bm{w}_{\mathrm{KQ}}(\bm{X}^{(t+1)}) \right).
+\bm{X}_{t+1},
+\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}) \right).
 \label{eq:wift-one-step-convergence}
 \end{align}
 By \Cref{lem:kq-residual-control}, 
-$\mathcal{E}(\bm{X}^{(t+1)},\bm{w}_{\mathrm{KQ}}(\bm{X}^{(t+1)}))
+$\mathcal{E}(\bm{X}_{t+1},\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}))
 \leq
 \mathcal{E}(\bm{X}_0,\bm{w}_{\mathrm{KQ}}(\bm{X}_0))$,
 and therefore
 \begin{align}
-\mathcal{E}(\bm{X}^{(t+1)},\bm{w}^{(t+1)}) \leq
+\mathcal{E}(\bm{X}_{t+1},\bm{w}_{t+1}) \leq
 \frac{1}{(1+\eta)^2}
-\mathcal{E}(\bm{X}^{(t)},\bm{w}^{(t)}) +
+\mathcal{E}(\bm{X}_t,\bm{w}_t) +
 \left(
 1-\frac{1}{(1+\eta)^2}
 \right)
