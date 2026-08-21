@@ -10,7 +10,7 @@ For a probability measure $\pi$, assume that $\int k(x,x)\,\dd\pi(x)<\infty$. We
 Gradient flows provide a principled framework for evolving a curve of probability measures $(\mu_t)_{t\geq 0}$ along the direction of steepest descent of an objective functional $\calF:\calP(\R^d)\to\R$. To define what constitutes the ``steepest'' direction, however, one must first equip $\calP(\R^d)$ with a metric $d(\mu,\nu)$---different choices of $d$ induce different geometries on $\calP(\R^d)$ and therefore lead to different gradient-flow dynamics, even when the objective $\calF$ is fixed. 
 
 
-In this paper, we focus on the minimization of the (squared) MMD objective, i.e., $\calF_{\mmd}=\frac{1}{2}\mmd^2(\cdot, \pi)$, due to its wide application in numerical integration and generative modelling~\citep{li2017mmd}.  
+In this paper, we focus on the minimization of the (squared) MMD objective, i.e., $\calF_{\mmd}=\frac{1}{2}\mmd^2(\cdot, \pi)$, due to its wide application in numerical integration~\citep{chen2025stationary} and generative modelling~\citep{li2017mmd,arbel2018gradient,arbel2019maximum}.  
 We summarize several resulting gradient flows from common choices of geometry $d$ and discuss the convergence behaviour of these dynamics, i.e., whether $\lim_{t\to\infty} \calF(\mu_t)\to 0$. 
 In this section, we focus on the gradient flows at the population level, and defer their practical realizations through finite-particle approximations to the next section. 
 
@@ -20,11 +20,12 @@ Before we proceed to introduce various gradient flows, we first need to introduc
 \paragraph{Wasserstein} 
 One of the most commonly used geometries is the Wasserstein-2 geometry, defined on $\mathcal{P}_2(\mathbb{R}^d)$, the set of probability measures with finite second moment. In this case, the metric $d$ is chosen to be the Wasserstein-2 distance, $d(\mu,\nu)=W_2(\mu,\nu):=\left(\inf _{\gamma \in \Pi(\mu, \nu)} \int \|x-y\|^2 \dd \gamma(x, y)\right)^{\frac{1}{2}}$.  
 Intuitively, $W_2(\mu,\nu)$ represents the minimum quadratic cost required to move the mass of $\mu$ to match $\nu$. 
-Under this geometry, the Wasserstein gradient flow (W-GF) of $\calF_{\mmd}$ is
+Under this geometry, the Wasserstein gradient flow (W-GF) of $\calF_{\mmd}$ is~\citep{arbel2019maximum,korba2021kernel}
 \begin{align}\label{eq:w-gf}
 \partial_t \mu_t = \nabla\cdot \left(\mu_t \nabla \calF_{\mmd}'[\mu_t]\right). \tag{W-GF}
 \end{align}
-
+\eqref{eq:w-gf} has been widely used for sampling~\citep{chen2025stationary} and generative modelling~\citep{galashov2024deep}, with different kernel choices tailored to the application at hand. Despite its broad empirical success, establishing convergence of \eqref{eq:w-gf} remains challenging in general. 
+Several techniques have been proposed to improve its convergence behavior, including noise injection~\citep{arbel2019maximum,suzuki2023uniform,chen2026thinned} and adaptive kernel lengthscales~\citep{kang2026gradient}, but a general convergence theory is still lacking. 
 
 
 \paragraph{Fisher-Rao} 
@@ -39,6 +40,8 @@ The resulting Fisher-Rao gradient flow (FR-GF) of $\calF_{\mmd}$ is:
 \partial_t\mu_t = -\mu_t \left( \calF_{\mmd}'[\mu_t] - \int \calF_{\mmd}'[\mu_t]  \dd \mu_t \right). \tag{FR-GF}
 \end{align}
 
+
+
 \paragraph{Wasserstein Fisher-Rao} 
 \eqref{eq:w-gf} evolves a distribution by continuously transporting mass through space, whereas \eqref{eq:fr-gf} redistributes the density locally without requiring mass to move along spatial paths. 
 An interpolation between these two dynamics is the Wasserstein--Fisher--Rao gradient flow (WFR-GF), allowing the probability measure to adapt through both particle movement and mass redistribution. 
@@ -48,22 +51,20 @@ For $\alpha,\beta>0$,
 \end{align} 
 
 
-\paragraph{Interaction Force Transport} 
-More recently, an alternative geometry based on the MMD has been studied in \cite{zhu2024inclusive,zhu2024kernel,gladin2024interaction}. 
+\paragraph{(Wasserstein) Interaction Force Transport} 
+More recently, an alternative geometry based on the MMD distance has been proposes, i.e., $d(\mu,\nu)=\mmd(\mu,\nu)$ \citep{zhu2024inclusive,zhu2024kernel,gladin2024interaction}. 
 For a kernel $k$ and probability measure $\mu$, recall the associated kernel integral operator $\calT_\mu:L^2(\mu)\to L^2(\mu)$. 
 Also recall that $\calF'_{\mmd} = \int k(\cdot, y) \; \dd(\mu-\pi)(y)=\calT_\mu (1 - \dd \mu/\dd \pi)$. 
 The resulting Interaction-Force Transport (IFT) gradient flow of $\calF$ is given by~\citep{gladin2024interaction}: 
-\begin{align}\label{eq:itf-gf}
+\begin{align}\label{eq:ift-gf}
 \partial_t\mu_t = -\mu_t \calT_{\mu_t}^{-1} \calF_{\mmd}'[\mu_t] = -(\mu_t - \pi). \tag{IFT-GF}
 \end{align}
-The above dynamics seems only well-defined when the inverse operator $\calT_{\mu_t}^{-1} $ cancel out with the operator $\calT_{\mu_t}$ in $\calF_{\mmd}'$. Since we only focus on $\calF_{\mmd}$ in this paper, we leave an extension to more general $\calF$ to future work. 
-
-\paragraph{Wasserstein Interaction Force Transport}
-Similarly as \eqref{eq:wfr-gf}, an interpolation of WGF and IFT-GF can also be constructed
+The above dynamics seems only well-defined when the inverse operator $\calT_{\mu_t}^{-1} $ cancel out with the operator $\calT_{\mu_t}$ in $\calF_{\mmd}'$. Since we only focus on $\calF_{\mmd}$ in this paper, we leave an extension to more general $\calF$ to future work. The above \eqref{eq:ift-gf} only has mass redistribution and no mass movement. 
+As a result, similarly as \eqref{eq:wfr-gf}, an interpolation of WGF and IFT-GF can also be constructed as follows:
 \begin{align*}
     \partial_t\mu_t = \alpha \nabla\cdot \left(\mu_t \nabla \calF'[\mu_t]\right) - \beta \calT^{-1} \calF'[\mu_t] \tag{WIFT-GF}.
 \end{align*}
-It has been proved that~\citep{gladin2024interaction}, for both IFT-GF and WIFT-GF, $\operatorname{MMD}^2\left(\mu_t, \pi\right) \leq e^{-2 \beta t} \cdot \operatorname{MMD}^2 \left(\mu_0, \pi\right)$. 
+It has been proved that~\citep{gladin2024interaction}, for both IFT-GF and WIFT-GF, $\operatorname{MMD}^2\left(\mu_t, \pi\right) \leq e^{-2 \beta t} \cdot \operatorname{MMD}^2 \left(\mu_0, \pi\right)$. It is worth hilighting that the convergence holds without any conditions on the target distribution $\pi$. The only similar results are established in \citet{tian2026sobolev}, yet, it requires additional regularization for this to hold. 
 
 
 \section{Particle Descent} 
