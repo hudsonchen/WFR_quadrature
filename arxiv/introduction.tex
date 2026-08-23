@@ -10,10 +10,8 @@ For a probability measure $\pi$, assume that $\int k(x,x)\,\dd\pi(x)<\infty$. We
 Gradient flows characterize steepest-descent dynamics on a metric space. Let $(\mu_t)_{t\geq 0}$ be a curve of probability measures and let $\calF:\calP(\R^d)\to\R$ be an objective functional. The corresponding notion of steepest descent depends on the metric $d$ imposed on $\calP(\R^d)$. Consequently, a fixed objective $\calF$ generally induces different gradient flows under different choices of $d$.
 
 
-We consider the squared MMD objective $\calF_{\mmd}=\frac{1}{2}\mmd^2(\cdot,\pi)$, motivated by its applications to numerical integration~\citep{chen2025stationary} and generative modelling~\citep{li2017mmd,arbel2018gradient,arbel2019maximum}. We review the gradient flows associated with several standard geometries and discuss their asymptotic convergence in objective value, namely whether $\lim_{t\to\infty}\calF_{\mmd}(\mu_t)=0$. The present section focuses on population-level dynamics, while the next section develops finite-particle approximations.
-
-
-For later use, the first variation of $\calF_{\mmd}$ at $\mu$ is $\calF'_{\mmd}[\mu](x)=\int k(x,y)\,\dd(\mu-\pi)(y)$.
+We consider the squared MMD objective $\calF_{\mmd}=\frac{1}{2}\mmd^2(\cdot,\pi)$, motivated by its applications to numerical integration~\citep{chen2025stationary} and generative modelling~\citep{li2017mmd,arbel2018gradient,arbel2019maximum}. We review the gradient flows associated with several standard geometries and discuss their asymptotic convergence in objective value, namely whether $\lim_{t\to\infty}\calF_{\mmd}(\mu_t)=0$. The present section focuses on population-level dynamics, while the next section develops finite-particle approximations. 
+For later use, the first variation of $\calF_{\mmd}$ at a measure $\mu$ is $\calF'_{\mmd}[\mu](x)=\int k(x,y)\,\dd(\mu-\pi)(y)$. 
 
 \paragraph{Wasserstein} 
 The $2$-Wasserstein geometry is defined on $\mathcal{P}_2(\mathbb{R}^d)$, the space of probability measures with finite second moments. For $\mu,\nu\in\mathcal{P}_2(\mathbb{R}^d)$, the $2$-Wasserstein distance is $d(\mu,\nu)=W_2(\mu,\nu):=\left(\inf _{\gamma \in \Pi(\mu, \nu)} \int \|x-y\|^2 \dd \gamma(x, y)\right)^{\frac{1}{2}}$. Thus, $W_2^2(\mu,\nu)$ is the minimum quadratic cost of transporting $\mu$ to $\nu$. Under this geometry, the Wasserstein gradient flow (W-GF) of $\calF_{\mmd}$ is~\citep{arbel2019maximum,korba2021kernel}
@@ -25,9 +23,9 @@ Several techniques have been proposed to improve its convergence behavior, inclu
 
 
 \paragraph{Fisher--Rao}
-The Fisher--Rao geometry defines an alternative metric on the space of probability measures. Suppose that $\mu,\nu\in\calP(\mathbb{R}^d)$ admit densities with respect to Lebesgue measure, and use the same symbols to denote these densities. Their Fisher--Rao distance is
-$d(\mu,\nu)=d_{\mathrm{FR}}(\mu,\nu):=2\arccos\left(
-\int \sqrt{\mu(x)\nu(x)}\,\dd x
+The Fisher--Rao geometry defines an alternative metric on the space of probability measures. Suppose that $\mu,\nu\in\calP(\mathbb{R}^d)$ admit densities with respect to Lebesgue measure, and abuse the same symbols to denote these densities. Their Fisher--Rao distance is
+$d(\mu,\nu)=d_{\mathrm{FR}}(\mu,\nu) := 2\arccos \left(
+\int \sqrt{\mu(x)\nu(x)} \,\dd x
 \right)$. 
 The corresponding Fisher--Rao gradient flow (FR-GF) of $\calF_{\mmd}$ is
 \begin{align}\label{eq:fr-gf}
@@ -41,154 +39,75 @@ The W-GF in \eqref{eq:w-gf} transports mass through space, whereas the FR-GF in 
 \end{align} 
 
 
-\paragraph{Interaction Force Transport}
+\paragraph{Wasserstein Interaction Force Transport}
 Recent work has considered the geometry induced by the MMD distance, $d(\mu,\nu)=\mmd(\mu,\nu)$~\citep{zhu2024inclusive,zhu2024kernel,gladin2024interaction}. For a kernel $k$ and a probability measure $\mu$, let $\calT_\mu:L^2(\mu)\to L^2(\mu)$ denote the associated kernel integral operator. The first variation of the MMD objective can be written as $\calF'_{\mmd}=\int k(\cdot,y)\,\dd(\mu-\pi)(y)=\calT_\mu(1-\dd\mu/\dd\pi)$. The resulting Interaction-Force Transport (IFT) gradient flow is~\citep{gladin2024interaction}
 \begin{align}\label{eq:ift-gf}
 \partial_t\mu_t = -\mu_t \calT_{\mu_t}^{-1} \calF_{\mmd}'[\mu_t] = -(\mu_t - \pi). \tag{IFT-GF}
 \end{align}
-This representation relies on the cancellation of $\calT_{\mu_t}^{-1}$ with $\calT_{\mu_t}$ in $\calF_{\mmd}'$. The present work is restricted to $\calF_{\mmd}$; extending this construction to more general objectives $\calF$ is beyond its scope. The IFT-GF redistributes mass without spatial movement.
+This representation relies on the cancellation of $\calT_{\mu_t}^{-1}$ with $\calT_{\mu_t}$ in $\calF_{\mmd}'$. The present work is restricted to $\calF_{\mmd}$; extending this construction to more general objectives $\calF$ is beyond its scope. \eqref{eq:ift-gf} redistributes mass without any spatial movement. 
 
-\paragraph{Wasserstein Interaction Force Transport}
-Combining W-GF and IFT-GF, analogously to \eqref{eq:wfr-gf}, yields
+Combining W-GF and IFT-GF, analogously to \eqref{eq:wfr-gf}, yields, for $\alpha,\beta>0$, 
 \begin{align*}
-    \partial_t\mu_t = \alpha \nabla\cdot \left(\mu_t \nabla \calF'[\mu_t]\right) - \beta \calT^{-1} \calF'[\mu_t] \tag{WIFT-GF}
+    \partial_t\mu_t = \alpha \nabla\cdot \left(\mu_t \nabla \calF_{\mmd}'[\mu_t]\right) - \beta (\mu_t - \pi) . \tag{WIFT-GF}
 \end{align*}
-Both IFT-GF and WIFT-GF converge exponentially in squared MMD~\citep{gladin2024interaction}; specifically, $\operatorname{MMD}^2(\mu_t,\pi)\leq e^{-2\beta t}\operatorname{MMD}^2(\mu_0,\pi)$. Notably, this convergence holds without conditions on the target distribution $\pi$. The closest comparable result in \citet{tian2026sobolev} requires additional regularization.
+Both IFT-GF and WIFT-GF enjoy nice convergence properties~\citep{gladin2024interaction}; $\operatorname{MMD}^2(\mu_t,\pi)\leq e^{-2\beta t}\operatorname{MMD}^2(\mu_0,\pi)$. Notably, this convergence holds without conditions on the target distribution $\pi$. The closest comparable result is \citet[Theorem 4.1]{tian2026sobolev}, yet, it requires additional regularizations.
 
 
 \section{Particle Descent} 
-
-If $\calF$ is the MMD distance $\calF(\cdot)=\mmd^2(\cdot, \pi)$, then the first variation $\calF'[\mu](\cdot)=\int k(x, \cdot) \dd(\mu-\pi) = \calT(\mu-\pi)$. 
-Then, we can derive the particle descent scheme of the corresponding gradient flows. 
-
-Let $\mu_{N,t}=\sum_{i=1}^N w_t^{(i)} \delta_{x_t^{(i)}}$ be a weighted empirical measure at iteration $t$. Write $\bm{X}_t=(x_t^{(1)},\ldots,x_t^{(N)})$ and $\bm{w}_t=(w_t^{(1)},\ldots,w_t^{(N)})$.
+In the last section, we have discussed the gradient flows on $\calP(\R^d)$ with different geometries. 
+Now, we are about to study their corresponding implementations with finite particles, i.e., particle descent scheme. 
+Let $\mu_{N,t}=\sum_{i=1}^N w_t^{(i)} \delta_{x_t^{(i)}}$ be a weighted empirical measure at iteration $t$. We use bold symbols $\bm{X}_t=(x_t^{(1)},\ldots, x_t^{(N)}) \in\R^{N\times d}$ and $\bm{w}_t=(w_t^{(1)},\ldots, w_t^{(N)})\in\R^N$.
 Denote $m_\pi=\int k(x,\cdot)\dd \pi$ as the kernel mean embedding. 
 Denote the kernel-mean residual and its vectorized counterpart as,  
 \begin{align*}
 h_{\bm{X},\bm{w}}(x) := \sum_{j=1}^N w^{(j)} k(x^{(j)},x)-m_\pi(x) \in \R, \quad h_{\bm{X},\bm{w}}(\bm{v}) = [h_{\bm{X},\bm{w}}(v^{(1)}), \ldots, h_{\bm{X},\bm{w}}(v^{(N)})]^\top \in \R^N .
 \end{align*}
-Define
-\begin{align*}
-E(\bm{X},\bm{w})
-=
-\frac{1}{2}\mmd^2\left(\sum_{i=1}^N w^{(i)}\delta_{x^{(i)}},\pi\right).
-\end{align*}
+Define the objective $\calE(\bm{X},\bm{w}) = \frac{1}{2}\mmd^2\left(\sum_{i=1}^N w^{(i)}\delta_{x^{(i)}},\pi \right)$.
 
-\paragraph{Euclidean geometry}
+\paragraph{Euclidean}
 The most straightforward approach to optimizing the particle locations and weights is to apply gradient descent jointly to $\bm{X}$ and $\bm{w}$. 
-For consistency with the update schemes introduced later, we adopt a Gauss--Seidel-type block gradient descent scheme, in which the particle locations are updated first and the weights are subsequently updated using the new locations $\bm{X}_{t+1}$.
-In particular, let $\tau>0$ be the step size. We consider $\bm{X}_{t+1}=\bm{X}_t - \tau \nabla_{\bm{X}} E(\bm{X}_t,\bm{w}_t)$ and $\bm{w}_{t+1}=\bm{w}_t - \tau \nabla_{\bm{w}} E(\bm{X}_t,\bm{w}_t)$.
-Expanding the gradients yields the following explicit update scheme: for each $i\in[N]$, 
-\begin{align}
-    x_{t+1}^{(i)}=x_t^{(i)}-\tau w_t^{(i)} \nabla h_{\bm{X}_t, \bm{w}_t}\left( x_t^{(i)} \right), \quad w_{t+1}^{(i)} =w_t^{(i)}-\tau h_{\bm{X}_{t+1},\bm{w}_t} \left(x_{t+1}^{(i)}\right)
+Let $\tau>0$ be the step size, we consider $\bm{X}_{t+1}=\bm{X}_t - \tau \nabla_{\bm{X}} \calE(\bm{X}_t,\bm{w}_t)$ and $\bm{w}_{t+1}=\bm{w}_t - \tau \nabla_{\bm{w}} \calE(\bm{X}_t,\bm{w}_t)$. 
+For consistency with the update schemes introduced later, we adopt a Gauss--Seidel-type block gradient descent scheme, in which the particle locations are updated first and the weights are subsequently updated using the new locations $\bm{X}_{t+1}$. 
+In particular, for each $i\in[N]$, 
+\begin{align}\label{eq:e-pd}
+    x_{t+1}^{(i)}=x_t^{(i)}-\tau w_t^{(i)} \nabla h_{\bm{X}_t, \bm{w}_t}\left( x_t^{(i)} \right), \quad w_{t+1}^{(i)} =w_t^{(i)}-\tau h_{\bm{X}_{t+1},\bm{w}_t} \left(x_{t+1}^{(i)}\right) \tag{E-PD} . 
 \end{align}
+Note that the above descent scheme guarantees neither $w_i>0$ or $\sum_{i=1}^N w_i =1$. 
 
 
-
-\paragraph{Wasserstein Fisher-Rao geometry}
-\begin{align}
+\paragraph{Wasserstein Fisher-Rao}
+Let the step size $\tau>0$. 
+A finite-particle implementation of \eqref{eq:wfr-gf} is: for each $i\in[N]$, 
+\begin{align}\label{eq:wfr-pd}
 x_{t+1}^{(i)}
-= x_t^{(i)}-\tau\alpha\nabla h_{\bm{X}_t,\bm{w}_t}\left(x_t^{(i)}\right), \quad
-w_{t+1}^{(i)}
-=w_t^{(i)}-\tau\beta w_t^{(i)}
-h_{\bm{X}_{t+1},\bm{w}_t} \left(x_{t+1}^{(i)}\right) .
+= x_t^{(i)}-\tau\alpha \nabla h_{\bm{X}_t,\bm{w}_t} \left(x_t^{(i)} \right), \quad w_{t+1}^{(i)} = w_t^{(i)} - \tau\beta h_{\bm{X}_{t+1}, \bm{w}_t} \left(x_{t+1}^{(i)}\right) \tag{WFR-PD} .
 \end{align}
+When $\beta=0$, the weights remain fixed and hence the above dynamics reduce to the finite-particle implementation of MMD flow in \citet{arbel2019maximum}. 
+Another implementation of the Wasserstein Fisher–Rao gradient flow is based on fixed-point equations, called mean shift interacting particles (MSIP). 
+Specifically, they directly solve the stationary conditions of \eqref{eq:wfr-pd}. The stationarity of the weight dynamics gives $h_{\bm X,\bm w}(x^{(i)})=0$, which implies $\bm w=\bm w_{\mathrm{KQ}}(\bm X)=K(\bm X, \bm X)^{-1} m_\pi(\bm X)$, 
+i.e., the kernel quadrature weights associated with the current particle locations. 
+Substituting these weights into the stationarity condition for the particle locations yields a fixed-point equation for $\bm X$, which MSIP solves iteratively. 
 
-
-\paragraph{Wasserstein IFT geometry} 
-The locations are first updated as the same as above, however, the weight update scheme require knowledge of the true density $\pi$. In reality, the weights are updated instead via an implicit minimizing scheme. 
-\begin{align}
-    x_{t+1}^{(i)} &= x_t^{(i)}-\tau\alpha \nabla h_{\bm{X}_t,\bm{w}_t}\left(x_t^{(i)}\right), \\
-    \bm{w}_{t+1} &= \arg \min _{\bm{w} \in \Delta^N} \left\{\frac{1}{2} \mmd^2\left(\sum_{i=1}^N w^{(i)} \delta_{x_{t+1}^{(i)}}, \pi\right) + \frac{1}{2 (\beta \tau)} \mmd^2 \left(\sum_{i=1}^N w^{(i)} \delta_{x_{t+1}^{(i)}}, \mu_{N,t}\right) \right\}.
+\paragraph{Wasserstein IFT} 
+The locations are first updated in the same 
+way as \eqref{eq:e-pd} and \eqref{eq:wfr-pd} above. 
+However, the weight update scheme requires knowledge of the true density $\pi$, which is often intractable in practice. 
+Following \citet{gladin2024interaction}, the weights are updated instead via an implicit minimizing scheme. Let $\tau>0$ be the step size. 
+\begin{align}\label{eq:wift-pd}
+    x_{t+1}^{(i)} &= x_t^{(i)}-\tau\alpha \nabla h_{\bm{X}_t,\bm{w}_t}\left(x_t^{(i)}\right), \tag{WIFT-PD} \\
+    \bm{w}_{t+1} &= \arg \min _{\bm{w}} \left\{\frac{1}{2} \mmd^2\left(\sum_{i=1}^N w^{(i)} \delta_{x_{t+1}^{(i)}}, \pi\right) + \frac{1}{2 (\beta \tau)} \mmd^2 \left(\sum_{i=1}^N w^{(i)} \delta_{x_{t+1}^{(i)}}, \mu_{N,t}\right) \right\} \nonumber .
 \end{align}
-Interestingly, letting $K_{t+1}=K(\bm{X}_{t+1}, \bm{X}_{t+1}) \in\R^{N\times N}$ be the Gram matrix, the weight problem is
+Interestingly, letting $K_{t+1} = k(\bm{X}_{t+1}, \bm{X}_{t+1}) \in\R^{N\times N}$ be the Gram matrix of the particles at iteration $t+1$, then the weight update problem is equivalent to, 
 \begin{align*}
-    \min_{\bm{w}\in \Delta^N} \left\{\frac{1}{2} \bm{w}^{\top} K_{t+1} \bm{w} - m_\pi(\bm{X}_{t+1})^{\top} \bm{w} + \frac{1}{2 \eta} \left(\bm{w}-\bm{w}_t \right)^{\top} K_{t+1} \left(\bm{w}-\bm{w}_t\right)\right\} ,
-\end{align*}
-By definition of kernel quadrature, there is $m_\pi(\bm{X}_{t+1}) = K_{t+1} \bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1})$.
-And the solution is, when ignoring the simplex constraint, $\bm{w}_{t+1} = \frac{1}{1+\eta} \bm{w}_t + \frac{\eta}{1+\eta} \bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1})$ which can be equivalently written as,
-\begin{align*}
-    \bm{w}_{t+1} = \bm{w}_t - \frac{1}{1+(\tau\beta)} {K_{t+1}}^{-1} \left( h_{\bm{X}_{t+1},\bm{w}_t} \left(\bm{X}_{t+1}\right) \right).
-\end{align*}
+    \bm{w}_{t+1} &= \arg \min_{\bm{w}} \left\{\frac{1}{2} \bm{w}^{\top} K_{t+1} \bm{w} - m_\pi(\bm{X}_{t+1})^{\top} \bm{w} + \frac{1}{2 (\beta \tau)} \left(\bm{w}-\bm{w}_t \right)^{\top} K_{t+1} \left(\bm{w}-\bm{w}_t\right)\right\} \\
+    &= \bm{w}_t - \frac{1}{1+(\tau\beta)} K_{t+1}^{-1} h_{\bm{X}_{t+1},\bm{w}_t} \left(\bm{X}_{t+1}\right) \\
+    &= \frac{1}{1+\tau\beta} \bm{w}_t + \frac{\tau\beta}{1+\tau\beta} \bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}) . 
+\end{align*} 
+The last line holds by the definition of kernel quadrature: $m_\pi(\bm{X}_{t+1}) = K_{t+1} \bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1})$.
 
-To state the particle updates compactly, 
-Table~\ref{tab:mmd-particle-geometries} gives the location and weight updates explicitly for the three geometries, direct Euclidean gradient descent, and MSIP \citep{belhadji2026weighted}. In the WFR scheme, the transport step precedes the weight step, which is evaluated at the updated particle locations. The WFR weight update is obtained by applying forward Euler discretization to the Fisher--Rao reaction term in Eq.~\textup{(WFR-GF)}.
 
-\begin{table}[t]
-\centering
-\caption{Location and weight updates for MMD minimization under Wasserstein, WFR, and MMD geometries, together with direct Euclidean gradient descent and MSIP.}
-\label{tab:mmd-particle-geometries}
-\small
-\renewcommand{\arraystretch}{1.5}
-\begin{tabular}{@{}|>{\raggedright\arraybackslash}p{0.16\textwidth}|>{\raggedright\arraybackslash}p{0.78\textwidth}|@{}}
-\hline
-Geometry or method & Location and weight updates \\
-\hline
-Wasserstein
-& \(\displaystyle
-\begin{aligned}
-x_{t+1}^{(i)}
-&=x_t^{(i)}-\tau\alpha\nabla h_{\bm{X}_t,\bm{w}_t}\left(x_t^{(i)}\right), \\
-w_{t+1}^{(i)}
-&=w_t^{(i)}=\frac{1}{N}.
-\end{aligned}
-\) \\
-\hline
-WFR
-& \(\displaystyle
-\begin{aligned}
-x_{t+1}^{(i)}
-&=x_t^{(i)}-\tau\alpha\nabla h_{\bm{X}_t,\bm{w}_t}\left(x_t^{(i)}\right), \\
-w_{t+1}^{(i)}
-&=w_t^{(i)}-\tau\beta w_t^{(i)}
-\left[
-h_{\bm{X}_{t+1},\bm{w}_t}\left(x_{t+1}^{(i)}\right)
--\sum_{j=1}^N w_t^{(j)}
-h_{\bm{X}_{t+1},\bm{w}_t}\left(x_{t+1}^{(j)}\right)
-\right].
-\end{aligned}
-\) \\
-\hline
-MMD (IFT)
-& \(\displaystyle
-\begin{aligned}
-x_{t+1}^{(i)}
-&=x_t^{(i)}-\tau\alpha\nabla h_{\bm{X}_t,\bm{w}_t}\left(x_t^{(i)}\right), \\
-\bm{w}_{t+1}
-&=\frac{1}{1+\eta}\bm{w}_t
-+\frac{\eta}{1+\eta}\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}).
-\end{aligned}
-\) \\
-\hline
-Direct GD
-& \(\displaystyle
-\begin{aligned}
-x_{t+1}^{(i)}
-&=x_t^{(i)}-\tau\alpha w_t^{(i)}
-\nabla h_{\bm{X}_t,\bm{w}_t}\left(x_t^{(i)}\right), \\
-w_{t+1}^{(i)}
-&=w_t^{(i)}-\tau\beta
-h_{\bm{X}_t,\bm{w}_t}\left(x_t^{(i)}\right).
-\end{aligned}
-\) \\
-\hline
-MSIP
-& For a squared-exponential kernel,
-\(\displaystyle
-\begin{aligned}
-x_{t+1}^{(i)}={}&(1-\tau)x_t^{(i)}
-+\frac{\tau}{w_{\mathrm{KQ}}^{(i)}(\bm{X}_t)}
-\sum_{j=1}^N
-\left[K(\bm{X}_t)^{-1}\right]_{ij}
-\int x k\left(x,x_t^{(j)}\right)\dd\pi(x), \\
-&\bm{w}_{t+1}=\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}).
-\end{aligned}
-\) \\
-\hline
-\end{tabular}
-\end{table}
-
-The Wasserstein row uses uniform initial weights, which remain equal to $1/N$ under transport; arbitrary initial weights would likewise remain fixed. The centering term in the WFR update preserves $\sum_{i=1}^N w_t^{(i)}=1$, while nonnegativity additionally requires $\tau\beta$ to be sufficiently small. The MMD row is the WIFT particle implementation used here: it combines the Wasserstein location update with the IFT weight update in Eqs.~\eqref{eq:wass_update}--\eqref{eq:ift_update}. Its displayed closed form is obtained when the simplex constraint in Eq.~\eqref{eq:ift_update} is ignored. The direct-gradient row performs simultaneous Euclidean descent in both $\bm{X}$ and $\bm{w}$; its location update differs from the Wasserstein update by the factor $w_t^{(i)}$. This weight update is unconstrained and must be projected if the iterates are required to remain in $\Delta^N$. In contrast, MSIP is a damped fixed-point method for the stationary conditions of the unbalanced WFR flow, rather than a time discretization of the normalized WFR flow in Eq.~\textup{(WFR-GF)}. Its update requires $K(\bm{X}_t)$ to be invertible and the kernel quadrature weights to be positive.
+\subsection{Which update scheme is better?}
+Having introduced the update schemes \eqref{eq:e-pd}, \eqref{eq:wfr-pd}, and \eqref{eq:wift-pd}, we are now ready to compare their optimization behavior. Although all three schemes minimize the same objective, $\calE(\bm{X},\bm{w}) = \frac{1}{2}\mmd^2\left(\sum_{i=1}^N w^{(i)}\delta_{x^{(i)}},\pi \right)$, they exhibit different optimization properties as a consequence of the different underlying geometries. 
 
 \begin{defi}[Weighted Euclidean Geometry]\label{defi:weighted_euc}
 Let $m\in\R$ and let $G \in \mathbb{R}^{m\times m}$ be a symmetric positive definite matrix. 
@@ -201,24 +120,31 @@ Equivalently, $\grad_G f(x) = G^{-1}\nabla f(x)$ where $\nabla f$ denotes the st
 \end{defi}
 
 
+\begin{defi}[Smoothness]
+    A differentiable function $f:\R^m\to\R$ is said to be $L$-smooth with respect to the $G$-weighted Euclidean geometry if $\|\grad_G f(x)-\grad_G f(y)\|_G
+    \leq L\|x-y\|_G$ for all $x,y\in\R^m$. 
+\end{defi}
 
-
-\begin{prop}[Smoothness under Euclidean and weighted Euclidean geometries]
+\begin{prop}[Smoothness of squared MMD objective under various geometries]
 \label{prop:mmd-energy-smoothness}
-Let $\bm{w}\in\Delta^N$ with $w^{(i)}>0$ for every $i$ and $\sum_{i=1}^N w^{(i)}=1$.
-Suppose that $k$ is symmetric and twice continuously differentiable, with $\sup_{x,y\in\R^d}\|\nabla_{11}^2 k(x,y)\|_{\mathrm{op}} = C_1<\infty$ and $\sup_{x,y\in\R^d}\|\nabla_{12}^2 k(x,y)\|_{\mathrm{op}}=C_2 <\infty$. Define
-\begin{align*}
-E(\bm{X},\bm{w})
-=
-\frac{1}{2}\mmd^2\left(\sum_{i=1}^N w^{(i)}\delta_{x^{(i)}},\pi\right).
-\end{align*}
-Then $E(\cdot,\bm{w})$ is $\max_{1\leq i\leq N}w^{(i)} (2 C_1 + C_2)$-smooth under the standard Euclidean geometry;
-and is $(2 C_1 + C_2)$-smooth under the $\bm{w}$-weighted Euclidean geometry. 
-Moreover, $E(\bm{X}, \cdot)$ is $\lambda_{\max}(K(\bm{X}, \bm{X}))$-smooth under the standard Euclidean geometry; and is $1$-smooth under the $K(\bm{X}, \bm{X})$-weighted Euclidean geometry. 
+Let $\bm{w}\in\R^N$ with $w^{(i)}>0$ for every $i$ and $\sum_{i=1}^N w^{(i)}=1$.
+Let $\bm{X}\in\R^{N\times d}$ and $k(\bm{X}, \bm{X})\in\R^{N\times N}$ be the associated Gram matrix. 
+Suppose that $k$ is symmetric and twice continuously differentiable, with $\sup_{x,y\in\R^d}\|\nabla_{11}^2 k(x,y)\|_{\mathrm{op}} = C_1<\infty$ and $\sup_{x,y\in\R^d}\|\nabla_{12}^2 k(x,y)\|_{\mathrm{op}}=C_2 <\infty$.
+Then,
+\begin{enumerate}
+    \item $\calE(\cdot,\bm{w})$ is $\max_{1\leq i\leq N} w^{(i)}(2 C_1 + C_2)$-smooth under the standard Euclidean geometry; and is $(2 C_1 + C_2)$-smooth under the $\operatorname{Diag}(\bm{w})$-weighted Euclidean geometry. 
+    \item $\calE(\bm{X}, \cdot)$ is $\lambda_{\max}(K(\bm{X}, \bm{X}))$-smooth under the standard Euclidean geometry; and is $1$-smooth under the $K(\bm{X}, \bm{X})$-weighted Euclidean geometry. 
+\end{enumerate} 
 \end{prop}
 
-From the above proposition, we see that the right smoothness notion to consider is the weighted Euclidean geometry instead of the standard Euclidean geometry. 
+The above proposition shows that the smoothness of the squared MMD objective depends strongly on the underlying geometry. In particular, an appropriate choice of geometry can remove the dependence of smoothness $L$ on quantities such as the particle weights $w^{(i)}$ or the spectrum of the Gram matrix. 
+One important implication of smoothness is that it determines the admissible scale of the step size $\tau$. It is well known that, for an $L$-smooth objective, a sufficient condition for a gradient descent step to be non-increasing is $\tau \leq \frac{2}{L}$. 
+We next analyze the particle descent schemes introduced above, identify the geometry underlying each scheme, and compare their corresponding smoothness properties and admissible step sizes. 
 
+\begin{prop}
+    \eqref{eq:e-pd} updates particles $\bm{X}$ under the standard Euclidean geometry; while \eqref{eq:wfr-pd} and \eqref{eq:wift-pd} update particles $\bm{X}$ under the $\operatorname{Diag}(\bm{w})$-weighted Euclidean geometry. 
+    \eqref{eq:e-pd} and \eqref{eq:wfr-pd} update weights $\bm{w}$ under the standard Euclidean geometry; while \eqref{eq:wift-pd} update particles $\bm{w}$ under the $K(\bm{X}, \bm{X})$-weighted Euclidean geometry. 
+\end{prop}
 
 The direct KQ update instantaneously minimizes the MMD over the weights at each particle configuration, whereas the IFT update is a proximal tracking scheme that interpolates between the previous weights and the instantaneous KQ solution. The latter sacrifices instantaneous optimality in exchange for a controlled and stable evolution of the weights, consistent with the underlying continuous-time IFT dynamics.
 
