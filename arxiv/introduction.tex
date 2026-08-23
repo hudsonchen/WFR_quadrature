@@ -141,16 +141,23 @@ The above proposition shows that the smoothness of the squared MMD objective dep
 One important implication of smoothness is that it determines the admissible scale of the step size $\tau$. It is well known that, for an $L$-smooth objective, a sufficient condition for a gradient descent step to be non-increasing is $\tau \leq \frac{2}{L}$. 
 We next analyze the particle descent schemes introduced above, identify the geometry underlying each scheme, and compare their corresponding smoothness properties and admissible step sizes. 
 
-\begin{prop}
-    \eqref{eq:e-pd} updates particles $\bm{X}$ under the standard Euclidean geometry; while \eqref{eq:wfr-pd} and \eqref{eq:wift-pd} update particles $\bm{X}$ under the $\operatorname{Diag}(\bm{w})$-weighted Euclidean geometry. 
-    \eqref{eq:e-pd} and \eqref{eq:wfr-pd} update weights $\bm{w}$ under the standard Euclidean geometry; while \eqref{eq:wift-pd} update particles $\bm{w}$ under the $K(\bm{X}, \bm{X})$-weighted Euclidean geometry. 
+\begin{prop}[Learning rate for a decaying objective]
+x
 \end{prop}
 
+\eqref{eq:e-pd} updates particles $\bm{X}$ under the standard Euclidean geometry; while \eqref{eq:wfr-pd} and \eqref{eq:wift-pd} update particles $\bm{X}$ under the $\operatorname{Diag}(\bm{w})$-weighted Euclidean geometry. 
+\eqref{eq:e-pd} and \eqref{eq:wfr-pd} update weights $\bm{w}$ under the standard Euclidean geometry; while \eqref{eq:wift-pd} update particles $\bm{w}$ under the $K(\bm{X}, \bm{X})$-weighted Euclidean geometry. 
+    
 The direct KQ update instantaneously minimizes the MMD over the weights at each particle configuration, whereas the IFT update is a proximal tracking scheme that interpolates between the previous weights and the instantaneous KQ solution. The latter sacrifices instantaneous optimality in exchange for a controlled and stable evolution of the weights, consistent with the underlying continuous-time IFT dynamics.
 
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\linewidth]{figures/all_mmd_trajectories.pdf}
+    \caption{Caption}
+    \label{fig:all_mmd}
+\end{figure}
 
-
-
+\hudson{The following is Work in Progress.}
 \section{Convergence}
 \begin{theorem}[Monotone improvement]
 \label{thm:wift-kq-descent}
