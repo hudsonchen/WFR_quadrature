@@ -66,21 +66,21 @@ Define the objective $\calE(\bm{X},\bm{w}) = \frac{1}{2}\mmd^2\left(\sum_{i=1}^N
 
 \paragraph{Euclidean}
 The most straightforward approach to optimizing the particle locations and weights is to apply gradient descent jointly to $\bm{X}$ and $\bm{w}$. 
-Let $\tau>0$ be the step size, we consider $\bm{X}_{t+1}=\bm{X}_t - \tau \nabla_{\bm{X}} \calE(\bm{X}_t,\bm{w}_t)$ and $\bm{w}_{t+1}=\bm{w}_t - \tau \nabla_{\bm{w}} \calE(\bm{X}_t,\bm{w}_t)$. 
+Let $\tau_X,\tau_w>0$ be the step sizes for the particle locations and weights, respectively. We consider $\bm{X}_{t+1}=\bm{X}_t-\tau_X\nabla_{\bm{X}}\calE(\bm{X}_t,\bm{w}_t)$ and $\bm{w}_{t+1}=\bm{w}_t-\tau_w\nabla_{\bm{w}}\calE(\bm{X}_t,\bm{w}_t)$.
 For consistency with the update schemes introduced later, we adopt a Gauss--Seidel-type block gradient descent scheme, in which the particle locations are updated first and the weights are subsequently updated using the new locations $\bm{X}_{t+1}$. 
 In particular, for each $i\in[N]$, 
 \begin{align}\label{eq:e-pd}
-    x_{t+1}^{(i)}=x_t^{(i)}-\tau w_t^{(i)} \nabla h_{\bm{X}_t, \bm{w}_t}\left( x_t^{(i)} \right), \quad w_{t+1}^{(i)} =w_t^{(i)}-\tau h_{\bm{X}_{t+1},\bm{w}_t} \left(x_{t+1}^{(i)}\right) \tag{E-PD} . 
+    x_{t+1}^{(i)}=x_t^{(i)}-\tau_X w_t^{(i)} \nabla h_{\bm{X}_t, \bm{w}_t}\left( x_t^{(i)} \right), \quad w_{t+1}^{(i)} =w_t^{(i)}-\tau_w h_{\bm{X}_{t+1},\bm{w}_t} \left(x_{t+1}^{(i)}\right) \tag{E-PD} .
 \end{align}
 Note that the above descent scheme guarantees neither $w_i>0$ or $\sum_{i=1}^N w_i =1$. 
 
 
 \paragraph{Wasserstein Fisher-Rao}
-Let the step size $\tau>0$. 
+Let $\tau_X,\tau_w>0$ be the location and weight step sizes.
 A finite-particle implementation of \eqref{eq:wfr-gf} is: for each $i\in[N]$, 
 \begin{align}\label{eq:wfr-pd}
 x_{t+1}^{(i)}
-= x_t^{(i)}-\tau\alpha \nabla h_{\bm{X}_t,\bm{w}_t} \left(x_t^{(i)} \right), \quad w_{t+1}^{(i)} = w_t^{(i)} - \tau\beta h_{\bm{X}_{t+1}, \bm{w}_t} \left(x_{t+1}^{(i)}\right) \tag{WFR-PD} .
+= x_t^{(i)}-\tau_X\alpha \nabla h_{\bm{X}_t,\bm{w}_t} \left(x_t^{(i)} \right), \quad w_{t+1}^{(i)} = w_t^{(i)} - \tau_w\beta h_{\bm{X}_{t+1}, \bm{w}_t} \left(x_{t+1}^{(i)}\right) \tag{WFR-PD} .
 \end{align}
 When $\beta=0$, the weights remain fixed and hence the above dynamics reduce to the finite-particle implementation of MMD flow in \citet{arbel2019maximum}. 
 Another implementation of the Wasserstein Fisher–Rao gradient flow is based on fixed-point equations, called mean shift interacting particles (MSIP). 
@@ -92,16 +92,16 @@ Substituting these weights into the stationarity condition for the particle loca
 The locations are first updated in the same 
 way as \eqref{eq:e-pd} and \eqref{eq:wfr-pd} above. 
 However, the weight update scheme requires knowledge of the true density $\pi$, which is often intractable in practice. 
-Following \citet{gladin2024interaction}, the weights are updated instead via an implicit minimizing scheme. Let $\tau>0$ be the step size. 
+Following \citet{gladin2024interaction}, the weights are updated instead via an implicit minimizing scheme. Let $\tau_X,\tau_w>0$ be the location and weight step sizes.
 \begin{align}\label{eq:wift-pd}
-    x_{t+1}^{(i)} &= x_t^{(i)}-\tau\alpha \nabla h_{\bm{X}_t,\bm{w}_t}\left(x_t^{(i)}\right), \tag{WIFT-PD} \\
-    \bm{w}_{t+1} &= \arg \min _{\bm{w}} \left\{\frac{1}{2} \mmd^2\left(\sum_{i=1}^N w^{(i)} \delta_{x_{t+1}^{(i)}}, \pi\right) + \frac{1}{2 (\beta \tau)} \mmd^2 \left(\sum_{i=1}^N w^{(i)} \delta_{x_{t+1}^{(i)}}, \mu_{N,t}\right) \right\} \nonumber .
+    x_{t+1}^{(i)} &= x_t^{(i)}-\tau_X\alpha \nabla h_{\bm{X}_t,\bm{w}_t}\left(x_t^{(i)}\right), \tag{WIFT-PD} \\
+    \bm{w}_{t+1} &= \arg \min _{\bm{w}} \left\{\frac{1}{2} \mmd^2\left(\sum_{i=1}^N w^{(i)} \delta_{x_{t+1}^{(i)}}, \pi\right) + \frac{1}{2 (\beta \tau_w)} \mmd^2 \left(\sum_{i=1}^N w^{(i)} \delta_{x_{t+1}^{(i)}}, \mu_{N,t}\right) \right\} \nonumber .
 \end{align}
-Interestingly, letting $K_{t+1} = k(\bm{X}_{t+1}, \bm{X}_{t+1}) \in\R^{N\times N}$ be the Gram matrix of the particles at iteration $t+1$, then the weight update problem is equivalent to, 
+Interestingly, letting $K_{t+1}=K(\bm{X}_{t+1},\bm{X}_{t+1})\in\R^{N\times N}$ be the Gram matrix of the particles at iteration $t+1$, the weight update problem is equivalent to
 \begin{align*}
-    \bm{w}_{t+1} &= \arg \min_{\bm{w}} \left\{\frac{1}{2} \bm{w}^{\top} K_{t+1} \bm{w} - m_\pi(\bm{X}_{t+1})^{\top} \bm{w} + \frac{1}{2 (\beta \tau)} \left(\bm{w}-\bm{w}_t \right)^{\top} K_{t+1} \left(\bm{w}-\bm{w}_t\right)\right\} \\
-    &= \bm{w}_t - \frac{1}{1+(\tau\beta)} K_{t+1}^{-1} h_{\bm{X}_{t+1},\bm{w}_t} \left(\bm{X}_{t+1}\right) \\
-    &= \frac{1}{1+\tau\beta} \bm{w}_t + \frac{\tau\beta}{1+\tau\beta} \bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}) . 
+    \bm{w}_{t+1} &= \arg \min_{\bm{w}} \left\{\frac{1}{2} \bm{w}^{\top} K_{t+1} \bm{w} - m_\pi(\bm{X}_{t+1})^{\top} \bm{w} + \frac{1}{2 (\beta \tau_w)} \left(\bm{w}-\bm{w}_t \right)^{\top} K_{t+1} \left(\bm{w}-\bm{w}_t\right)\right\} \\
+    &= \bm{w}_t - \frac{\beta\tau_w}{1+\beta\tau_w} K_{t+1}^{-1} h_{\bm{X}_{t+1},\bm{w}_t} \left(\bm{X}_{t+1}\right) \\
+    &= \frac{1}{1+\beta\tau_w} \bm{w}_t + \frac{\beta\tau_w}{1+\beta\tau_w} \bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}) .
 \end{align*} 
 The last line holds by the definition of kernel quadrature: $m_\pi(\bm{X}_{t+1}) = K_{t+1} \bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1})$.
 
@@ -128,7 +128,7 @@ Equivalently, $\grad_G f(x) = G^{-1}\nabla f(x)$ where $\nabla f$ denotes the st
 \begin{prop}[Smoothness of squared MMD objective under various geometries]
 \label{prop:mmd-energy-smoothness}
 Let $\bm{w}\in\R^N$ with $w^{(i)}>0$ for every $i$ and $\sum_{i=1}^N w^{(i)}=1$.
-Let $\bm{X}\in\R^{N\times d}$ and $k(\bm{X}, \bm{X})\in\R^{N\times N}$ be the associated Gram matrix. 
+Let $\bm{X}\in\R^{N\times d}$ and suppose that the associated Gram matrix $K(\bm{X},\bm{X})\in\R^{N\times N}$ is positive definite.
 Suppose that $k$ is symmetric and twice continuously differentiable, with $\sup_{x,y\in\R^d}\|\nabla_{11}^2 k(x,y)\|_{\mathrm{op}} = C_1<\infty$ and $\sup_{x,y\in\R^d}\|\nabla_{12}^2 k(x,y)\|_{\mathrm{op}}=C_2 <\infty$.
 Then,
 \begin{enumerate}
@@ -138,15 +138,20 @@ Then,
 \end{prop}
 
 The above proposition shows that the smoothness of the squared MMD objective depends strongly on the underlying geometry. In particular, an appropriate choice of geometry can remove the dependence of smoothness $L$ on quantities such as the particle weights $w^{(i)}$ or the spectrum of the Gram matrix. 
-One important implication of smoothness is that it determines the admissible scale of the step size $\tau$. It is well known that, for an $L$-smooth objective, a sufficient condition for a gradient descent step to be non-increasing is $\tau \leq \frac{2}{L}$. 
+One important implication of smoothness is that it determines the admissible scale of a gradient step. For an $L$-smooth objective, the descent lemma shows that a step size no larger than $2/L$ is sufficient for the objective to be non-increasing.
 We next analyze the particle descent schemes introduced above, identify the geometry underlying each scheme, and compare their corresponding smoothness properties and admissible step sizes. 
 
-\begin{prop}[Learning rate for a decaying objective]
-x
+\begin{prop}[Sufficient step sizes for monotone descent]
+\label{prop:geometry-step-sizes}
+Suppose that the assumptions of \Cref{prop:mmd-energy-smoothness} hold with $\bm{w}=\bm{w}_t$ and $\bm{X}=\bm{X}_{t+1}$. Then each Gauss--Seidel particle descent scheme satisfies $\calE(\bm{X}_{t+1},\bm{w}_{t+1})\leq\calE(\bm{X}_t,\bm{w}_t)$ under the following sufficient conditions:
+\begin{enumerate}
+    \item For E-PD, the sufficient location condition is $\tau_X\leq 2/[\max_{1\leq i\leq N}w_t^{(i)}(2C_1+C_2)]$. The sufficient weight condition is $\tau_w\leq 2/\lambda_{\max}(K_{t+1})$.
+    \item For WFR-PD, the sufficient location condition is $\alpha\tau_X\leq 2/(2C_1+C_2)$. The sufficient weight condition is $\beta\tau_w\leq 2/\lambda_{\max}(K_{t+1})$.
+    \item For WIFT-PD, the sufficient location condition is $\alpha\tau_X\leq 2/(2C_1+C_2)$, while every $\tau_w>0$ yields a non-increasing implicit weight substep.
+\end{enumerate}
 \end{prop}
 
-\eqref{eq:e-pd} updates particles $\bm{X}$ under the standard Euclidean geometry; while \eqref{eq:wfr-pd} and \eqref{eq:wift-pd} update particles $\bm{X}$ under the $\operatorname{Diag}(\bm{w})$-weighted Euclidean geometry. 
-\eqref{eq:e-pd} and \eqref{eq:wfr-pd} update weights $\bm{w}$ under the standard Euclidean geometry; while \eqref{eq:wift-pd} update particles $\bm{w}$ under the $K(\bm{X}, \bm{X})$-weighted Euclidean geometry. 
+The different conditions in \Cref{prop:geometry-step-sizes} follow directly from the underlying geometries. The location update of \eqref{eq:e-pd} uses the standard Euclidean geometry, whereas those of \eqref{eq:wfr-pd} and \eqref{eq:wift-pd} use the $\operatorname{Diag}(\bm{w})$-weighted Euclidean geometry. The weight updates of \eqref{eq:e-pd} and \eqref{eq:wfr-pd} use the standard Euclidean geometry, whereas the implicit weight update of \eqref{eq:wift-pd} is proximal in the $K(\bm{X},\bm{X})$-weighted Euclidean geometry. Separate step sizes are therefore natural because the location and weight blocks generally have different smoothness constants.
     
 The direct KQ update instantaneously minimizes the MMD over the weights at each particle configuration, whereas the IFT update is a proximal tracking scheme that interpolates between the previous weights and the instantaneous KQ solution. The latter sacrifices instantaneous optimality in exchange for a controlled and stable evolution of the weights, consistent with the underlying continuous-time IFT dynamics.
 
@@ -161,9 +166,9 @@ The direct KQ update instantaneously minimizes the MMD over the weights at each 
 \section{Convergence}
 \begin{theorem}[Monotone improvement]
 \label{thm:wift-kq-descent}
-At iteration $t\in\N$, let $\mu_{N,t}=\sum_{i=1}^N w_t^{(i)}\delta_{x_t^{(i)}}$ with $\bm{X}_t=(x_t^{(1)},\ldots,x_t^{(N)})$, and $\bm{w}_t=(w_t^{(1)},\ldots,w_t^{(N)})$.
+Let the iterates $\mu_{N,t}=\sum_{i=1}^N w_t^{(i)}\delta_{x_t^{(i)}}$, with $\bm{X}_t=(x_t^{(1)},\ldots,x_t^{(N)})$ and $\bm{w}_t=(w_t^{(1)},\ldots,w_t^{(N)})$, be generated by WIFT-PD with step sizes $\tau_X,\tau_w>0$, and set $\eta=\beta\tau_w$.
 
-Assume that $k$ is twice continuously differentiable, that $K(\bm{X}_t)$ is positive definite for every $t$, and that the weights remain uniformly positive, namely $w_t^{(i)}\geq \underline w>0$ for every $i,t$. Assume moreover that, for every admissible $\bm{w}$, the map $\bm{X}\mapsto\mathcal{E}(\bm{X},\bm{w})$ has an $L_X$-Lipschitz gradient on a set containing all iterates. If $\tau\alpha\leq 2\underline w/L_X$, then for every $t\geq0$,
+Assume that $k$ is twice continuously differentiable, that $K(\bm{X}_t)$ is positive definite for every $t$, and that the weights remain uniformly positive, namely $w_t^{(i)}\geq \underline w>0$ for every $i,t$. Assume moreover that, for every admissible $\bm{w}$, the map $\bm{X}\mapsto\mathcal{E}(\bm{X},\bm{w})$ has an $L_X$-Lipschitz gradient on a set containing all iterates. If $\tau_X\alpha\leq 2\underline w/L_X$, then for every $t\geq0$,
 \begin{align}
 \operatorname{MMD} \left( \mu_{N,t+1},\pi
 \right) \leq \operatorname{MMD}
@@ -310,7 +315,32 @@ For the standard Euclidean geometry, since $\sum_{i=1}^Nw^{(i)}\|u^{(i)}\|^2
 =
 \left(\max_{1\leq i\leq N}w^{(i)}\right)
 \|\bm{u}\|_2^2$. 
-The proof is concluded.
+This proves the first claim.
+
+For fixed $\bm{X}$, the weight gradient is $\nabla_{\bm{w}}\calE(\bm{X},\bm{w})=K(\bm{X},\bm{X})\bm{w}-m_\pi(\bm{X})$. Hence, for any $\bm{w},\bm{v}\in\R^N$, we have $\|\nabla_{\bm{w}}\calE(\bm{X},\bm{w})-\nabla_{\bm{w}}\calE(\bm{X},\bm{v})\|_2\leq\lambda_{\max}(K(\bm{X},\bm{X}))\|\bm{w}-\bm{v}\|_2$. Under the $K(\bm{X},\bm{X})$-weighted Euclidean geometry, the corresponding gradient is $\grad_K\calE(\bm{X},\bm{w})=\bm{w}-K(\bm{X},\bm{X})^{-1}m_\pi(\bm{X})$, and therefore $\|\grad_K\calE(\bm{X},\bm{w})-\grad_K\calE(\bm{X},\bm{v})\|_K=\|\bm{w}-\bm{v}\|_K$. This proves the second claim.
+\end{proof}
+
+\begin{proof}[Proof of \Cref{prop:geometry-step-sizes}]
+For an $L$-smooth function $f$ under a fixed weighted Euclidean geometry, the descent lemma applied to $z^+=z-\gamma\grad_G f(z)$ gives
+\begin{align*}
+f(z^+)\leq f(z)-\gamma\left(1-\frac{L\gamma}{2}\right)\|\grad_G f(z)\|_G^2.
+\end{align*}
+Thus, the corresponding block objective is non-increasing whenever $\gamma\leq2/L$.
+
+For E-PD, the location substep is standard Euclidean gradient descent with effective step size $\tau_X$. By \Cref{prop:mmd-energy-smoothness}, its smoothness constant is $\max_i w_t^{(i)}(2C_1+C_2)$. With $\bm{X}_{t+1}$ fixed, the weight substep is standard Euclidean gradient descent with effective step size $\tau_w$ and smoothness constant $\lambda_{\max}(K_{t+1})$. The stated bounds therefore imply
+\begin{align*}
+\calE(\bm{X}_{t+1},\bm{w}_{t+1})\leq\calE(\bm{X}_{t+1},\bm{w}_t)\leq\calE(\bm{X}_t,\bm{w}_t).
+\end{align*}
+
+For WFR-PD, the location substep is gradient descent under the $\operatorname{Diag}(\bm{w}_t)$-weighted Euclidean geometry with effective step size $\alpha\tau_X$ and smoothness constant $2C_1+C_2$. Its weight substep is standard Euclidean gradient descent with effective step size $\beta\tau_w$ and smoothness constant $\lambda_{\max}(K_{t+1})$. The same descent argument gives the claimed monotonicity.
+
+The WIFT-PD location substep is identical to that of WFR-PD and is therefore non-increasing under the stated location condition. For the implicit weight substep, its defining minimization problem and the admissible choice $\bm{w}=\bm{w}_t$ give
+\begin{align*}
+\calE(\bm{X}_{t+1},\bm{w}_{t+1})
++\frac{1}{2\beta\tau_w}\|\bm{w}_{t+1}-\bm{w}_t\|_{K_{t+1}}^2
+\leq\calE(\bm{X}_{t+1},\bm{w}_t).
+\end{align*}
+The squared norm is nonnegative for every $\tau_w>0$, so the weight substep is non-increasing without an upper bound on $\tau_w$. Combining the two substeps concludes the proof.
 \end{proof}
 
 \begin{proof}[Proof of \Cref{thm:wift-kq-descent}]
@@ -324,7 +354,7 @@ Define the MMD energy by
 Differentiating the MMD energy with respect to $x^{(i)}$ and using symmetry of the kernel gives
 $\nabla_{x^{(i)}}\mathcal{E}(\bm{X},\bm{w})=w^{(i)} g^{(i)}(\bm{X},\bm{w})$.
 Hence, the position update can be written as
-$x_{t+1}^{(i)}=x_t^{(i)}-\frac{\tau\alpha}{w_t^{(i)}}\nabla_{x^{(i)}}\mathcal{E}(\bm{X}_t,\bm{w}_t)$.
+$x_{t+1}^{(i)}=x_t^{(i)}-\frac{\tau_X\alpha}{w_t^{(i)}}\nabla_{x^{(i)}}\mathcal{E}(\bm{X}_t,\bm{w}_t)$.
 Thus, the Wasserstein substep is a diagonally preconditioned gradient step for $\bm{X}\mapsto\mathcal{E}(\bm{X},\bm{w}_t)$.
 By the $L_X$-smoothness of $\mathcal{E}(\cdot,\bm{w}_t)$, the descent lemma gives
 \begin{align}
@@ -347,21 +377,21 @@ x_{t+1}^{(i)}-x_t^{(i)}
 &=
 \mathcal{E}(\bm{X}_t,\bm{w}_t)
 -
-\tau\alpha
+\tau_X\alpha
 \sum_{i=1}^N
 \left(
 w_t^{(i)}
 -
-\frac{L_X\tau\alpha}{2}
+\frac{L_X\tau_X\alpha}{2}
 \right)
 \left\|
 g^{(i)}(\bm{X}_t,\bm{w}_t)
 \right\|^2.
 \label{eq:wasserstein-descent}
 \end{align}
-Since $w_t^{(i)}\geq\underline w$ and $\tau\alpha\leq2\underline w/L_X$, we have
-$w_t^{(i)}-L_X\tau\alpha/2\geq0$. Therefore,
-$\mathcal{E}(\bm{X}_{t+1},\bm{w}_t)\leq\mathcal{E}(\bm{X}_t,\bm{w}_t)$. This proves that the particle update in Eq.~\eqref{eq:wass_update} is decreasing the MMD value.
+Since $w_t^{(i)}\geq\underline w$ and $\tau_X\alpha\leq2\underline w/L_X$, we have
+$w_t^{(i)}-L_X\tau_X\alpha/2\geq0$. Therefore,
+$\mathcal{E}(\bm{X}_{t+1},\bm{w}_t)\leq\mathcal{E}(\bm{X}_t,\bm{w}_t)$. This proves that the location substep in \eqref{eq:wift-pd} decreases the MMD value.
 
 We next consider the weight update. For fixed $\bm{X}$, the dependence of the MMD energy on $\bm{w}$ is quadratic:
 $\mathcal{E}(\bm{X},\bm{w})=\frac12 \bm{w}^\top K(\bm{X})\bm{w}-m_\pi(\bm{X})^\top \bm{w}+$const. Since $K(\bm{X})$ is positive definite, the unique minimizer is
