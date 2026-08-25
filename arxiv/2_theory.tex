@@ -47,9 +47,9 @@ The corresponding Fisher--Rao gradient flow (FR-GF) of $\calF_{\mmd}$ is
 \paragraph{Wasserstein--Fisher--Rao}
 The W-GF in \eqref{eq:w-gf} transports mass through space, whereas the FR-GF in \eqref{eq:fr-gf} redistributes mass locally without spatial transport. The Wasserstein--Fisher--Rao gradient flow (WFR-GF) combines these two mechanisms. For $\alpha,\beta>0$, the resulting dynamics are
 \begin{align}\label{eq:wfr-gf}
-\partial_t\mu_t
-&= \alpha \nabla\cdot \left(\mu_t \nabla \calF_{\mmd}'[\mu_t]\right) \nonumber \\
-&\quad - \beta \mu_t \left( \calF_{\mmd}'[\mu_t]
+&\partial_t\mu_t
+= \alpha \nabla\cdot \left(\mu_t \nabla \calF_{\mmd}'[\mu_t]\right) \nonumber \\
+&\hspace{-20pt} - \beta \mu_t \left( \calF_{\mmd}'[\mu_t]
 - \int \calF_{\mmd}'[\mu_t]  \dd \mu_t \right). \tag{WFR-GF}
 \end{align} 
 
@@ -192,6 +192,7 @@ In the next proposition, we analyze the particle descent schemes introduced abov
 
 \begin{prop}[Sufficient step sizes for monotone descent]
 \label{prop:geometry-step-sizes}
+Let $t\in\N$ be fixed. 
 Suppose that the assumptions of \Cref{prop:mmd-energy-smoothness} hold with $\bm{w}=\bm{w}_t$ and $\bm{X}=\bm{X}_{t+1}$. 
 Then each particle descent scheme satisfies $\calE(\bm{X}_{t+1},\bm{w}_{t+1})\leq\calE(\bm{X}_t,\bm{w}_t)$ under the following sufficient conditions:
 \begin{enumerate}
@@ -207,6 +208,7 @@ The location update of \eqref{eq:e-pd} uses the standard Euclidean geometry, whe
 Separate step sizes conditions are therefore almost immediate because the location and weight blocks generally have different smoothness constants established in \Cref{prop:mmd-energy-smoothness}.  
 
 For the step size condition that $\tau_X\leq 2/[\max_{i\in[N]} w_t^{(i)}(2C_1+C_2)]$, the maximal admissible step size is dictated by the largest particle weight. Consequently, particles with smaller weights suffers from a factor of $[\min_{i\in[N]} w_t^{(i)}] / [\max_{i\in[N]} w_t^{(i)}]$. 
+For the step size condition that $\tau_w\leq 2/\lambda_{\max}(K_{t+1})$, 
 
 
 \begin{rem}[WIFT-PD as a favorable geometry]

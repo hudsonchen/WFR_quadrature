@@ -2,6 +2,8 @@
 \label{sec:experiments}
 
 \subsection{Synthetic Gaussians}
+We first consider a synthetic mixture of Gaussian setting---a simple multimodal benchmark that
+evaluates the ability of sampling methods to capture all modes of a distribution. 
 We compare Euc-PD, WFR, WIFT, and MSIP for the two-dimensional target $\pi=\mathcal{N}(\bm{0},I_2)$. Every run uses $N=20$ particles, seed $42$, RBF length scale $1$, and $1000$ iterations. The close and far initial distributions are $\mathcal{N}((1,1),I_2)$ and $\mathcal{N}((9,9),I_2)$, respectively. Euc-PD, WFR, and WIFT use the linear-plus-RBF kernel with unit linear coefficient, whereas the upstream MSIP implementation uses the RBF kernel. We use $\alpha=1$ and $\beta=0.5$ and report unsmoothed trajectories.
 
 Figure~\ref{fig:all_mmd} compares $\tau\in\{0.01,0.1,1\}$. The MSIP curve for $\tau=1$ is omitted because the upstream update encounters a singular Gram matrix in both initialization settings. Appendix~\ref{app:distant-initialization} provides the corresponding particle trajectories.
