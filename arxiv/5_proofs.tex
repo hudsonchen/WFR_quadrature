@@ -310,7 +310,8 @@ Eq.~\eqref{eq:kq-weight-contraction}, together with descent of the Wasserstein p
 \end{align}
 Applying the same iteration above recursively, then we obtain, 
 \begin{align*}
-\calE \left(\bm{X}_t, \bm{w}_t\right) \leq & \frac{1}{\left(1+\tau_w\right)^{2 t}} \calE\left(\bm{X}_0, \bm{w}_0\right) +\left(1-\frac{1}{\left(1+\tau_w\right)^2}\right) \sum_{s=1}^t \frac{\calE \left(\bm{X}_s, \bm{w}_{\mathrm{KQ}}(\bm{X}_s) \right)}{\left(1+\tau_w\right)^{2(t-s)}} .
+\calE \left(\bm{X}_t, \bm{w}_t\right) &\leq \frac{1}{(1+\tau_w)^{2 t}} \calE(\bm{X}_0, \bm{w}_0) +\left(1-\frac{1}{(1+\tau_w)^2}\right) \sum_{s=1}^t \frac{\calE(\bm{X}_s, \bm{w}_{\mathrm{KQ}}(\bm{X}_s))}{(1+\tau_w)^{2(t-s)}} . \\
+&= \frac{1}{(1+\tau_w)^{2 t}} \calE(\bm{X}_0, \bm{w}_{\mathrm{KQ}}(\bm{X}_0)) + \sum_{s=1}^t \left( \frac{1}{(1+\tau_w)^{2(t-s)}} - \frac{1}{(1+\tau_w)^{2(t-s+1)}} \right) \calE(\bm{X}_s, \bm{w}_{\mathrm{KQ}}(\bm{X}_s)). 
 \end{align*}
 
 By \Cref{lem:kq-residual-control}, 
