@@ -213,11 +213,11 @@ K_{t+1}
 \label{eq:kq-weight-contraction}
 \end{align}
 Since $(1+\tau_w)^{-2}\leq1$ and $\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1})$ minimizes
-$\bm{w}\mapsto\calE(\bm{X}_{t+1},\bm{w})$, it follows that
+$\bm{w}\mapsto\calE(\bm{X}_{t+1}, \bm{w})$, it follows that
 $\calE(\bm{X}_{t+1},\bm{w}_{t+1})
 \leq
 \calE(\bm{X}_{t+1},\bm{w}_t)$.
-Combining the two substeps yields
+Combining the two sub-steps yields
 \begin{align}
 \calE(\bm{X}_{t+1},\bm{w}_{t+1})
 \leq
@@ -228,6 +228,27 @@ Combining the two substeps yields
 \end{align}
 Hence, $\calE(\bm{X}_t,\bm{w}_t)$ is nonincreasing, and the proof is concluded.
 \end{proof}
+
+\begin{lem}[Uniform control of the kernel quadrature residual]
+\label{lem:kq-residual-control}
+Suppose that the assumptions of Theorem~\ref{thm:wift-kq-descent} hold and that the initial weights are chosen as $\bm{w}_0=\bm{w}_{\mathrm{KQ}}(\bm{X}_0) $.
+Then, for every $t\geq 0$, $\operatorname{MMD}
+\left(
+\sum_{i=1}^N
+w_{\mathrm{KQ}}^{(i)} (\bm{X}_t)
+\delta_{x_t^{(i)}},
+\pi
+\right)
+\leq
+\operatorname{MMD}
+\left(
+\sum_{i=1}^N
+w_{\mathrm{KQ}}^{(i)}(\bm{X}_0)
+\delta_{x_0^{(i)}},
+\pi
+\right)$.
+\end{lem}
+
 
 \begin{proof}[Proof of \Cref{lem:kq-residual-control}]
 Recall the definition that $\calE(\bm{X},\bm{w})
@@ -287,6 +308,11 @@ Eq.~\eqref{eq:kq-weight-contraction}, together with descent of the Wasserstein p
 \bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}) \right).
 \label{eq:wift-one-step-convergence}
 \end{align}
+Applying the same iteration above recursively, then we obtain, 
+\begin{align*}
+\calE \left(\bm{X}_t, \bm{w}_t\right) \leq & \frac{1}{\left(1+\tau_w\right)^{2 t}} \calE\left(\bm{X}_0, \bm{w}_0\right) +\left(1-\frac{1}{\left(1+\tau_w\right)^2}\right) \sum_{s=1}^t \frac{\calE \left(\bm{X}_s, \bm{w}_{\mathrm{KQ}}(\bm{X}_s) \right)}{\left(1+\tau_w\right)^{2(t-s)}} .
+\end{align*}
+
 By \Cref{lem:kq-residual-control}, 
 $\calE(\bm{X}_{t+1},\bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}))
 \leq

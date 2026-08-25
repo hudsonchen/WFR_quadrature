@@ -156,7 +156,8 @@ We next analyze the particle descent schemes introduced above, identify the geom
 Suppose that the assumptions of \Cref{prop:mmd-energy-smoothness} hold with $\bm{w}=\bm{w}_t$ and $\bm{X}=\bm{X}_{t+1}$. Then each Gauss--Seidel particle descent scheme satisfies $\calE(\bm{X}_{t+1},\bm{w}_{t+1})\leq\calE(\bm{X}_t,\bm{w}_t)$ under the following sufficient conditions:
 \begin{enumerate}
     \item For E-PD, the sufficient location condition is $\tau_X\leq 2/[\max_{1\leq i\leq N}w_t^{(i)}(2C_1+C_2)]$. The sufficient weight condition is $\tau_w\leq 2/\lambda_{\max}(K_{t+1})$.
-    \item For WFR-PD, the sufficient location condition is $\tau_X\leq 2/(2C_1+C_2)$. The sufficient weight condition is $\tau_w\leq 2/\lambda_{\max}(K_{t+1})$.
+    \item For WFR-PD, the sufficient location condition is $\tau_X\leq 2/(2C_1+C_2)$. The sufficient weight condition is $\tau_w\leq 2/\lambda_{\max}(K_{t+1})$. 
+    \item For MSIP, XXX. 
     \item For WIFT-PD, the sufficient location condition is $\tau_X\leq 2/(2C_1+C_2)$. The sufficient weight condition is $0< \tau_w$. 
 \end{enumerate}
 \end{prop}
@@ -195,25 +196,6 @@ If $\tau_X\leq 2\underline w/L_X$, then for every $t\geq0$,
 \end{align}
 \end{theorem}
 
-\begin{lem}[Uniform control of the kernel quadrature residual]
-\label{lem:kq-residual-control}
-Suppose that the assumptions of Theorem~\ref{thm:wift-kq-descent} hold and that the initial weights are chosen as $\bm{w}_0=\bm{w}_{\mathrm{KQ}}(\bm{X}_0) $.
-Then, for every $t\geq 0$, $\operatorname{MMD}
-\left(
-\sum_{i=1}^N
-w_{\mathrm{KQ}}^{(i)} (\bm{X}_t)
-\delta_{x_t^{(i)}},
-\pi
-\right)
-\leq
-\operatorname{MMD}
-\left(
-\sum_{i=1}^N
-w_{\mathrm{KQ}}^{(i)}(\bm{X}_0)
-\delta_{x_0^{(i)}},
-\pi
-\right)$.
-\end{lem}
 
 \begin{theorem}[Convergence to the kernel quadrature error]
 \label{thm:wift-convergence}
