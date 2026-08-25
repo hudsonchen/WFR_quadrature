@@ -10,27 +10,27 @@ Figure~\ref{fig:all_mmd} compares $\tau\in\{0.01,0.1,1\}$. The MSIP curve for $\
     \centering
     \includegraphics[width=1.0\linewidth]{figures/all_mmd_trajectories.pdf}
     \caption{\textbf{Gaussian synthetic.} MMD trajectories for Euc-PD, WFR, WIFT, and MSIP with target $\pi=\mathcal{N}(\bm{0},I_2)$. 
-    The first and the second row use a close initial distribution $\mathcal{N}((1,1), I_2)$ and a far distribution $\mathcal{N}((9,9), I_2)$, respectively.}
+    The first and the second row use a close initial distribution $\mathcal{N}((1,1), I_2)$ and a far distribution $\mathcal{N}((9,9), I_2)$, respectively. All panels use the y-axis range of the WIFT trajectories.}
     \label{fig:all_mmd}
 \end{figure*}
 
 
 \subsection{Mean-field student-teacher neural networks}
-We next test the particle geometries in a nonlinear regression problem. For an input $z\in\R^d$, the student network is $f_{\mu_N}(z)=\sum_{i=1}^N w^{(i)}\sigma(z^\top\theta^{(i)})$, where the hidden parameters $\theta^{(i)}$ are the particle locations and the outer coefficients $w^{(i)}$ are their weights. The teacher $f_\star$ has the same two-layer mean-field form with $M$ hidden features. For fixed inputs $z_1,\ldots,z_L$, we use the empirical feature kernel $k(\theta,\theta')=L^{-1}\sum_{\ell=1}^L\sigma(z_\ell^\top\theta)\sigma(z_\ell^\top\theta')$. With residuals $r_\ell=f_{\mu_N}(z_\ell)-f_\star(z_\ell)$, the resulting MMD is exactly the root-mean-square student--teacher mismatch:
+We next test the particle geometries in a nonlinear regression problem. For an input $z\in\R^d$, each particle is an augmented neuron parameter $\theta^{(i)}=(a^{(i)},b^{(i)})\in\R^{d+1}$, and the student network is $f_{\mu_N}(z)=\sum_{i=1}^N w^{(i)}a^{(i)}\sigma(z^\top b^{(i)})$. Keeping the signed output coefficient $a^{(i)}$ inside the particle allows the measure weights $w^{(i)}$ to remain nonnegative. The teacher $f_\star$ has the same two-layer mean-field form with $M$ hidden features and uniform measure weights $1/M$. For fixed inputs $z_1,\ldots,z_L$, we use the empirical neuron kernel $k(\theta,\theta')=L^{-1}\sum_{\ell=1}^L a a'\sigma(z_\ell^\top b)\sigma(z_\ell^\top b')$. With residuals $r_\ell=f_{\mu_N}(z_\ell)-f_\star(z_\ell)$, the resulting MMD is exactly the root-mean-square student--teacher mismatch:
 \begin{align*}
     \mmd^2(\mu_N,\pi_M)
     &= \frac{1}{L}\sum_{\ell=1}^L r_\ell^2.
 \end{align*}
 
-We use ReLU activation, dimension $d=5$, $N=40$ student particles, $M=20$ teacher features, and $L=256$ fixed inputs. The inputs follow $\mathcal{N}(\bm{0},I_d/d)$, while both the teacher hidden parameters and the initial student particles follow $\mathcal{N}(\bm{0},I_d)$. The teacher outer coefficients follow $\mathcal{N}(0,1/M)$. We fix the student, teacher, and input seeds to $42$, $123$, and $456$, respectively, use $\alpha=1$ and $\beta=0.5$, and run every method for $100$ iterations without projecting the weights.
+We use ReLU activation, dimension $d=5$, $N=40$ student particles, $M=20$ teacher features, and $L=256$ fixed inputs. The inputs follow $\mathcal{N}(\bm{0},I_d/d)$, while the teacher hidden parameters and initial student hidden parameters follow $\mathcal{N}(\bm{0},I_d)$. The teacher output parameters follow $\mathcal{N}(0,M)$, so after multiplication by the uniform teacher weight $1/M$, their effective coefficients follow $\mathcal{N}(0,1/M)$. We initialize the student output parameters at $a^{(i)}=1$ and the measure weights at $w^{(i)}=1/N$. We fix the student, teacher, and input seeds to $42$, $123$, and $456$, respectively, use $\alpha=1$ and $\beta=0.5$, project the particle weights onto the probability simplex, and run every method for $1000$ iterations.
 
-Figure~\ref{fig:mean-field-nn} compares $\tau\in\{0.003,0.01,0.03,0.1,0.3\}$.
+Figure~\ref{fig:mean-field-nn} compares $\tau\in\{0.01,0.1,1\}$. To make the method panels directly comparable, every panel uses the same logarithmic y-axis limits, determined by the minimum and maximum MMD values across the plotted WIFT trajectories.
 
 \begin{figure*}[t]
     \centering
     \includegraphics[width=1.0\linewidth]{figures/mean_field_nn_trajectories.pdf}
-    \caption{\textbf{Mean-field ReLU student--teacher network with $d=5$, $N=40$, and $M=20$.} MMD trajectories for Euc-PD, WFR, and WIFT over $100$ iterations and $L=256$ fixed inputs.}
+    \caption{\textbf{Mean-field ReLU student--teacher network with $d=5$, $N=40$, and $M=20$.} MMD trajectories for Euc-PD, WFR, and WIFT over $1000$ iterations and $L=256$ fixed inputs, with $\tau\in\{0.01,0.1,1\}$. All panels use the y-axis range of the WIFT trajectories.}
     \label{fig:mean-field-nn}
 \end{figure*}
 
-The larger tested step sizes initially decrease the MMD more rapidly, while WIFT obtains the lowest errors for $\tau\in\{0.03,0.1,0.3\}$ and plateaus near $0.08$ for $\tau\in\{0.1,0.3\}$. At iteration $100$, the best final MMD over the tested step sizes is $0.127$ for Euc-PD, $0.178$ for WFR, and $0.081$ for WIFT.
+WIFT benefits most from the largest tested step size and reaches an MMD of $0.0295$ at $\tau=1$. WFR performs best at $\tau=0.1$, whereas its $\tau=1$ trajectory remains near its initial value. At iteration $1000$, the best final MMD over the tested step sizes is $0.4277$ for Euc-PD, $0.0892$ for WFR, and $0.0295$ for WIFT.

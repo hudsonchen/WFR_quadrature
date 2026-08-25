@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex main"] 1787661801 "main.aux" "main.bbl" "main" 1787661846
+["bibtex main"] 1787665100 "main.aux" "main.bbl" "main" 1787665100
   "/usr/share/texlive/texmf-dist/bibtex/bst/base/apalike.bst" 1292289607 24635 604dafcc79f521a11ea73e506e1fbd98 ""
-  "main.aux" 1787661846 10762 206bf406bdefc3aa4d1c1a6c59f1cde8 "pdflatex"
+  "main.aux" 1787665100 11084 a47868e530327d1b67a7eabcad233909 "pdflatex"
   "main.bib" 1787574550 69131 cdf8d90fb1b997f0b54e8daf9520c657 ""
   (generated)
   "main.bbl"
   "main.blg"
-["pdflatex"] 1787661845 "main.tex" "main.pdf" "main" 1787661846
+["pdflatex"] 1787665100 "main.tex" "main.pdf" "main" 1787665100
   "/etc/texmf/web2c/texmf.cnf" 1691084906 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/symbol/psyr.tfm" 1136768653 1408 5937f58aa508ea2cea4901c07d10f5fe ""
@@ -232,16 +232,16 @@
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1781392682 1503855 bb3b237899f15e72fded17b9c951fbf4 ""
   "arxiv/1_introduction.tex" 1787574550 0 d41d8cd98f00b204e9800998ecf8427e ""
   "arxiv/2_theory.tex" 1787661561 19673 3366ded02c6b6ecd73c33207bf48803a ""
-  "arxiv/4_experiments.tex" 1787661841 3447 71fe23b0fef09c7852c6a770e83c4032 ""
+  "arxiv/4_experiments.tex" 1787665091 4154 49ad4208865ef1ad1aa86fcdc52a16f8 ""
   "arxiv/5_proofs.tex" 1787639486 15070 e3bc57e51806b4dbe00000a36f35b7c9 ""
-  "figures/all_mmd_trajectories.pdf" 1787639492 102359 d752ccbdba00bd575d1c0d69aa0563e9 ""
-  "figures/appendix_particle_trajectories.pdf" 1787639492 338344 b668ecde7af4c08386600c6959ae5dc1 ""
-  "figures/mean_field_nn_trajectories.pdf" 1787661695 53168 af362bc3a387eac88059a72aac082763 ""
+  "figures/all_mmd_trajectories.pdf" 1787665096 103758 1a05ca853a463a2109e01d20fe395925 ""
+  "figures/appendix_particle_trajectories.pdf" 1787665096 338343 038c514f3e0a83e50f9aa4262715368a ""
+  "figures/mean_field_nn_trajectories.pdf" 1787665013 51604 f0187a1fdd55dcc0dab5abb961113061 ""
   "include//aistats2026.sty" 1787623096 18252 6210dbdb835ef46fc140db24f3fea0f5 ""
   "include/macros.tex" 1787573795 2031 e40c804d98d22d415cbca83a22cb0bf8 ""
-  "main.aux" 1787661846 10762 206bf406bdefc3aa4d1c1a6c59f1cde8 "pdflatex"
-  "main.bbl" 1787661801 3483 e17760a1f8eae09dab2a25c4ec12d241 "bibtex main"
-  "main.out" 1787661846 1814 26ae44111736334a8cbbadae7db9a25c "pdflatex"
+  "main.aux" 1787665100 11084 a47868e530327d1b67a7eabcad233909 "pdflatex"
+  "main.bbl" 1787665100 3483 e17760a1f8eae09dab2a25c4ec12d241 "bibtex main"
+  "main.out" 1787665100 1814 26ae44111736334a8cbbadae7db9a25c "pdflatex"
   "main.tex" 1787661745 4574 ffe66f52024de5bff6c24087692baebc ""
   (generated)
   "main.aux"
