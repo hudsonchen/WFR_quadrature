@@ -42,7 +42,10 @@ The corresponding Fisher--Rao gradient flow (FR-GF) of $\calF_{\mmd}$ is
 \paragraph{Wasserstein--Fisher--Rao}
 The W-GF in \eqref{eq:w-gf} transports mass through space, whereas the FR-GF in \eqref{eq:fr-gf} redistributes mass locally without spatial transport. The Wasserstein--Fisher--Rao gradient flow (WFR-GF) combines these two mechanisms. For $\alpha,\beta>0$, the resulting dynamics are
 \begin{align}\label{eq:wfr-gf}
-\partial_t\mu_t = \alpha \nabla\cdot \left(\mu_t \nabla \calF_{\mmd}'[\mu_t]\right) - \beta \mu_t \left( \calF_{\mmd}'[\mu_t] - \int \calF_{\mmd}'[\mu_t]  \dd \mu_t \right). \tag{WFR-GF}
+\partial_t\mu_t
+&= \alpha \nabla\cdot \left(\mu_t \nabla \calF_{\mmd}'[\mu_t]\right) \nonumber \\
+&\quad - \beta \mu_t \left( \calF_{\mmd}'[\mu_t]
+- \int \calF_{\mmd}'[\mu_t]  \dd \mu_t \right). \tag{WFR-GF}
 \end{align} 
 
 
@@ -67,7 +70,11 @@ Let $\mu_{N,t}=\sum_{i=1}^N w_t^{(i)} \delta_{x_t^{(i)}}$ be a weighted empirica
 Denote $m_\pi=\int k(x,\cdot)\dd \pi$ as the kernel mean embedding. 
 Denote the kernel-mean residual and its vectorized counterpart as,  
 \begin{align*}
-h_{\bm{X},\bm{w}}(x) := \sum_{j=1}^N w^{(j)} k(x^{(j)},x)-m_\pi(x) \in \R, \quad h_{\bm{X},\bm{w}}(\bm{v}) = [h_{\bm{X},\bm{w}}(v^{(1)}), \ldots, h_{\bm{X},\bm{w}}(v^{(N)})]^\top \in \R^N .
+h_{\bm{X},\bm{w}}(x)
+&:= \sum_{j=1}^N w^{(j)} k(x^{(j)},x)-m_\pi(x) \in \R, \\
+h_{\bm{X},\bm{w}}(\bm{v})
+&:= [h_{\bm{X},\bm{w}}(v^{(1)}), \ldots,
+h_{\bm{X},\bm{w}}(v^{(N)})]^\top \in \R^N .
 \end{align*}
 Define the objective $\calE(\bm{X},\bm{w}) = \frac{1}{2}\mmd^2\left(\sum_{i=1}^N w^{(i)}\delta_{x^{(i)}},\pi \right)$.
 For simplicity, throughout this section we set $\alpha=\beta=1$. 
@@ -78,7 +85,12 @@ Let $\tau_X,\tau_w>0$ be the step sizes for the particle locations and weights, 
 For consistency with the update schemes introduced later, we adopt a Gauss--Seidel-type block gradient descent scheme, in which the particle locations are updated first and the weights are subsequently updated using the new locations $\bm{X}_{t+1}$. 
 In particular, for each $i\in[N]$, 
 \begin{align}\label{eq:e-pd}
-    x_{t+1}^{(i)}=x_t^{(i)}-\tau_X w_t^{(i)} \nabla h_{\bm{X}_t, \bm{w}_t}\left( x_t^{(i)} \right), \quad w_{t+1}^{(i)} =w_t^{(i)}-\tau_w h_{\bm{X}_{t+1},\bm{w}_t} \left(x_{t+1}^{(i)}\right) \tag{E-PD} .
+    x_{t+1}^{(i)}
+    &=x_t^{(i)}-\tau_X w_t^{(i)}
+    \nabla h_{\bm{X}_t, \bm{w}_t}\left( x_t^{(i)} \right), \nonumber \\
+    w_{t+1}^{(i)}
+    &=w_t^{(i)}-\tau_w h_{\bm{X}_{t+1},\bm{w}_t}
+    \left(x_{t+1}^{(i)}\right). \tag{E-PD}
 \end{align}
 Note that the above descent scheme guarantees neither $w_i>0$ or $\sum_{i=1}^N w_i =1$. 
 
@@ -88,7 +100,11 @@ Let $\tau_X,\tau_w>0$ be the location and weight step sizes.
 A finite-particle implementation of \eqref{eq:wfr-gf} is: for each $i\in[N]$, 
 \begin{align}\label{eq:wfr-pd}
 x_{t+1}^{(i)}
-= x_t^{(i)}-\tau_X \nabla h_{\bm{X}_t,\bm{w}_t} \left(x_t^{(i)} \right), \quad w_{t+1}^{(i)} = w_t^{(i)} - \tau_w h_{\bm{X}_{t+1}, \bm{w}_t} \left(x_{t+1}^{(i)}\right) \tag{WFR-PD} .
+&= x_t^{(i)}-\tau_X \nabla h_{\bm{X}_t,\bm{w}_t}
+\left(x_t^{(i)} \right), \nonumber \\
+w_{t+1}^{(i)}
+&= w_t^{(i)} - \tau_w h_{\bm{X}_{t+1}, \bm{w}_t}
+\left(x_{t+1}^{(i)}\right). \tag{WFR-PD}
 \end{align}
 When $\tau_w=0$, the weights remain fixed and hence the above dynamics reduce to the finite-particle implementation of MMD flow in \citet{arbel2019maximum}. 
 Another implementation of the Wasserstein Fisher–Rao gradient flow is based on fixed-point equations, called mean shift interacting particles (MSIP). 
@@ -104,14 +120,30 @@ way as \eqref{eq:e-pd} and \eqref{eq:wfr-pd} above.
 However, the weight update scheme requires knowledge of the true density $\pi$, which is often intractable in practice. 
 Following \citet{gladin2024interaction}, the weights are updated instead via an implicit minimizing scheme. Let $\tau_X,\tau_w>0$ be the location and weight step sizes.
 \begin{align}\label{eq:wift-pd}
-    x_{t+1}^{(i)} &= x_t^{(i)}-\tau_X \nabla h_{\bm{X}_t,\bm{w}_t}\left(x_t^{(i)}\right), \tag{WIFT-PD} \\
-    \bm{w}_{t+1} &= \arg \min _{\bm{w}} \left\{\frac{1}{2} \mmd^2\left(\sum_{i=1}^N w^{(i)} \delta_{x_{t+1}^{(i)}}, \pi\right) + \frac{1}{2  \tau_w} \mmd^2 \left(\sum_{i=1}^N w^{(i)} \delta_{x_{t+1}^{(i)}}, \mu_{N,t}\right) \right\} \nonumber .
+    x_{t+1}^{(i)}
+    &= x_t^{(i)}-\tau_X \nabla h_{\bm{X}_t,\bm{w}_t}
+    \left(x_t^{(i)}\right), \tag{WIFT-PD} \\
+    \bm{w}_{t+1}
+    &= \arg \min _{\bm{w}} \left\{
+    \frac{1}{2} \mmd^2\left(\sum_{i=1}^N w^{(i)}
+    \delta_{x_{t+1}^{(i)}}, \pi\right) \right. \nonumber \\
+    &\hspace{3.8em}\left.{}+ \frac{1}{2\tau_w} \mmd^2
+    \left(\sum_{i=1}^N w^{(i)} \delta_{x_{t+1}^{(i)}},
+    \mu_{N,t}\right) \right\}. \nonumber
 \end{align}
 Interestingly, letting $K_{t+1}=K(\bm{X}_{t+1},\bm{X}_{t+1})\in\R^{N\times N}$ be the Gram matrix of the particles at iteration $t+1$, the weight update problem is equivalent to
 \begin{align*}
-    \bm{w}_{t+1} &= \arg \min_{\bm{w}} \left\{\frac{1}{2} \bm{w}^{\top} K_{t+1} \bm{w} - m_\pi(\bm{X}_{t+1})^{\top} \bm{w} + \frac{1}{2 \tau_w} \left(\bm{w}-\bm{w}_t \right)^{\top} K_{t+1} \left(\bm{w}-\bm{w}_t\right)\right\} \\
-    &= \bm{w}_t - \frac{\tau_w}{1+\tau_w} K_{t+1}^{-1} h_{\bm{X}_{t+1},\bm{w}_t} \left(\bm{X}_{t+1}\right) \\
-    &= \frac{1}{1+\tau_w} \bm{w}_t + \frac{\tau_w}{1+\tau_w} \bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}) . 
+    \bm{w}_{t+1}
+    &= \arg \min_{\bm{w}} \left\{
+    \frac{1}{2} \bm{w}^{\top} K_{t+1} \bm{w}
+    - m_\pi(\bm{X}_{t+1})^{\top} \bm{w} \right. \\
+    &\hspace{5.6em}\left.{}+ \frac{1}{2 \tau_w}
+    \|\bm{w}-\bm{w}_t\|_{K_{t+1}}^2\right\} \\
+    &= \bm{w}_t - \frac{\tau_w}{1+\tau_w} K_{t+1}^{-1}
+    h_{\bm{X}_{t+1},\bm{w}_t} \left(\bm{X}_{t+1}\right) \\
+    &= \frac{1}{1+\tau_w} \bm{w}_t
+    + \frac{\tau_w}{1+\tau_w}
+    \bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}) .
 \end{align*} 
 The last line holds by the definition of kernel quadrature: $m_\pi(\bm{X}_{t+1}) = K_{t+1} \bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1})$.
 
@@ -199,21 +231,13 @@ If $\tau_X\leq 2\underline w/L_X$, then for every $t\geq0$,
 
 \begin{theorem}[Convergence to the kernel quadrature error]
 \label{thm:wift-convergence}
-Suppose that the assumptions of Theorem~\ref{thm:wift-kq-descent} hold, and that the initial weights are chosen as $\bm{w}_0=\bm{w}_{\mathrm{KQ}}(\bm{X}_0)$. Then, the WIFT iterates satisfy
+Suppose that the assumptions of Theorem~\ref{thm:wift-kq-descent} hold, and that the initial weights are chosen as $\bm{w}_0=\bm{w}_{\mathrm{KQ}}(\bm{X}_0)$. Define the initial kernel quadrature measure $\nu_{N,0}^{\mathrm{KQ}}:=\sum_{i=1}^N w_{\mathrm{KQ}}^{(i)}(\bm{X}_0)\delta_{x_0^{(i)}}$. Then, the WIFT iterates satisfy
 \begin{align*}
-\operatorname{MMD}^2(\mu_{N,t},\pi) \leq
-\frac{1}{(1+\eta)^{2t}}
-\operatorname{MMD}^2(\mu_{N,0},\pi) +
-\left(
-1-\frac{1}{(1+\eta)^{2t}}
-\right)
-\operatorname{MMD}^2
-\left(
-\sum_{i=1}^N
-w_{\mathrm{KQ}}^{(i)}(\bm{X}_0)
-\delta_{x_0^{(i)}},
-\pi
-\right).
+\operatorname{MMD}^2(\mu_{N,t},\pi)
+&\leq \frac{\operatorname{MMD}^2(\mu_{N,0},\pi)}
+{(1+\eta)^{2t}} \\
+&\quad + \left(1-\frac{1}{(1+\eta)^{2t}}\right)
+\operatorname{MMD}^2(\nu_{N,0}^{\mathrm{KQ}},\pi).
 \end{align*}
 \end{theorem}
 
@@ -225,8 +249,8 @@ w_{\mathrm{KQ}}^{(i)}(\bm{X}_0)\delta_{x_0^{(i)}},\pi)
 =O_{\mathbb{P}}(N^{-s/d})$, then
 \begin{align*}
 \operatorname{MMD}(\mu_{N,t},\pi)
-&\leq \frac{1}{(1+\eta)^t}
-\operatorname{MMD}(\mu_{N,0},\pi)
+&\leq \frac{\operatorname{MMD}(\mu_{N,0},\pi)}
+{(1+\eta)^t}
 +O_{\mathbb{P}}(N^{-s/d}).
 \end{align*}
 Thus, the optimization error decays geometrically until it reaches the

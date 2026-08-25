@@ -1,26 +1,15 @@
-\documentclass[11pt]{article}
-\usepackage{mathrsfs,amsmath,amsfonts,amssymb,bm,eufrak,pifont,amscd,euscript,amsthm,color,epsfig,xr,tikz,verbatim,enumitem}
- 
-%%%%%%%%%%%%%%%%
+\documentclass[twoside]{article}
+\makeatletter
+\def\input@path{{include/}}
+\makeatother
+\usepackage{aistats2026}
 
-%\usepackage{jmlr2e}
-\usepackage{authblk}
-\setlength{\hoffset}{-1in}
-   \setlength{\voffset}{-1in}
-   \setlength{\oddsidemargin}{1.1in}
-   \setlength{\textwidth}{6.42in}
-   \setlength{\topmargin}{0.5in}
-   \setlength{\headheight}{0.25in}
-   \setlength{\headsep}{0.25in}
-   \setlength{\textheight}{9.0in}
-\setlength{\arraycolsep}{0.0em}
+\usepackage{mathrsfs,amsmath,amsfonts,amssymb,bm,eufrak,pifont,amscd,euscript,amsthm,color,epsfig,xr,tikz,verbatim,enumitem}
 \usepackage[utf8]{inputenc} % allow utf-8 input
 \usepackage[T1]{fontenc}    % use 8-bit T1 fonts   % hyperlinks
 \usepackage{url}            % simple URL typesetting
 \usepackage{booktabs}       % professional-quality tables
 \usepackage{flafter}        % keep floats after their definition
-\usepackage{amsfonts}  
-\usepackage{amsmath} 
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
 \usepackage{xcolor}
@@ -29,14 +18,12 @@
 \usepackage{cleveref}
 \usepackage{graphicx}
 \usepackage{array}
-\usepackage{subcaption,mathrsfs}
-\usepackage{natbib}
+\usepackage{subcaption}
+\usepackage[round]{natbib}
 \usepackage{wrapfig}
-\usepackage{tikz}
 % \usepackage{include/titletoc}
 \usepackage[makeroom]{cancel}
 % \usepackage{caption}
-\usepackage{subcaption}
 \newcommand{\tarc}{\mbox{$\frown$}}
 \newcommand{\arc}[1]{\stackrel{\raisebox{-0.5ex}{\tarc}}{#1}}
 
@@ -155,24 +142,26 @@
 }
 \makeatother
 
-\title{What is the best geometry for minimization of MMD?}
-
-\author{Zonghao (Hudson) Chen}
-% \author{}
-
-%\nipsfinalcopy % Uncomment for camera-ready version
-
-
 \begin{document}
-\maketitle
+
+\twocolumn[
+\aistatstitle{What Is the Best Geometry for Minimization of MMD?}
+\aistatsauthor{Zonghao (Hudson) Chen}
+\aistatsaddress{}
+]
+
 \input{arxiv/1_introduction}
 \input{arxiv/2_theory}
-\input{arxiv/5_proofs}
 
-\bibliographystyle{plainnat}
+\renewcommand{\bibname}{References}
+\renewcommand{\bibsection}{\subsubsection*{\bibname}}
+\bibliographystyle{apalike}
 \bibliography{main}  
 
-\newpage
+\clearpage
+\onecolumn
+\appendix
+\input{arxiv/5_proofs}
 
 % \newpage
 % \input{include/checklist}

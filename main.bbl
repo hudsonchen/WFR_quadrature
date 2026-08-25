@@ -1,101 +1,85 @@
-\begin{thebibliography}{14}
-\providecommand{\natexlab}[1]{#1}
-\providecommand{\url}[1]{\texttt{#1}}
-\expandafter\ifx\csname urlstyle\endcsname\relax
-  \providecommand{\doi}[1]{doi: #1}\else
-  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+\begin{thebibliography}{}
 
-\bibitem[Arbel et~al.(2018)Arbel, Sutherland, Binkowski, and
-  Gretton]{arbel2018gradient}
-Michael Arbel, Danica~J Sutherland, Mikolaj Binkowski, and Arthur Gretton.
-\newblock On gradient regularizers for {MMD GAN}s.
-\newblock In \emph{Advances in Neural Information Processing Systems},
-  volume~31, 2018.
-
-\bibitem[Arbel et~al.(2019)Arbel, Korba, Salim, and Gretton]{arbel2019maximum}
-Michael Arbel, Anna Korba, Adil Salim, and Arthur Gretton.
+\bibitem[Arbel et~al., 2019]{arbel2019maximum}
+Arbel, M., Korba, A., Salim, A., and Gretton, A. (2019).
 \newblock Maximum mean discrepancy gradient flow.
-\newblock In \emph{Advances in Neural Information Processing Systems},
-  volume~32, 2019.
+\newblock In {\em Advances in Neural Information Processing Systems},
+  volume~32.
 
-\bibitem[Chen et~al.(2026{\natexlab{a}})Chen, Kanagawa, Briol, Oates, and
-  Mackey]{chen2026thinned}
-Zonghao Chen, Heishiro Kanagawa, Fran{\c{c}}ois-Xavier Briol, Chris~J Oates,
-  and Lester Mackey.
+\bibitem[Arbel et~al., 2018]{arbel2018gradient}
+Arbel, M., Sutherland, D.~J., Binkowski, M., and Gretton, A. (2018).
+\newblock On gradient regularizers for {MMD GAN}s.
+\newblock In {\em Advances in Neural Information Processing Systems},
+  volume~31.
+
+\bibitem[Chen et~al., 2026a]{chen2026thinned}
+Chen, Z., Kanagawa, H., Briol, F.-X., Oates, C.~J., and Mackey, L. (2026a).
 \newblock Thinned mean field {L}angevin dynamics.
-\newblock In \emph{Proceedings of the 43rd International Conference on Machine
-  Learning}. PMLR, 2026{\natexlab{a}}.
+\newblock In {\em Proceedings of the 43rd International Conference on Machine
+  Learning}. PMLR.
 
-\bibitem[Chen et~al.(2026{\natexlab{b}})Chen, Karvonen, Kanagawa, Briol, and
-  Oates]{chen2025stationary}
-Zonghao Chen, Toni Karvonen, Heishiro Kanagawa, Fran{\c{c}}ois-Xavier Briol,
-  and Chris~J. Oates.
+\bibitem[Chen et~al., 2026b]{chen2025stationary}
+Chen, Z., Karvonen, T., Kanagawa, H., Briol, F.-X., and Oates, C.~J. (2026b).
 \newblock Stationary {MMD} points.
-\newblock In \emph{Proceedings of the 43rd International Conference on Machine
-  Learning}, 2026{\natexlab{b}}.
+\newblock In {\em Proceedings of the 43rd International Conference on Machine
+  Learning}.
 
-\bibitem[Galashov et~al.(2025)Galashov, {De Bortoli}, and
-  Gretton]{galashov2024deep}
-Alexandre Galashov, Valentin {De Bortoli}, and Arthur Gretton.
+\bibitem[Galashov et~al., 2025]{galashov2024deep}
+Galashov, A., {De Bortoli}, V., and Gretton, A. (2025).
 \newblock Deep {MMD} gradient flow without adversarial training.
-\newblock In \emph{Proceedings of the 13th International Conference on Learning
-  Representations}, 2025.
+\newblock In {\em Proceedings of the 13th International Conference on Learning
+  Representations}.
 
-\bibitem[Gladin et~al.(2024)Gladin, Dvurechensky, Mielke, and
-  Zhu]{gladin2024interaction}
-Egor Gladin, Pavel Dvurechensky, Alexander Mielke, and Jia-Jie Zhu.
+\bibitem[Gladin et~al., 2024]{gladin2024interaction}
+Gladin, E., Dvurechensky, P., Mielke, A., and Zhu, J.-J. (2024).
 \newblock Interaction-force transport gradient flows.
-\newblock \emph{Advances in Neural Information Processing Systems},
-  37:\penalty0 14484--14508, 2024.
+\newblock {\em Advances in Neural Information Processing Systems},
+  37:14484--14508.
 
-\bibitem[Kang et~al.(2026)Kang, Sharrock, Cheng, Briol, and
-  Chen]{kang2026gradient}
-Sophia~Seulkee Kang, Louis Sharrock, Xiaoyuan Cheng, Fran{\c{c}}ois-Xavier
-  Briol, and Zonghao Chen.
+\bibitem[Kang et~al., 2026]{kang2026gradient}
+Kang, S.~S., Sharrock, L., Cheng, X., Briol, F.-X., and Chen, Z. (2026).
 \newblock A gradient flow perspective on minimum {MMD} estimation.
-\newblock \emph{arXiv preprint arXiv:2607.03871}, 2026.
+\newblock {\em arXiv preprint arXiv:2607.03871}.
 
-\bibitem[Korba et~al.(2021)Korba, Aubin-Frankowski, Majewski, and
-  Ablin]{korba2021kernel}
-Anna Korba, Pierre-Cyril Aubin-Frankowski, Szymon Majewski, and Pierre Ablin.
+\bibitem[Korba et~al., 2021]{korba2021kernel}
+Korba, A., Aubin-Frankowski, P.-C., Majewski, S., and Ablin, P. (2021).
 \newblock Kernel {Stein} discrepancy descent.
-\newblock In \emph{Proceedings of the 38th International Conference on Machine
-  Learning}, pages 5719--5730. PMLR, 2021.
+\newblock In {\em Proceedings of the 38th International Conference on Machine
+  Learning}, pages 5719--5730. PMLR.
 
-\bibitem[Li et~al.(2017)Li, Chang, Cheng, Yang, and Poczos]{li2017mmd}
-Chun-Liang Li, Wei-Cheng Chang, Yu~Cheng, Yiming Yang, and Barnabas Poczos.
+\bibitem[Li et~al., 2017]{li2017mmd}
+Li, C.-L., Chang, W.-C., Cheng, Y., Yang, Y., and Poczos, B. (2017).
 \newblock {MMD GAN}: {T}owards deeper understanding of moment matching network.
-\newblock In \emph{Advances in Neural Information Processing Systems},
-  volume~30, 2017.
+\newblock In {\em Advances in Neural Information Processing Systems},
+  volume~30.
 
-\bibitem[Otto(2001)]{otto2001geometry}
-Felix Otto.
+\bibitem[Otto, 2001]{otto2001geometry}
+Otto, F. (2001).
 \newblock The geometry of dissipative evolution equations: the porous medium
   equation.
-\newblock \emph{Communications in Partial Differential Equations}, 2001.
+\newblock {\em Communications in Partial Differential Equations}.
 
-\bibitem[Suzuki et~al.(2023)Suzuki, Nitanda, and Wu]{suzuki2023uniform}
-Taiji Suzuki, Atsushi Nitanda, and Denny Wu.
+\bibitem[Suzuki et~al., 2023]{suzuki2023uniform}
+Suzuki, T., Nitanda, A., and Wu, D. (2023).
 \newblock Uniform-in-time propagation of chaos for the mean-field gradient
   {L}angevin dynamics.
-\newblock In \emph{Proceedings of the 11th International Conference on Learning
-  Representations}, 2023.
+\newblock In {\em Proceedings of the 11th International Conference on Learning
+  Representations}.
 
-\bibitem[Tian et~al.(2026)Tian, Sriperumbudur, Gretton, and
-  Chen]{tian2026sobolev}
-Chenyang Tian, Bharath~K Sriperumbudur, Arthur Gretton, and Zonghao Chen.
+\bibitem[Tian et~al., 2026]{tian2026sobolev}
+Tian, C., Sriperumbudur, B.~K., Gretton, A., and Chen, Z. (2026).
 \newblock Sobolev regularized {MMD} gradient flow.
-\newblock \emph{arXiv preprint arXiv:2605.11884}, 2026.
+\newblock {\em arXiv preprint arXiv:2605.11884}.
 
-\bibitem[Zhu(2024)]{zhu2024inclusive}
-Jia-Jie Zhu.
+\bibitem[Zhu, 2024]{zhu2024inclusive}
+Zhu, J.-J. (2024).
 \newblock Inclusive kl minimization: A wasserstein-fisher-rao gradient flow
   perspective.
-\newblock \emph{arXiv preprint arXiv:2411.00214}, 2024.
+\newblock {\em arXiv preprint arXiv:2411.00214}.
 
-\bibitem[Zhu and Mielke(2024)]{zhu2024kernel}
-Jia-Jie Zhu and Alexander Mielke.
+\bibitem[Zhu and Mielke, 2024]{zhu2024kernel}
+Zhu, J.-J. and Mielke, A. (2024).
 \newblock Kernel approximation of fisher-rao gradient flows.
-\newblock \emph{arXiv preprint arXiv:2410.20622}, 2024.
+\newblock {\em arXiv preprint arXiv:2410.20622}.
 
 \end{thebibliography}
