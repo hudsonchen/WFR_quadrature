@@ -334,23 +334,16 @@ Applying the same iteration above recursively, then we obtain,
 The proof is concluded. 
 \end{proof}
 
-\section{Additional Distant-Initialization Experiments}
+\section{Close- and Far-Initialization Experiments}
 \label{app:distant-initialization}
 
-We further stress-test the particle schemes by initializing them progressively farther from the target. The target is $\pi=\mathcal{N}(1,0.7^2)$, the RBF length scale is $1$, and every run uses $N=100$ particles, seed $42$, and $100$ iterations. WFR and WIFT start from deterministic equally spaced particles, whereas the raw upstream MSIP implementation samples its initial particles on the stated interval. We use $\alpha=1$ and $\beta=0.5$ and retain the unsmoothed trajectories. Figure~\ref{fig:appendix-distant-mmd} reports the learning-rate sweep. The MSIP curve for $\tau=1$ is omitted because the upstream update encounters a singular Gram matrix in this setting.
+We compare two Gaussian initialization settings in two dimensions: close initialization from $\mathcal{N}((1,1),I_2)$ and far initialization from $\mathcal{N}((9,9),I_2)$. The target is $\pi=\mathcal{N}(\bm{0},I_2)$, and every run uses $N=20$ particles, seed $42$, RBF length scale $1$, and $1000$ iterations. All methods use the same seed-controlled initial cloud in each setting, and the far cloud is the close cloud translated by $(8,8)$. Euc-PD, WFR, and WIFT use the linear-plus-RBF kernel with unit linear coefficient, whereas the upstream MSIP implementation uses the RBF kernel. We use $\alpha=1$ and $\beta=0.5$ and retain the unsmoothed trajectories. Figure~\ref{fig:all_mmd} reports the sweep over $\tau\in\{0.01,0.1,1\}$. The MSIP curve for $\tau=1$ is omitted because the upstream update encounters a singular Gram matrix in both settings.
 
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=1.0\linewidth]{figures/appendix_mmd_distant_initializations.pdf}
-    \caption{MMD trajectories under progressively more distant initializations on $[8,10]$, $[16,18]$, and $[32,34]$. The panels show the raw behavior of each method; values are not smoothed.}
-    \label{fig:appendix-distant-mmd}
-\end{figure}
-
-Figure~\ref{fig:appendix-particle-trajectories} adapts the path-and-weight visualization of \citet[Figures~4--5]{gladin2024interaction} to the present one-dimensional experiment. Each panel displays a fixed subsample of $20$ particles in space--time coordinates. The blue background represents the target density. Intermediate point size and opacity increase with $|w^{(i)}|$, blue and red indicate positive and negative weights, orange markers show the initial particles, green markers show final particles with positive weight, and hollow red markers show final particles with nonpositive weight. To keep the paths readable, we use $\tau=0.1$ for WFR and WIFT and $\tau=0.01$ for raw MSIP.
+Figure~\ref{fig:appendix-particle-trajectories} adapts the trajectory visualization of \citet[Figures~4--5]{gladin2024interaction} to these two-dimensional experiments. Both axes are spatial coordinates, the blue contours represent the target density, and iteration progresses along each dotted path. Each panel shows all $20$ particles: orange crosses mark step $0$, and green circles mark step $1000$. To keep the paths readable, we use $\tau=0.01$ for Euc-PD and MSIP, $\tau=0.1$ for WFR, and $\tau=1$ for WIFT. Each row uses a common spatial window spanning the target and the corresponding Gaussian initial cloud; path segments outside that window are clipped.
 
 \begin{figure}[p]
     \centering
     \includegraphics[width=1.0\linewidth]{figures/appendix_particle_trajectories.pdf}
-    \caption{Particle trajectories under progressively more distant initializations. The horizontal axis is particle location and the vertical axis is iteration.}
+    \caption{\textbf{Particle trajectories under close and far initialization.} Paths of all $20$ particles from step $0$ to step $1000$ for initial distributions $\mathcal{N}((1,1),I_2)$ and $\mathcal{N}((9,9),I_2)$, respectively.}
     \label{fig:appendix-particle-trajectories}
 \end{figure}

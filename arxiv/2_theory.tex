@@ -214,13 +214,6 @@ This perspective makes explicit how the choice of geometry affects the particle 
 
 % The direct KQ update instantaneously minimizes the MMD over the weights at each particle configuration, whereas the IFT update is a proximal tracking scheme that interpolates between the previous weights and the instantaneous KQ solution. The latter sacrifices instantaneous optimality in exchange for a controlled and stable evolution of the weights, consistent with the underlying continuous-time IFT dynamics.
 
-\begin{figure*}[t]
-    \centering
-    \includegraphics[width=1.0\linewidth]{figures/all_mmd_trajectories.pdf}
-    \caption{MMD trajectories for WFR, WIFT, and MSIP. The rows use particles initialized on $[-2,2]$ and $[8,10]$, respectively.}
-    \label{fig:all_mmd}
-\end{figure*}
-
 \hudson{The following is Work in Progress.}
 \section{Convergence}
 
