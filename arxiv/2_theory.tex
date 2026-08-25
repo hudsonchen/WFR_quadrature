@@ -178,7 +178,7 @@ Equivalently, $\grad_G f(x) = G^{-1}\nabla f(x)$ where $\nabla f$ denotes the st
 \label{prop:mmd-energy-smoothness}
 Let $\bm{w}\in\R^N$ with $w^{(i)}>0$ for every $i$ and $\sum_{i=1}^N w^{(i)}=1$.
 Let $\bm{X}\in\R^{N\times d}$ and suppose that the associated Gram matrix $K(\bm{X},\bm{X})\in\R^{N\times N}$ is positive definite.
-Suppose that $k$ is symmetric and twice continuously differentiable, with $\sup_{x,y\in\R^d}\|\nabla_{11}^2 k(x,y)\|_{\mathrm{op}} = C_1<\infty$ and $\sup_{x,y\in\R^d}\|\nabla_{12}^2 k(x,y)\|_{\mathrm{op}}=C_2 <\infty$.
+Suppose that  $\sup_{x,y\in\R^d}\|\nabla_{11}^2 k(x,y)\|_{\mathrm{op}} = C_1<\infty$ and $\sup_{x,y\in\R^d}\|\nabla_{12}^2 k(x,y)\|_{\mathrm{op}}=C_2 <\infty$.
 Then,
 \begin{enumerate}
     \item $\calE(\cdot,\bm{w})$ is $\max_{1\leq i\leq N} w^{(i)}(2 C_1 + C_2)$-smooth under the standard Euclidean geometry; and is $(2 C_1 + C_2)$-smooth under the $\operatorname{Diag}(\bm{w})$-weighted Euclidean geometry. 
@@ -192,7 +192,8 @@ We next analyze the particle descent schemes introduced above, identify the geom
 
 \begin{prop}[Sufficient step sizes for monotone descent]
 \label{prop:geometry-step-sizes}
-Suppose that the assumptions of \Cref{prop:mmd-energy-smoothness} hold with $\bm{w}=\bm{w}_t$ and $\bm{X}=\bm{X}_{t+1}$. Then each Gauss--Seidel particle descent scheme satisfies $\calE(\bm{X}_{t+1},\bm{w}_{t+1})\leq\calE(\bm{X}_t,\bm{w}_t)$ under the following sufficient conditions:
+Suppose that the assumptions of \Cref{prop:mmd-energy-smoothness} hold with $\bm{w}=\bm{w}_t$ and $\bm{X}=\bm{X}_{t+1}$. 
+Then each particle descent scheme satisfies $\calE(\bm{X}_{t+1},\bm{w}_{t+1})\leq\calE(\bm{X}_t,\bm{w}_t)$ under the following sufficient conditions:
 \begin{enumerate}
     \item For E-PD, the sufficient location condition is $\tau_X\leq 2/[\max_{1\leq i\leq N}w_t^{(i)}(2C_1+C_2)]$. The sufficient weight condition is $\tau_w\leq 2/\lambda_{\max}(K_{t+1})$.
     \item For WFR-PD, the sufficient location condition is $\tau_X\leq 2/(2C_1+C_2)$. The sufficient weight condition is $\tau_w\leq 2/\lambda_{\max}(K_{t+1})$. 
@@ -202,8 +203,15 @@ Suppose that the assumptions of \Cref{prop:mmd-energy-smoothness} hold with $\bm
 \end{prop}
 
 The different conditions on the step sizes in \Cref{prop:geometry-step-sizes} follow directly from the underlying geometries and the correspoinding smoothness proved in \Cref{prop:mmd-energy-smoothness}. 
-The location update of \eqref{eq:e-pd} uses the standard Euclidean geometry, whereas those of \eqref{eq:wfr-pd} and \eqref{eq:wift-pd} use the $\operatorname{Diag}(\bm{w})$-weighted Euclidean geometry. The weight updates of \eqref{eq:e-pd} and \eqref{eq:wfr-pd} use the standard Euclidean geometry, whereas the implicit weight update of \eqref{eq:wift-pd} is proximal in the $K(\bm{X},\bm{X})$-weighted Euclidean geometry. Separate step sizes are therefore natural because the location and weight blocks generally have different smoothness constants.
-    
+The location update of \eqref{eq:e-pd} uses the standard Euclidean geometry, whereas those of \eqref{eq:wfr-pd} and \eqref{eq:wift-pd} use the $\operatorname{Diag}(\bm{w})$-weighted Euclidean geometry. The weight updates of \eqref{eq:e-pd} and \eqref{eq:wfr-pd} use the standard Euclidean geometry, whereas the implicit weight update of \eqref{eq:wift-pd} is proximal in the $K(\bm{X},\bm{X})$-weighted Euclidean geometry. 
+Separate step sizes conditions are therefore almost immediate because the location and weight blocks generally have different smoothness constants established in \Cref{prop:mmd-energy-smoothness}.  
+
+\begin{rem}[WIFT-PD as a favorable geometry]
+The main message of this paper is that WIFT-PD provides a particularly favorable geometry for finite-particle MMD minimization. 
+While its updates can be interpreted as preconditioned gradient steps and all the step-size conditions follow naturally, our contribution is to provide, to the best of our knowledge, the first unified finite-particle analysis of the different geometries and their associated preconditioners. 
+This perspective makes explicit how the choice of geometry affects the particle dynamics, smoothness properties, admissible step sizes, and convergence behavior.
+\end{rem}
+
 % The direct KQ update instantaneously minimizes the MMD over the weights at each particle configuration, whereas the IFT update is a proximal tracking scheme that interpolates between the previous weights and the instantaneous KQ solution. The latter sacrifices instantaneous optimality in exchange for a controlled and stable evolution of the weights, consistent with the underlying continuous-time IFT dynamics.
 
 \begin{figure*}[t]
@@ -230,7 +238,7 @@ If $\tau_X\leq 2(2C_1+C_2)^{-1}$, then for every $t\geq0$,
 See the proof of \Cref{proof:wift-convergence}.
 The above theorem shows that the squared MMD error at iteration $t$ is controlled by a convex combination of the kernel-quadrature residuals associated with the particle locations visited from initialization up to iteration $t-1$. 
 
-Importantly, the contribution of earlier particle configurations decays geometrically: the influence of an iterate that is $r$ steps in the past is proportional to $(1+\tau_w)^{-2 r}$.Thus, WIFT progressively “forgets” earlier particle configurations and places increasingly more weight on the kernel-quadrature quality of the recent iterates. 
+Importantly, the contribution of earlier particle configurations decays geometrically: the influence of an iterate that is $r$ steps in the past is proportional to $(1+\tau_w)^{-2 r}$. Thus, WIFT progressively “forgets” earlier particle configurations and places increasingly more weight on the kernel-quadrature quality of the recent iterates. 
 Another notable feature of this geometric forgetting is that its rate is independent of the condition number of the kernel Gram matrix $\lambda_{\text{max}}(k(\bm{X}_t, \bm{X}_t))$. 
 This contrasts with the Euclidean weight updates in Euc-PD and WFR-PD, whose convergence behavior generally depends on the spectrum of the Gram matrix. 
 
