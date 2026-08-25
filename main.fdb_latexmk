@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex main"] 1787639581 "main.aux" "main.bbl" "main" 1787639581
+["bibtex main"] 1787661801 "main.aux" "main.bbl" "main" 1787661846
   "/usr/share/texlive/texmf-dist/bibtex/bst/base/apalike.bst" 1292289607 24635 604dafcc79f521a11ea73e506e1fbd98 ""
-  "main.aux" 1787639581 9843 35c2691fb23dc81aa279970e9a0e2c2b "pdflatex"
+  "main.aux" 1787661846 10762 206bf406bdefc3aa4d1c1a6c59f1cde8 "pdflatex"
   "main.bib" 1787574550 69131 cdf8d90fb1b997f0b54e8daf9520c657 ""
   (generated)
   "main.bbl"
   "main.blg"
-["pdflatex"] 1787639581 "main.tex" "main.pdf" "main" 1787639581
+["pdflatex"] 1787661845 "main.tex" "main.pdf" "main" 1787661846
   "/etc/texmf/web2c/texmf.cnf" 1691084906 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/symbol/psyr.tfm" 1136768653 1408 5937f58aa508ea2cea4901c07d10f5fe ""
@@ -231,17 +231,18 @@
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1781392677 412563 db61d7d2177dee6340dcfa89b660dbf6 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1781392682 1503855 bb3b237899f15e72fded17b9c951fbf4 ""
   "arxiv/1_introduction.tex" 1787574550 0 d41d8cd98f00b204e9800998ecf8427e ""
-  "arxiv/2_theory.tex" 1787639576 19353 72d10f0a85cca58b1f81b88dd38c0bf3 ""
-  "arxiv/4_experiments.tex" 1787639576 1269 56c6b90c67bc878c73dca0bd582c3806 ""
+  "arxiv/2_theory.tex" 1787661561 19673 3366ded02c6b6ecd73c33207bf48803a ""
+  "arxiv/4_experiments.tex" 1787661841 3447 71fe23b0fef09c7852c6a770e83c4032 ""
   "arxiv/5_proofs.tex" 1787639486 15070 e3bc57e51806b4dbe00000a36f35b7c9 ""
   "figures/all_mmd_trajectories.pdf" 1787639492 102359 d752ccbdba00bd575d1c0d69aa0563e9 ""
   "figures/appendix_particle_trajectories.pdf" 1787639492 338344 b668ecde7af4c08386600c6959ae5dc1 ""
+  "figures/mean_field_nn_trajectories.pdf" 1787661695 53168 af362bc3a387eac88059a72aac082763 ""
   "include//aistats2026.sty" 1787623096 18252 6210dbdb835ef46fc140db24f3fea0f5 ""
   "include/macros.tex" 1787573795 2031 e40c804d98d22d415cbca83a22cb0bf8 ""
-  "main.aux" 1787639581 9843 35c2691fb23dc81aa279970e9a0e2c2b "pdflatex"
-  "main.bbl" 1787639581 3483 e17760a1f8eae09dab2a25c4ec12d241 "bibtex main"
-  "main.out" 1787639581 1381 79b6d8bb686181ac5586ab80edef8641 "pdflatex"
-  "main.tex" 1787639401 4563 cb8e9c305c6d16cedfdd00229c8e486b ""
+  "main.aux" 1787661846 10762 206bf406bdefc3aa4d1c1a6c59f1cde8 "pdflatex"
+  "main.bbl" 1787661801 3483 e17760a1f8eae09dab2a25c4ec12d241 "bibtex main"
+  "main.out" 1787661846 1814 26ae44111736334a8cbbadae7db9a25c "pdflatex"
+  "main.tex" 1787661745 4574 ffe66f52024de5bff6c24087692baebc ""
   (generated)
   "main.aux"
   "main.log"

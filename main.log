@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.6.14)  25 AUG 2026 07:33
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.6.14)  25 AUG 2026 13:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -981,29 +981,58 @@ Underfull \hbox (badness 2626) in paragraph at lines 157--158
  []
 
 
+Underfull \hbox (badness 10000) in paragraph at lines 209--210
+[]\T1/cmr/m/n/10 (+20) For the step size con-di-tion that $\OML/cmm/m/it/10 ^^\
+[] \OMS/cmsy/m/n/10 ^^T
+ []
+
+
+Underfull \hbox (badness 1789) in paragraph at lines 209--210
+\OT1/cmr/m/n/10 (+20) 2\OML/cmm/m/it/10 =\OT1/cmr/m/n/10 (+20) [[][] \OML/cmm/m
+/it/10 w[]\OT1/cmr/m/n/10 (+20) (2\OML/cmm/m/it/10 C[] \OT1/cmr/m/n/10 (+20) + 
+\OML/cmm/m/it/10 C[]\OT1/cmr/m/n/10 (+20) )]$\T1/cmr/m/n/10 (+20) , the max-i-m
+al ad-mis-
+ []
+
+
 Package fancyhdr Warning: \footskip is too small (0.0pt): 
 (fancyhdr)                Make it at least 3.30003pt, for example:
 (fancyhdr)                \setlength{\footskip}{3.30003pt}.
 
 [3]
-Overfull \hbox (33.54381pt too wide) detected at line 228
+Overfull \hbox (33.54381pt too wide) detected at line 231
 []
  []
 
 ) (./arxiv/4_experiments.tex
-<figures/all_mmd_trajectories.pdf, id=192, 1371.55772pt x 624.70186pt>
+<figures/all_mmd_trajectories.pdf, id=199, 1371.55772pt x 624.70186pt>
 File: figures/all_mmd_trajectories.pdf Graphic file (type pdf)
 <use figures/all_mmd_trajectories.pdf>
 Package pdftex.def Info: figures/all_mmd_trajectories.pdf  used on input line 1
-0.
+1.
 (pdftex.def)             Requested size: 487.8225pt x 222.18536pt.
-) (./main.bbl
+<figures/mean_field_nn_trajectories.pdf, id=201, 1068.47963pt x 309.26743pt>
+File: figures/mean_field_nn_trajectories.pdf Graphic file (type pdf)
+<use figures/mean_field_nn_trajectories.pdf>
+Package pdftex.def Info: figures/mean_field_nn_trajectories.pdf  used on input 
+line 31.
+(pdftex.def)             Requested size: 487.8225pt x 141.19823pt.
+)
 
 Package fancyhdr Warning: \footskip is too small (0.0pt): 
 (fancyhdr)                Make it at least 3.30003pt, for example:
 (fancyhdr)                \setlength{\footskip}{3.30003pt}.
 
 [4]
+
+Package fancyhdr Warning: \footskip is too small (0.0pt): 
+(fancyhdr)                Make it at least 3.30003pt, for example:
+(fancyhdr)                \setlength{\footskip}{3.30003pt}.
+
+[5
+
+ <./figures/all_mmd_trajectories.pdf> <./figures/mean_field_nn_trajectories.pdf
+>] (./main.bbl
 Underfull \hbox (badness 2884) in paragraph at lines 75--79
 \T1/cmr/m/n/10 (+20) wasserstein-fisher-rao gra-di-ent flow per-spec-tive.
  []
@@ -1014,9 +1043,9 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 (fancyhdr)                Make it at least 3.30003pt, for example:
 (fancyhdr)                \setlength{\footskip}{3.30003pt}.
 
-[5
+[6
 
- <./figures/all_mmd_trajectories.pdf>] (./arxiv/5_proofs.tex
+] (./arxiv/5_proofs.tex
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\new@ifnextchar' on input line 2.
@@ -1033,7 +1062,7 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 (fancyhdr)                Make it at least 3.30003pt, for example:
 (fancyhdr)                \setlength{\footskip}{3.30003pt}.
 
-[6
+[7
 
 
 ]
@@ -1046,14 +1075,14 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 (fancyhdr)                Make it at least 3.30003pt, for example:
 (fancyhdr)                \setlength{\footskip}{3.30003pt}.
 
-[7]
+[8]
 
 Package fancyhdr Warning: \footskip is too small (0.0pt): 
 (fancyhdr)                Make it at least 3.30003pt, for example:
 (fancyhdr)                \setlength{\footskip}{3.30003pt}.
 
-[8]
-<figures/appendix_particle_trajectories.pdf, id=277, 1351.30016pt x 660.47957pt
+[9]
+<figures/appendix_particle_trajectories.pdf, id=305, 1351.30016pt x 660.47957pt
 >
 File: figures/appendix_particle_trajectories.pdf Graphic file (type pdf)
 <use figures/appendix_particle_trajectories.pdf>
@@ -1066,24 +1095,24 @@ Package fancyhdr Warning: \footskip is too small (0.0pt):
 (fancyhdr)                Make it at least 3.30003pt, for example:
 (fancyhdr)                \setlength{\footskip}{3.30003pt}.
 
-[9]
+[10]
 
 Package fancyhdr Warning: \footskip is too small (0.0pt): 
 (fancyhdr)                Make it at least 3.30003pt, for example:
 (fancyhdr)                \setlength{\footskip}{3.30003pt}.
 
-[10 <./figures/appendix_particle_trajectories.pdf>] (./main.aux)
+[11 <./figures/appendix_particle_trajectories.pdf>] (./main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 79B6D8BB686181AC5586AB80EDEF8641;1381.
+(rerunfilecheck)             Checksum: 26AE44111736334A8CBBADAE7DB9A25C;1814.
  ) 
 Here is how much of TeX's memory you used:
- 28163 strings out of 479727
- 532071 string characters out of 5884998
- 828107 words of memory out of 5000000
- 45442 multiletter control sequences out of 15000+600000
- 490937 words of font info for 170 fonts, out of 8000000 for 9000
+ 28182 strings out of 479727
+ 532543 string characters out of 5884998
+ 828359 words of memory out of 5000000
+ 45452 multiletter control sequences out of 15000+600000
+ 491035 words of font info for 172 fonts, out of 8000000 for 9000
  264 hyphenation exceptions out of 8191
- 84i,12n,89p,1001b,467s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 84i,12n,89p,1001b,428s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist
@@ -1106,10 +1135,10 @@ fb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf
 /fonts/type1/public/cm-super/sfrm0700.pfb></usr/share/texmf/fonts/type1/public/
 cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1000.pf
 b>
-Output written on main.pdf (10 pages, 725622 bytes).
+Output written on main.pdf (11 pages, 749010 bytes).
 PDF statistics:
- 420 PDF objects out of 1000 (max. 8388607)
- 343 compressed objects within 4 object streams
- 80 named destinations out of 1000 (max. 500000)
- 34919 words of extra memory for PDF output out of 35830 (max. 10000000)
+ 448 PDF objects out of 1000 (max. 8388607)
+ 369 compressed objects within 4 object streams
+ 84 named destinations out of 1000 (max. 500000)
+ 34940 words of extra memory for PDF output out of 35830 (max. 10000000)
 

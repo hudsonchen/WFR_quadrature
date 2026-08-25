@@ -1233,6 +1233,11 @@ INPUT ./figures/all_mmd_trajectories.pdf
 INPUT figures/all_mmd_trajectories.pdf
 INPUT ./figures/all_mmd_trajectories.pdf
 INPUT ./figures/all_mmd_trajectories.pdf
+INPUT ./figures/mean_field_nn_trajectories.pdf
+INPUT ./figures/mean_field_nn_trajectories.pdf
+INPUT figures/mean_field_nn_trajectories.pdf
+INPUT ./figures/mean_field_nn_trajectories.pdf
+INPUT ./figures/mean_field_nn_trajectories.pdf
 INPUT ./main.bbl
 INPUT main.bbl
 INPUT ./main.bbl
