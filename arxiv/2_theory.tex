@@ -209,15 +209,8 @@ The location update of \eqref{eq:e-pd} uses the standard Euclidean geometry, whe
 \begin{figure*}[t]
     \centering
     \includegraphics[width=1.0\linewidth]{figures/all_mmd_trajectories.pdf}
-    \caption{An empirical plot for the various particle update schemes. }
+    \caption{MMD trajectories for WFR, WIFT, and MSIP. The rows use particles initialized on $[-2,2]$ and $[8,10]$, respectively.}
     \label{fig:all_mmd}
-\end{figure*}
-
-\begin{figure*}[t]
-    \centering
-    \includegraphics[width=1.0\linewidth]{figures/all_mmd_trajectories_initial_8_10.pdf}
-    \caption{\textbf{Distant initialization on $[8,10]$.} MMD trajectories for the particle update schemes.}
-    \label{fig:all_mmd_initial_8_10}
 \end{figure*}
 
 \hudson{The following is Work in Progress.}
@@ -234,11 +227,11 @@ If $\tau_X\leq 2(2C_1+C_2)^{-1}$, then for every $t\geq0$,
 \end{align*}
 \end{theorem}
 
-Proof is in XXX. 
+See the proof of \Cref{proof:wift-convergence}.
 The above theorem shows that the squared MMD error at iteration $t$ is controlled by a convex combination of the kernel-quadrature residuals associated with the particle locations visited from initialization up to iteration $t-1$. 
 
 Importantly, the contribution of earlier particle configurations decays geometrically: the influence of an iterate that is $r$ steps in the past is proportional to $(1+\tau_w)^{-2 r}$.Thus, WIFT progressively “forgets” earlier particle configurations and places increasingly more weight on the kernel-quadrature quality of the recent iterates. 
 Another notable feature of this geometric forgetting is that its rate is independent of the condition number of the kernel Gram matrix $\lambda_{\text{max}}(k(\bm{X}_t, \bm{X}_t))$. 
 This contrasts with the Euclidean weight updates in Euc-PD and WFR-PD, whose convergence behavior generally depends on the spectrum of the Gram matrix. 
 
-A side-product of the above theorem is the monotonic improvement that $\operatorname{MMD} \left( \mu_{N,t+1},\pi \right) \leq \operatorname{MMD} \left( \mu_{N,t}, \pi \right)$. Proof can be found in 
+Under the same step-size condition, WIFT-PD also satisfies the monotone decrease $\operatorname{MMD}(\mu_{N,t+1},\pi)\leq \operatorname{MMD}(\mu_{N,t},\pi)$; see \Cref{prop:wift-monotone-descent} in the appendix.

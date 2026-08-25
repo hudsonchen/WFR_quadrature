@@ -48,8 +48,8 @@
 }
 
 \newtheorem{assumption}{Assumption}
-\Crefname{assumption}{Assumption}{Assumption} 
-\crefname{assumption}{Assumption}{Assumption} 
+\crefname{assumption}{assumption}{assumptions}
+\Crefname{assumption}{Assumption}{Assumptions}
 
 \usepackage{aliascnt}
 
@@ -67,46 +67,58 @@
 
 
 \newtheorem{theorem}{Theorem}[section]
-\crefname{theorem}{Theorem}{Theorems}
+\crefname{theorem}{theorem}{theorems}
 \Crefname{theorem}{Theorem}{Theorems}
+
+\makeatletter
+\newcommand{\labeltheoremproof}[2]{%
+    \phantomsection
+    \begingroup
+    \edef\@currentlabel{\getrefnumber{#2}}%
+    \edef\cref@currentlabel{\getrefnumber{#2@cref}}%
+    \label{#1}%
+    \endgroup
+}
+\makeatother
+
 \newaliascnt{lem}{theorem}
 \newtheorem{lem}[lem]{Lemma}
 \aliascntresetthe{lem}
-\crefname{lem}{Lemma}{Lemmas}
+\crefname{lem}{lemma}{lemmas}
 \Crefname{lem}{Lemma}{Lemmas}
 
 \newaliascnt{prop}{theorem}
 \newtheorem{prop}[prop]{Proposition} 
 \aliascntresetthe{prop}
-\crefname{prop}{Proposition}{Propositions}
+\crefname{prop}{proposition}{propositions}
 \Crefname{prop}{Proposition}{Propositions}
 
 \newtheorem{ass}{Assumption}
-\crefname{ass}{Assumption}{Assumptions}
+\crefname{ass}{assumption}{assumptions}
 \Crefname{ass}{Assumption}{Assumptions}
 
 \newaliascnt{rem}{theorem}
 \newtheorem{rem}[rem]{Remark} 
 \aliascntresetthe{rem}
-\crefname{rem}{Remark}{Remarks}
+\crefname{rem}{remark}{remarks}
 \Crefname{rem}{Remark}{Remarks}
 
 \newaliascnt{example}{theorem}
 \newtheorem{example}[example]{Example} 
 \aliascntresetthe{example}
-\crefname{example}{Example}{Examples}
+\crefname{example}{example}{examples}
 \Crefname{example}{Example}{Examples}
 
 \newaliascnt{defi}{theorem}
 \newtheorem{defi}[defi]{Definition} 
 \aliascntresetthe{defi}
-\crefname{defi}{Definition}{Definitions}
+\crefname{defi}{definition}{definitions}
 \Crefname{defi}{Definition}{Definitions}
 
 \newaliascnt{cor}{theorem}
 \newtheorem{cor}[cor]{Corollary} 
 \aliascntresetthe{cor}
-\crefname{cor}{Corollary}{Corollaries}
+\crefname{cor}{corollary}{corollaries}
 \Crefname{cor}{Corollary}{Corollaries}
  
 \input{include/macros}
