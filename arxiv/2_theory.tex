@@ -64,7 +64,7 @@ Combining W-GF and IFT-GF, analogously to \eqref{eq:wfr-gf}, yields, with $\alph
 Both IFT-GF and WIFT-GF enjoy nice convergence properties~\citep{gladin2024interaction}; $\operatorname{MMD}^2(\mu_t,\pi)\leq e^{-2t}\operatorname{MMD}^2(\mu_0,\pi)$. Notably, this convergence holds without conditions on the target distribution $\pi$. The closest comparable result is \citet[Theorem 4.1]{tian2026sobolev}, yet, it requires additional regularizations.
 
 
-\paragraph{\texorpdfstring{$\mathrm{Dr}^{2}\,\mathrm{MMD}$}{Dr2 MMD}}
+\paragraph{Dr$^2$MMD} 
 Motivated by the spectral regularization of the weight update scheme in WIFT, we next introduce a spectral regularization on the particle update scheme as well. 
 \begin{align*}
     \partial_t\mu_t &= \nabla\cdot \left(\mu_t \nabla ((1-\lambda) \calT_{\mu_t} + \lambda)^{-1} \calF_{\mmd}'[\mu_t]\right)\\
@@ -144,17 +144,15 @@ Letting $K^{n+1}=K(\bm{X}^{n+1},\bm{X}^{n+1})\in\R^{N\times N}$ be the Gram matr
 The last line holds by the definition of kernel quadrature: $m_\pi(\bm{X}^{n+1}) = K^{n+1} \bm{w}_{\mathrm{KQ}}(\bm{X}^{n+1})$.
 \hudson{Connection to the ultra-fast paper by Barboni.}
 
-\paragraph{\texorpdfstring{$\mathrm{Dr}^{2}\,\mathrm{MMD}$}{Dr2 MMD}}
-We spectrally regularize the continuous-time transport and retain the same implicit IFT weight step. For $0<\lambda\leq1$, with $I$ denoting the identity operator, let $q_t=((1-\lambda)\mathcal{T}_{\mu_{N,t}}+\lambda I)^{-1}h_{\bm{X}_t,\bm{w}^n}$. Using its kernel extension to evaluate spatial derivatives, the dynamics are
+\paragraph{Dr$^2$MMD} 
+We spectrally regularize the continuous-time transport and retain the same implicit IFT weight step. For $0<\lambda\leq1$, the dynamics are
 \begin{align*}\label{eq:dr2-mmd-pd}
-    \dot{x}_t^{(i)}&=-\nabla q_t\left(x_t^{(i)}\right), \tag{$\mathrm{Dr}^{2}\,\mathrm{MMD}$-PD} \\
-    \bm{w}^{n+1}
-    &=\frac{1}{1+\tau_w}\bm{w}^n
-    +\frac{\tau_w}{1+\tau_w}\bm{w}_{\mathrm{KQ}}(\bm{X}^{n+1}).
+    \dot{x}_t^{(i)}&=-\nabla \big\{ ((1-\lambda) \calT_{\mu_{N, t}} + \lambda)^{-1} h_{\bm{X}_t,\bm{w}_t} \big\} \left(x_t^{(i)}\right), \tag{$\mathrm{Dr}^{2}\,\mathrm{MMD}$-PD} \\
+    \dot{w}_t^{(i)} &=  - w_t^{(i)} \left[\left((1-\lambda) \mathcal{T}_{\mu_{N, t}} + \lambda \right)^{-1} h_{X_t, w_t} \right]\left(x_t^{(i)}\right).
 \end{align*}
-As in WIFT-PD, the weights are fixed during transport and updated implicitly at the new support. This variant regularizes transport only; the population $\mathrm{Dr}^{2}\,\mathrm{MMD}$-GF above also regularizes the reaction term.
 
-\begin{lem}[Finite-particle implementation of $\mathrm{Dr}^{2}\,\mathrm{MMD}$]\label{lem:dr2-mmd-implementation}
+
+\begin{lem}[Finite-particle implementation of Dr$^2$MMD]\label{lem:dr2-mmd-implementation}
 Let $\mu_{\bm X}=\sum_{j=1}^Nw^{(j)}\delta_{x^{(j)}}$ with unnormalized weights $w^{(j)}\geq0$, and let $0<\lambda\leq1$. Write $K=K(\bm X,\bm X)$ and $D=\operatorname{Diag}(\bm w)$. The regularized residual $q=((1-\lambda)\mathcal T_{\mu_{\bm X}}+\lambda I)^{-1}h_{\bm X,\bm w}$ has the extension
 \begin{align*}
 q(x)&=\frac{1}{\lambda}\left[h_{\bm X,\bm w}(x)\right.\\
@@ -165,12 +163,6 @@ where $\bm a=q(\bm X)$ is the unique solution of
 \bigl(\lambda I+(1-\lambda)KD\bigr)\bm a
 &=h_{\bm X,\bm w}(\bm X)=K\bm w-m_\pi(\bm X).
 \end{align*}
-Thus the $\mathrm{Dr}^{2}\,\mathrm{MMD}$ transport is implemented by one $N\times N$ linear solve followed by evaluating
-\begin{align*}
-\nabla q(x)&=\frac{1}{\lambda}\left[\nabla h_{\bm X,\bm w}(x)\right.\\
-&\qquad\left.{}-(1-\lambda)\sum_{j=1}^Nw^{(j)}a^{(j)}\nabla_2k(x^{(j)},x)\right]
-\end{align*}
-at each particle and setting $\dot{x}^{(i)}=-\nabla q(x^{(i)})$. Here $\nabla_2$ differentiates the second kernel argument; $\bm X$, $\bm w$, and $\bm a$ are held fixed when differentiating in $x$. The IFT weight step remains as in \eqref{eq:dr2-mmd-pd}.
 \end{lem}
 
 \begin{proof}
