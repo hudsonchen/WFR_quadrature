@@ -71,8 +71,8 @@ Both IFT-GF and WIFT-GF enjoy nice convergence properties~\citep{gladin2024inter
 \paragraph{De-regularized Fisher-Rao} 
 Motivated by the spectral regularization of the weight update scheme in WIFT, we next introduce a spectral regularization on the particle update scheme as well. 
 \begin{align*}
-    \partial_t\mu_t &= \alpha \nabla\cdot \left(\mu_t \nabla ((1-\lambda) \calT_\mu + \lambda)^{-1} \calF_{\mmd}'[\mu_t]\right)\\
-    &- \beta (\mu_t - \pi) . \tag{DrFR-GF}
+    \partial_t\mu_t &= \alpha \nabla\cdot \left(\mu_t \nabla ((1-\lambda) \calT_{\mu_t} + \lambda)^{-1} \calF_{\mmd}'[\mu_t]\right)\\
+    &- \beta \left( \mu_t ((1-\lambda) \calT_{\mu_t} + \lambda)^{-1} \calF_{\mmd}'[\mu_t]\right) . \tag{DrFR-GF}
 \end{align*}
 
 
@@ -118,7 +118,7 @@ x_{t+1}^{(i)}
 &= x_t^{(i)}-\tau_X \nabla h_{\bm{X}_t,\bm{w}_t}
 \left(x_t^{(i)} \right), \nonumber \\
 w_{t+1}^{(i)}
-&= w_t^{(i)} - \tau_w h_{\bm{X}_{t+1}, \bm{w}_t}
+&= w_t^{(i)} - \tau_w w_t^{(i)} \cdot h_{\bm{X}_{t+1}, \bm{w}_t}
 \left(x_{t+1}^{(i)}\right). \tag{WFR-PD}
 \end{align}
 When $\tau_w=0$, the weights remain fixed and hence the above dynamics reduce to the finite-particle implementation of MMD flow in \citet{arbel2019maximum}. 
@@ -167,16 +167,11 @@ The last line holds by the definition of kernel quadrature: $m_\pi(\bm{X}_{t+1})
 \paragraph{De-regularized MMD} 
 Motivated by the spectral regularization of the weight update scheme in WIFT, we next introduce a spectral regularization on the particle update scheme as well. 
 \begin{align}\label{eq:drfr-pd}
-    x_{t+1}^{(i)}
-    &= x_t^{(i)}-\tau_X \nabla K_t^{-1} h_{\bm{X}_t,\bm{w}_t}
-    \left(x_t^{(i)}\right), \tag{DrFR-PD} \\
+    x_{t+1}^{(i)} &= x_t^{(i)}-\tau_X \nabla\left[\left((1-\lambda) \mathcal{T}_{\mu_{N, t}}+\lambda \right)^{-1} h_{\bm{X}_t, \bm{w}_t} \right]\left(x_t^{(i)}\right), \tag{DrFR-PD} \\
     \bm{w}_{t+1}
-    &= \arg \min _{\bm{w}} \left\{
-    \frac{1}{2} \mmd^2\left(\sum_{i=1}^N w^{(i)}
-    \delta_{x_{t+1}^{(i)}}, \pi\right) \right. \nonumber \\
-    &\hspace{3.8em}\left.{}+ \frac{1}{2\tau_w} \mmd^2
-    \left(\sum_{i=1}^N w^{(i)} \delta_{x_{t+1}^{(i)}},
-    \mu_{N,t}\right) \right\}. \nonumber
+    &= \frac{1}{1+\tau_w} \bm{w}_t
+    + \frac{\tau_w}{1+\tau_w}
+    \bm{w}_{\mathrm{KQ}}(\bm{X}_{t+1}) \nonumber . 
 \end{align}
 
 
