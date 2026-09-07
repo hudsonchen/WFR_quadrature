@@ -2,17 +2,14 @@
 \label{sec:experiments}
 
 \subsection{Synthetic Gaussians}
-We first consider a synthetic mixture of Gaussian setting---a simple multimodal benchmark that
-evaluates the ability of sampling methods to capture all modes of a distribution. 
-We compare Euc-PD, WFR, WIFT, and MSIP for the two-dimensional target $\pi=\mathcal{N}(\bm{0},I_2)$. Every run uses $N=20$ particles, seed $42$, RBF length scale $1$, and $1000$ iterations. The close and far initial distributions are $\mathcal{N}((1,1),I_2)$ and $\mathcal{N}((9,9),I_2)$, respectively. Euc-PD, WFR, and WIFT use the linear-plus-RBF kernel with unit linear coefficient, whereas the upstream MSIP implementation uses the RBF kernel. We use $\alpha=1$ and $\beta=0.5$ and report unsmoothed trajectories.
+We compare Euc-PD, WFR, WIFT, and MSIP on one- and two-dimensional Gaussian targets over $1000$ iterations, with RBF length scale $1$, $\alpha=1$, $\beta=0.5$, and $\tau\in\{0.01,0.1,1\}$. WIFT uses the explicit-Euler weight update. In the one-dimensional setting, $\pi=\mathcal{N}(1,0.7^2)$ and $N=100$ particles; Euc-PD, WFR, and WIFT start from an equally spaced grid on $[-2,2]$, whereas MSIP samples its initial particles uniformly on this interval. All four methods use the RBF kernel in this setting, without weight projection. In two dimensions, $\pi=\mathcal{N}(\bm{0},I_2)$ and $N=20$ particles, with close and far initial distributions $\mathcal{N}((1,1),I_2)$ and $\mathcal{N}((9,9),I_2)$. Euc-PD, WFR, and WIFT use the linear-plus-RBF kernel with unit linear coefficient and simplex-projected weights, whereas the upstream MSIP implementation uses the RBF kernel.
 
-Figure~\ref{fig:all_mmd} compares $\tau\in\{0.01,0.1,1\}$. The MSIP curve for $\tau=1$ is omitted because the upstream update encounters a singular Gram matrix in both initialization settings. Appendix~\ref{app:distant-initialization} provides the corresponding particle trajectories.
+Figure~\ref{fig:all_mmd} reports pointwise median MMD across seeds $42$--$46$, with capped error bars every $100$ iterations showing the sample standard deviation divided by $\sqrt{n}$ for the $n$ successful seeds. These bars describe across-seed variability about the median; they are not confidence intervals for the median. No smoothing is applied. The deterministic one-dimensional initialization gives zero variability for Euc-PD, WFR, and WIFT. MSIP has five and four successful seeds in one dimension at $\tau=0.01$ and $\tau=0.1$, respectively, five at both step sizes under close initialization, and three and four under far initialization. No MSIP trajectory at $\tau=1$ is included. All other plotted settings have five complete seeds. Appendix~\ref{app:distant-initialization} provides particle trajectories for seed $42$.
 
 \begin{figure*}[t]
     \centering
     \includegraphics[width=1.0\linewidth]{figures/all_mmd_trajectories.pdf}
-    \caption{\textbf{Gaussian synthetic.} MMD trajectories for Euc-PD, WFR, WIFT, and MSIP with target $\pi=\mathcal{N}(\bm{0},I_2)$. 
-    The first and the second row use a close initial distribution $\mathcal{N}((1,1), I_2)$ and a far distribution $\mathcal{N}((9,9), I_2)$, respectively. All panels use the y-axis range of the WIFT trajectories.}
+    \caption{\textbf{Gaussian synthetic.} Median MMD trajectories for Euc-PD, WFR, WIFT, and MSIP. Rows show the one-dimensional target, close two-dimensional initialization, and far two-dimensional initialization. Capped error bars show across-seed SEM for up to five successful seeds; reduced MSIP counts are annotated. All panels share logarithmic y-axis limits derived from the WIFT medians and error bars.}
     \label{fig:all_mmd}
 \end{figure*}
 
@@ -24,15 +21,15 @@ We next test the particle geometries in a nonlinear regression problem. For an i
     &= \frac{1}{L}\sum_{\ell=1}^L r_\ell^2.
 \end{align*}
 
-We use ReLU activation, dimension $d=5$, $N=40$ student particles, $M=20$ teacher features, and $L=256$ fixed inputs. The inputs follow $\mathcal{N}(\bm{0},I_d/d)$, while the teacher hidden parameters and initial student hidden parameters follow $\mathcal{N}(\bm{0},I_d)$. The teacher output parameters follow $\mathcal{N}(0,M)$, so after multiplication by the uniform teacher weight $1/M$, their effective coefficients follow $\mathcal{N}(0,1/M)$. We initialize the student output parameters at $a^{(i)}=1$ and the measure weights at $w^{(i)}=1/N$. We fix the student, teacher, and input seeds to $42$, $123$, and $456$, respectively, use $\alpha=1$ and $\beta=0.5$, project the particle weights onto the probability simplex, and run every method for $1000$ iterations.
+We use ReLU activation, dimensions $d\in\{10,50\}$, $N=100$ student particles, teacher widths $M\in\{50,200\}$, and $L=2048$ fixed inputs. The inputs follow $\mathcal{N}(\bm{0},I_d/d)$, while the teacher hidden parameters and initial student hidden parameters follow $\mathcal{N}(\bm{0},I_d)$. The teacher output parameters follow $\mathcal{N}(0,M)$, so after multiplication by the uniform teacher weight $1/M$, their effective coefficients follow $\mathcal{N}(0,1/M)$. We initialize the student output parameters at $a^{(i)}=1$ and the measure weights at $w^{(i)}=1/N$. We vary the student seed over $42$--$46$ while fixing the teacher and input seeds to $123$ and $456$, respectively, use $\alpha=1$ and $\beta=0.5$, project the particle weights onto the probability simplex, use the explicit-Euler weight update for WIFT, and run every method for $1000$ iterations.
 
-Figure~\ref{fig:mean-field-nn} compares $\tau\in\{0.01,0.1,1\}$. To make the method panels directly comparable, every panel uses the same logarithmic y-axis limits, determined by the minimum and maximum MMD values across the plotted WIFT trajectories.
+Figure~\ref{fig:mean-field-nn} compares $\tau\in\{0.01,0.1,1\}$. To make the method panels directly comparable, every panel uses the same logarithmic y-axis limits, derived from the WIFT medians and error bars across all four settings. Lines show pointwise medians over five completed student initializations, with capped across-seed SEM bars every $100$ iterations as in the Gaussian experiments.
 
 \begin{figure*}[t]
     \centering
-    \includegraphics[width=1.0\linewidth]{figures/mean_field_nn_trajectories.pdf}
-    \caption{\textbf{Mean-field ReLU student--teacher network with $d=5$, $N=40$, and $M=20$.} MMD trajectories for Euc-PD, WFR, and WIFT over $1000$ iterations and $L=256$ fixed inputs, with $\tau\in\{0.01,0.1,1\}$. All panels use the y-axis range of the WIFT trajectories.}
+    \includegraphics[width=0.94\linewidth]{figures/mean_field_nn_trajectories.pdf}
+    \caption{\textbf{Mean-field ReLU student--teacher networks.} Median MMD trajectories for Euc-PD, WFR, and WIFT over $1000$ iterations with $N=100$ student particles and $L=2048$ fixed inputs. Rows show $(d,M)=(10,50),(10,200),(50,50),(50,200)$. Capped error bars show across-seed SEM over five student initializations. All panels share logarithmic y-axis limits derived from the WIFT medians and error bars.}
     \label{fig:mean-field-nn}
 \end{figure*}
 
-WIFT benefits most from the largest tested step size and reaches an MMD of $0.0295$ at $\tau=1$. WFR performs best at $\tau=0.1$, whereas its $\tau=1$ trajectory remains near its initial value. At iteration $1000$, the best final MMD over the tested step sizes is $0.4277$ for Euc-PD, $0.0892$ for WFR, and $0.0295$ for WIFT.
+WIFT attains its lowest final median MMD at $\tau=1$ in all four settings, reaching $0.0668$, $0.0740$, $0.1019$, and $0.1076$ in row order. The best final medians over the tested step sizes are $0.2906$, $0.3696$, $0.4058$, and $0.3597$ for Euc-PD, and $0.1346$, $0.1379$, $0.3014$, and $0.2925$ for WFR. Euc-PD performs best at $\tau=1$ and WFR at $\tau=0.1$ in each setting.
